@@ -1,0 +1,76 @@
+---
+import { type TMetaInformation } from "@lib/types";
+
+import LayoutBlank from "@layouts/LayoutBlank.astro";
+import Header from "@components/Header/Header.astro";
+import Icon from "@components/Icon/Icon.astro";
+
+import LocalVueHeading from "./_index/VueHeading.vue";
+import LocalVueCustomDictionaries from "./_index/VueCustomDictionaries.vue";
+import LocalVueNativeDictionaries from "./_index/VueNativeDictionaries.vue";
+
+import dictionariesData from "@scripts/data/dictionariesData";
+import organizationUsersData from "@scripts/data/organizationUsersData";
+
+const dictionaries = dictionariesData();
+const users = organizationUsersData();
+
+import {
+  IconDataBookClose2,
+  IconDataBookEdit,
+  IconDataSingleNeutral,
+} from "@scripts/icons/streamline/regular.mjs";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Glossary`,
+  description: ``,
+  ogImage: ``,
+};
+---
+
+<LayoutBlank meta={meta} htmlClass="bg-stone-100">
+  <Header userRole="admin" />
+
+  <div class="px-4 pb-20 pt-4 sm:px-6">
+    <div class="mx-auto max-w-3xl">
+      <div
+        class="mb-12 flex flex-row flex-wrap gap-x-6 gap-y-1 sm:mb-6 sm:justify-end"
+      >
+        <div class="mt-2 flex items-center text-sm text-stone-500">
+          <Icon
+            data={IconDataBookEdit}
+            attributes={{
+              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
+            }}
+          />
+           0/3 custom
+        </div>
+
+        <div class="mt-2 flex items-center text-sm text-stone-500">
+          <Icon
+            data={IconDataBookClose2}
+            attributes={{
+              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
+            }}
+          />
+           18/{dictionaries.length} native
+        </div>
+
+        <div class="mt-2 flex items-center text-sm text-stone-500">
+          <Icon
+            data={IconDataSingleNeutral}
+            attributes={{
+              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
+            }}
+          />
+          {users.length}
+        </div>
+      </div>
+
+      <LocalVueHeading client:load />
+      <LocalVueCustomDictionaries client:load />
+      <LocalVueNativeDictionaries client:load />
+    </div>
+  </div>
+</LayoutBlank>

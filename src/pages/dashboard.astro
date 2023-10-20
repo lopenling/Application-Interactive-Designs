@@ -1,0 +1,21 @@
+---
+import { type TMetaInformation } from "@lib/types";
+
+import LayoutBlank from "@layouts/LayoutBlank.astro";
+import Header from "@components/Header/Header.astro";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Dashboard`,
+  description: ``,
+  ogImage: ``,
+};
+---
+
+<LayoutBlank meta={meta} htmlClass="bg-stone-100">
+  <Header userRole="admin" />
+
+  <div class="flex h-[calc(100vh-64px)] flex-col items-center justify-center">
+    <div class="-mt-[32px] text-stone-400">Dashboard placeholder page</div>
+  </div>
+</LayoutBlank>

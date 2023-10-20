@@ -1,0 +1,16 @@
+---
+import { type TProps } from "@components/Header/Header.types";
+
+import Logo from "@components/Logo/Logo.astro";
+import VueHeader from "@components/Header/VueHeader.vue";
+
+const props: TProps = Astro.props;
+---
+
+<VueHeader userRole={props.userRole} pathname={Astro.url.pathname} client:load>
+  <Fragment slot="logo">
+    <a href="/">
+      <Logo attributes={{ width: "30", height: "30" }} />
+    </a>
+  </Fragment>
+</VueHeader>

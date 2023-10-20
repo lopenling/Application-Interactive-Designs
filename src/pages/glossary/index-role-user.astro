@@ -1,0 +1,66 @@
+---
+import { type TMetaInformation } from "@lib/types";
+
+import LayoutBlank from "@layouts/LayoutBlank.astro";
+import Header from "@components/Header/Header.astro";
+import Icon from "@components/Icon/Icon.astro";
+
+import LocalVueHeading from "./_index-role-user/VueHeading.vue";
+import LocalVueCustomDictionaries from "./_index-role-user/VueCustomDictionaries.vue";
+import LocalVueNativeDictionaries from "./_index-role-user/VueNativeDictionaries.vue";
+
+import dictionariesData from "@scripts/data/dictionariesData";
+
+const dictionaries = dictionariesData();
+const enabledDictionaries = dictionaries.filter(
+  (dictionary) => dictionary.enabled === true,
+);
+
+import {
+  IconDataBookClose2,
+  IconDataBookEdit,
+} from "@scripts/icons/streamline/regular.mjs";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Glossary`,
+  description: ``,
+  ogImage: ``,
+};
+---
+
+<LayoutBlank meta={meta} htmlClass="bg-stone-100">
+  <Header userRole="user" />
+
+  <div class="px-4 pb-20 pt-4 sm:px-6">
+    <div class="mx-auto max-w-3xl">
+      <div
+        class="mb-12 flex flex-row flex-wrap gap-x-6 gap-y-1 sm:mb-6 sm:justify-end"
+      >
+        <div class="mt-2 flex items-center text-sm text-stone-500">
+          <Icon
+            data={IconDataBookEdit}
+            attributes={{
+              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
+            }}
+          />
+           0/3 custom
+        </div>
+
+        <div class="mt-2 flex items-center text-sm text-stone-500">
+          <Icon
+            data={IconDataBookClose2}
+            attributes={{
+              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
+            }}
+          />
+           18/{enabledDictionaries.length} native
+        </div>
+      </div>
+
+      <LocalVueHeading client:load />
+      <LocalVueCustomDictionaries client:load />
+      <LocalVueNativeDictionaries client:load />
+    </div>
+  </div>
+</LayoutBlank>

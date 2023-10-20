@@ -1,0 +1,130 @@
+---
+import { type TMetaInformation } from "@lib/types";
+
+import LayoutBlank from "@layouts/LayoutBlank.astro";
+import Logo from "@components/Logo/Logo.astro";
+import InputGroup from "@components/InputGroup/InputGroup.astro";
+import Icon from "@components/Icon/Icon.astro";
+
+import {
+  IconDataMeta,
+  IconDataGoogle,
+} from "@scripts/icons/fontawesome/brands.mjs";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Sign in`,
+  description: ``,
+  ogImage: ``,
+};
+---
+
+<LayoutBlank meta={meta} htmlClass="h-full bg-stone-100" bodyClass="h-full">
+  <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <Logo attributes={{ width: "40", height: "40", class: `mx-auto` }} />
+      <h2
+        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-stone-900"
+      >
+        Sign in to Lopenling
+      </h2>
+    </div>
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[426px]">
+      <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+        <form action="#" method="POST" id="emailForm">
+          <InputGroup
+            attributes={{ class: `mb-8` }}
+            label={{ text: "Email address" }}
+            input={{
+              attributes: {
+                name: "email",
+                id: "email",
+                type: "email",
+                inputtype: "email",
+                required: "",
+                autofocus: "",
+              },
+              appearance: "white",
+            }}
+          />
+
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm transition hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            >
+              Continue
+            </button>
+          </div>
+        </form>
+
+        <div>
+          <div class="relative mt-6">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full border-t border-stone-200"></div>
+            </div>
+            <div
+              class="font-regular relative flex justify-center text-sm leading-6"
+            >
+              <span class="bg-white px-6 text-stone-500">Or sign in with</span>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-2 gap-4">
+            <a
+              href="#"
+              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700"
+            >
+              <Icon data={IconDataGoogle} attributes={{ class: `h-4 w-4` }} />
+              <span class="text-sm font-semibold leading-6">Google</span>
+            </a>
+
+            <a
+              href="#"
+              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700"
+            >
+              <Icon data={IconDataMeta} attributes={{ class: `h-5 w-5` }} />
+              <span class="text-sm font-semibold leading-6">Meta</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-10 text-center text-sm text-stone-500">
+        New here?
+        <a
+          href="#"
+          class="font-medium leading-6 text-primary-600 underline decoration-transparent underline-offset-2 transition hover:text-primary-500 hover:decoration-primary-500/25"
+        >
+          Account registration
+        </a>
+      </p>
+    </div>
+  </div>
+</LayoutBlank>
+
+<script>
+  const emailForm = document.getElementById("emailForm");
+
+  function handleFormSubmit(event: Event) {
+    event.preventDefault();
+
+    const emailInput = document.getElementById("email") as HTMLInputElement;
+    const emailValue = emailInput.value.trim();
+
+    // Quick and dirty way to demo multiple flows with one view.
+    if (emailValue === "new@lopenling.org") {
+      window.location.href = "/sign-in/add-password-prompt";
+    } else if (emailValue === "password@lopenling.org") {
+      window.location.href = "/sign-in/password-fields-or-magic-link";
+    } else {
+      window.location.href = "/sign-in/check-inbox-or-password-link";
+    }
+  }
+
+  // Add the event listener to the form submission
+  if (emailForm) {
+    emailForm.addEventListener("submit", handleFormSubmit);
+  }
+</script>

@@ -1,0 +1,19 @@
+---
+import { type TProps } from "@components/Toggle/Toggle.types";
+import mergeAttributes from "@scripts/helpers/mergeAttributes";
+
+import VueToggle from "@components/Toggle/VueToggle.vue";
+
+const props: TProps = Astro.props;
+const attributes = mergeAttributes({}, props.attributes);
+---
+
+<VueToggle
+  {...attributes}
+  toggled={props.toggled}
+  size={props.size}
+  appearance={props.appearance}
+  switch={props.switch}
+  label={props.label}
+  client:load
+/>

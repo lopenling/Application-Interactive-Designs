@@ -1,0 +1,24 @@
+---
+import { type TProps } from "@components/Icon/Icon.types";
+import mergeAttributes from "@scripts/helpers/mergeAttributes";
+
+const props: TProps = Astro.props;
+const attributes = mergeAttributes(
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: props.data?.fill || "",
+    stroke: props.data?.stroke || "",
+    viewBox: props.data?.viewBox || "",
+    "aria-hidden": "true",
+  },
+  props.attributes,
+);
+---
+
+{
+  props.data && (
+    <svg {...attributes}>
+      <Fragment set:html={props.data.content} />
+    </svg>
+  )
+}

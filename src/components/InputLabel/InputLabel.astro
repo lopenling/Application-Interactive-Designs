@@ -1,0 +1,19 @@
+---
+import { type TProps } from "@components/InputLabel/InputLabel.types";
+import mergeAttributes from "@scripts/helpers/mergeAttributes";
+
+const props: TProps = Astro.props;
+const attributes = mergeAttributes(
+  {
+    class: `
+      ${props.defaultMargin && "mb-2"} 
+      block text-sm font-medium leading-6 text-stone-900
+    `,
+  },
+  props.attributes,
+);
+---
+
+<label {...attributes}>
+  {props.text}
+</label>

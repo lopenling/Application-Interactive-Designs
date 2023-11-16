@@ -1,5 +1,6 @@
 ---
 import { type TMetaInformation } from "@lib/types";
+import { SITE_TITLE } from "@scripts/data/constants";
 
 import LayoutBlank from "@layouts/LayoutBlank.astro";
 import Logo from "@components/Logo/Logo.astro";
@@ -22,7 +23,7 @@ const meta: TMetaInformation = {
       <h2
         class="mt-6 text-center text-2xl font-semibold leading-9 tracking-tight text-stone-900"
       >
-        Sign in to Lopenling
+        Sign in to {SITE_TITLE}
       </h2>
     </div>
 
@@ -40,7 +41,7 @@ const meta: TMetaInformation = {
             We have sent you a magic link. If you did not receive the email,
             <button
               type="button"
-              class="font-medium underline decoration-primary-700/25 underline-offset-2 transition hover:text-primary-700 hover:decoration-primary-700/50"
+              class="font-medium underline decoration-primary-700/25 underline-offset-2 outline-none transition hover:text-primary-700 hover:decoration-primary-700/50 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-1"
             >
               send a new one
             </button>.
@@ -51,7 +52,7 @@ const meta: TMetaInformation = {
       <p class="mt-10 text-center text-sm text-stone-500">
         <a
           href="/sign-in"
-          class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25"
+          class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
         >
           Back to sign in
         </a>

@@ -42,6 +42,8 @@ import { ref, onMounted, watch, computed } from "vue";
 import { useElementBounding, useWindowSize } from "@vueuse/core";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 
+const props = defineProps<TProps>();
+
 const referenceElement = ref<HTMLElement | null>(null);
 const buttonBoundingBox = useElementBounding(referenceElement);
 const windowSize = useWindowSize();
@@ -110,7 +112,6 @@ const panelOverflowDistance = computed(() => {
 
 // --- //
 
-const props = defineProps<TProps>();
 const attributes = mergeAttributes(
   {
     class: `relative inline-flex`,

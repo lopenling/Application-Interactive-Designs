@@ -1,0 +1,21 @@
+---
+import { type TProps } from "@components/BasicPopover/BasicPopover.types";
+import mergeAttributes from "@scripts/helpers/mergeAttributes";
+import renderSlot from "@scripts/helpers/renderSlot";
+
+import VueBasicPopover from "@components/BasicPopover/VueBasicPopover.vue";
+
+const props: TProps = Astro.props;
+const attributes = mergeAttributes({}, props.attributes);
+---
+
+<VueBasicPopover
+  {...attributes}
+  position={props.position}
+  button={props.button}
+  panel={props.panel}
+  client:load
+>
+  <Fragment slot="button" set:html={renderSlot("button", Astro)} />
+  <Fragment slot="panel" set:html={renderSlot("panel", Astro)} />
+</VueBasicPopover>

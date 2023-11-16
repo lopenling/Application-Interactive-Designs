@@ -1,10 +1,12 @@
 ---
 import { type TMetaInformation } from "@lib/types";
+import { SITE_TITLE } from "@scripts/data/constants";
 
 import LayoutBlank from "@layouts/LayoutBlank.astro";
 import Logo from "@components/Logo/Logo.astro";
 import InputGroup from "@components/InputGroup/InputGroup.astro";
 import Icon from "@components/Icon/Icon.astro";
+import BasicPopover from "@components/BasicPopover/BasicPopover.astro";
 
 import {
   IconDataMeta,
@@ -26,7 +28,7 @@ const meta: TMetaInformation = {
       <h2
         class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-stone-900"
       >
-        Sign in to Lopenling
+        Sign in to {SITE_TITLE}
       </h2>
     </div>
 
@@ -74,7 +76,7 @@ const meta: TMetaInformation = {
           <div class="mt-6 grid grid-cols-2 gap-4">
             <a
               href="#"
-              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700"
+              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
             >
               <Icon data={IconDataGoogle} attributes={{ class: `h-4 w-4` }} />
               <span class="text-sm font-semibold leading-6">Google</span>
@@ -82,7 +84,7 @@ const meta: TMetaInformation = {
 
             <a
               href="#"
-              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700"
+              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
             >
               <Icon data={IconDataMeta} attributes={{ class: `h-5 w-5` }} />
               <span class="text-sm font-semibold leading-6">Meta</span>
@@ -91,15 +93,22 @@ const meta: TMetaInformation = {
         </div>
       </div>
 
-      <p class="mt-10 text-center text-sm text-stone-500">
-        New here?
-        <a
-          href="#"
-          class="font-medium leading-6 text-primary-600 underline decoration-transparent underline-offset-2 transition hover:text-primary-500 hover:decoration-primary-500/25"
-        >
-          Account registration
-        </a>
-      </p>
+      <div class="mt-10 text-center">
+        <span class="text-sm text-stone-500">New here? &#32;</span>
+        <BasicPopover position="top">
+          <span
+            slot="button"
+            class="text-sm font-medium leading-snug text-primary-600 underline decoration-transparent underline-offset-2 transition hover:text-primary-500 hover:decoration-primary-500/25 group-focus-visible:rounded-sm group-focus-visible:outline group-focus-visible:outline-offset-2"
+          >
+            Account registration
+          </span>
+
+          <div slot="panel" class="text-left text-sm">
+            To get started with {SITE_TITLE}, enter your email above and click
+            'Continue'.
+          </div>
+        </BasicPopover>
+      </div>
     </div>
   </div>
 </LayoutBlank>

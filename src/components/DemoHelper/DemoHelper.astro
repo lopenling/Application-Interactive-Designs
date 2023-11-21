@@ -1,0 +1,27 @@
+---
+import { type TProps } from "@components/DemoHelper/DemoHelper.types";
+import mergeAttributes from "@scripts/helpers/mergeAttributes";
+
+const props: TProps = Astro.props;
+const attributes = mergeAttributes(
+  {
+    title:
+      "NB! Not to be implemented in production. This component is just for the demo.",
+    class: `fixed bottom-0 left-1/2 flex -translate-x-1/2`,
+  },
+  props.attributes,
+);
+---
+
+<div {...attributes}>
+  {
+    props.button && (
+      <a
+        href={props.button.href}
+        class="flex animate-bounce bg-stone-950 px-3 py-1.5 text-xs text-white hover:bg-stone-800 hover:[animation-play-state:paused]"
+      >
+        {props.button.name}
+      </a>
+    )
+  }
+</div>

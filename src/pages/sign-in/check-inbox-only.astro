@@ -3,8 +3,7 @@ import { type TMetaInformation } from "@lib/types";
 import { SITE_TITLE } from "@scripts/data/constants";
 import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
-import LayoutBlank from "@layouts/LayoutBlank.astro";
-import Logo from "@components/Logo/Logo.astro";
+import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
 import Icon from "@components/Icon/Icon.astro";
 
 import { IconDataEmailActionReadDocument } from "@scripts/icons/streamline/light.mjs";
@@ -17,54 +16,45 @@ const meta: TMetaInformation = {
 };
 ---
 
-<LayoutBlank meta={meta} htmlClass="h-full bg-stone-100" bodyClass="h-full">
-  <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <Logo attributes={{ width: "40", height: "40", class: `mx-auto` }} />
-      <h2
-        class="mt-6 text-center text-2xl font-semibold leading-9 tracking-tight text-stone-900"
+<LayoutAccountAuthentication meta={meta}>
+  <!-- Content -->
+  <div class="text-center">
+    <div class="flex justify-center pb-6 pt-2 text-primary-400">
+      <Icon
+        data={IconDataEmailActionReadDocument}
+        attributes={{ class: `h-16 w-16` }}
+      />
+    </div>
+    <h3 class="mb-2 font-semibold text-primary-800">Check your inbox</h3>
+    <p class="text-sm text-stone-700/70">
+      We have sent you a magic link. If you did not receive the email,
+      <button
+        type="button"
+        class="font-medium underline decoration-primary-700/25 underline-offset-2 outline-none transition hover:text-primary-700 hover:decoration-primary-700/50 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-1"
       >
-        Sign in to {SITE_TITLE}
-      </h2>
-    </div>
-
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[426px]">
-      <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <div class="text-center">
-          <div class="flex justify-center pb-6 pt-2 text-primary-400">
-            <Icon
-              data={IconDataEmailActionReadDocument}
-              attributes={{ class: `h-16 w-16` }}
-            />
-          </div>
-          <h3 class="mb-2 font-semibold text-primary-800">Check your inbox</h3>
-          <p class="text-sm text-stone-700/70">
-            We have sent you a magic link. If you did not receive the email,
-            <button
-              type="button"
-              class="font-medium underline decoration-primary-700/25 underline-offset-2 outline-none transition hover:text-primary-700 hover:decoration-primary-700/50 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-1"
-            >
-              send a new one
-            </button>.
-          </p>
-        </div>
-      </div>
-
-      <p class="mt-10 text-center text-sm text-stone-500">
-        <a
-          href="/sign-in"
-          class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
-        >
-          Back to sign in
-        </a>
-      </p>
-    </div>
+        send a new one
+      </button>.
+    </p>
   </div>
 
+  {/* //////// Heading //////// */}
+  <span slot="heading">Sign in to {SITE_TITLE}</span>
+
+  {/* //////// Footer //////// */}
+  <div slot="footer">
+    <a
+      href="/sign-in"
+      class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
+    >
+      Back to sign in
+    </a>
+  </div>
+
+  {/* //////// Demo only //////// */}
   <DemoHelper
     button={{
       name: "Proceed to next view",
       href: "/dashboard",
     }}
   />
-</LayoutBlank>
+</LayoutAccountAuthentication>

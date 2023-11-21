@@ -104,8 +104,8 @@ const meta: TMetaInformation = {
           </span>
 
           <div slot="panel" class="text-left text-sm">
-            To get started with {SITE_TITLE}, enter your email above and click
-            'Continue'.
+            To get started with {SITE_TITLE}, enter your email address above and
+            click 'Continue'.
           </div>
         </BasicPopover>
       </div>
@@ -121,6 +121,10 @@ const meta: TMetaInformation = {
 
     const emailInput = document.getElementById("email") as HTMLInputElement;
     const emailValue = emailInput.value.trim();
+
+    if (emailValue) {
+      sessionStorage.setItem("userEmail", emailValue);
+    }
 
     // Quick and dirty way to demo multiple flows with one view.
     if (emailValue === "new@lopenling.org") {

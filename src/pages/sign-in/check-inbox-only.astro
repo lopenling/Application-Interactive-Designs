@@ -1,6 +1,7 @@
 ---
 import { type TMetaInformation } from "@lib/types";
 import { SITE_TITLE } from "@scripts/data/constants";
+import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
 import LayoutBlank from "@layouts/LayoutBlank.astro";
 import Logo from "@components/Logo/Logo.astro";
@@ -59,4 +60,11 @@ const meta: TMetaInformation = {
       </p>
     </div>
   </div>
+
+  <DemoHelper
+    button={{
+      name: "Proceed to next view",
+      href: "/dashboard",
+    }}
+  />
 </LayoutBlank>

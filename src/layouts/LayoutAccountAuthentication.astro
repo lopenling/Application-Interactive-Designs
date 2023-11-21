@@ -1,0 +1,41 @@
+---
+import { type TLayoutProps } from "@lib/types";
+import { htmlClass } from "@lib/cssClasses";
+
+import HeadElements from "@components/HeadElements/HeadElements.astro";
+import Logo from "@components/Logo/Logo.astro";
+
+const props: TLayoutProps = Astro.props;
+---
+
+<html
+  lang={props.meta?.lang || "en"}
+  class:list={["h-full bg-stone-100", htmlClass, props.htmlClass]}
+>
+  <head>
+    <HeadElements meta={props.meta} />
+  </head>
+
+  <body class:list={["h-full", props.bodyClass]}>
+    <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <Logo attributes={{ width: "40", height: "40", class: `mx-auto` }} />
+        <h2
+          class="mt-6 text-center text-2xl font-semibold leading-9 tracking-tight text-stone-900"
+        >
+          <slot name="heading" />
+        </h2>
+      </div>
+
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[426px]">
+        <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+          <slot />
+        </div>
+
+        <div class="mt-10 text-center text-sm">
+          <slot name="footer" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

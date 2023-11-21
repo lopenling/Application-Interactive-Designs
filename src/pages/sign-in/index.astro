@@ -2,11 +2,11 @@
 import { type TMetaInformation } from "@lib/types";
 import { SITE_TITLE } from "@scripts/data/constants";
 
-import LayoutBlank from "@layouts/LayoutBlank.astro";
-import Logo from "@components/Logo/Logo.astro";
+import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
 import InputGroup from "@components/InputGroup/InputGroup.astro";
 import Icon from "@components/Icon/Icon.astro";
 import BasicPopover from "@components/BasicPopover/BasicPopover.astro";
+import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
 import {
   IconDataMeta,
@@ -21,97 +21,113 @@ const meta: TMetaInformation = {
 };
 ---
 
-<LayoutBlank meta={meta} htmlClass="h-full bg-stone-100" bodyClass="h-full">
-  <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <Logo attributes={{ width: "40", height: "40", class: `mx-auto` }} />
-      <h2
-        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-stone-900"
+<LayoutAccountAuthentication meta={meta}>
+  <!-- Form -->
+  <form action="#" method="POST" id="emailForm">
+    <InputGroup
+      attributes={{ class: `mb-8` }}
+      label={{ text: "Email address" }}
+      input={{
+        attributes: {
+          name: "email",
+          id: "email",
+          type: "email",
+          inputtype: "email",
+          required: "",
+          autofocus: "",
+        },
+        appearance: "white",
+      }}
+    />
+    <div>
+      <button
+        type="submit"
+        class="flex w-full justify-center rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm transition hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
       >
-        Sign in to {SITE_TITLE}
-      </h2>
+        Continue
+      </button>
     </div>
+  </form>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[426px]">
-      <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form action="#" method="POST" id="emailForm">
-          <InputGroup
-            attributes={{ class: `mb-8` }}
-            label={{ text: "Email address" }}
-            input={{
-              attributes: {
-                name: "email",
-                id: "email",
-                type: "email",
-                inputtype: "email",
-                required: "",
-                autofocus: "",
-              },
-              appearance: "white",
-            }}
-          />
-
-          <div>
-            <button
-              type="submit"
-              class="flex w-full justify-center rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm transition hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-            >
-              Continue
-            </button>
-          </div>
-        </form>
-
-        <div>
-          <div class="relative mt-6">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-              <div class="w-full border-t border-stone-200"></div>
-            </div>
-            <div
-              class="font-regular relative flex justify-center text-sm leading-6"
-            >
-              <span class="bg-white px-6 text-stone-500">Or sign in with</span>
-            </div>
-          </div>
-
-          <div class="mt-6 grid grid-cols-2 gap-4">
-            <a
-              href="#"
-              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
-            >
-              <Icon data={IconDataGoogle} attributes={{ class: `h-4 w-4` }} />
-              <span class="text-sm font-semibold leading-6">Google</span>
-            </a>
-
-            <a
-              href="#"
-              class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
-            >
-              <Icon data={IconDataMeta} attributes={{ class: `h-5 w-5` }} />
-              <span class="text-sm font-semibold leading-6">Meta</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-10 text-center">
-        <span class="text-sm text-stone-500">New here? &#32;</span>
-        <BasicPopover position="top">
-          <span
-            slot="button"
-            class="text-sm font-medium leading-snug text-primary-600 underline decoration-transparent underline-offset-2 transition hover:text-primary-500 hover:decoration-primary-500/25 group-focus-visible:rounded-sm group-focus-visible:outline group-focus-visible:outline-offset-2"
-          >
-            Account registration
-          </span>
-
-          <div slot="panel" class="text-left text-sm">
-            To get started with {SITE_TITLE}, enter your email address above and
-            click 'Continue'.
-          </div>
-        </BasicPopover>
-      </div>
+  <!-- Divider -->
+  <div class="relative mt-6">
+    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+      <div class="w-full border-t border-stone-200"></div>
+    </div>
+    <div class="font-regular relative flex justify-center text-sm leading-6">
+      <span class="bg-white px-6 text-stone-500">Or sign in with</span>
     </div>
   </div>
-</LayoutBlank>
+
+  <!-- Social buttons -->
+  <div class="mt-6 grid grid-cols-2 gap-4">
+    <a
+      href="#"
+      class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
+    >
+      <Icon data={IconDataGoogle} attributes={{ class: `h-4 w-4` }} />
+      <span class="text-sm font-semibold leading-6">Google</span>
+    </a>
+    <a
+      href="#"
+      class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
+    >
+      <Icon data={IconDataMeta} attributes={{ class: `h-5 w-5` }} />
+      <span class="text-sm font-semibold leading-6">Meta</span>
+    </a>
+  </div>
+
+  {/* //////// Heading //////// */}
+  <span slot="heading">Sign in to {SITE_TITLE}</span>
+
+  {/* //////// Footer //////// */}
+  <div slot="footer">
+    <span class="text-stone-500">New here? &#32;</span>
+    <BasicPopover position="top">
+      <span
+        slot="button"
+        class="text-sm font-medium leading-snug text-primary-600 underline decoration-transparent underline-offset-2 transition hover:text-primary-500 hover:decoration-primary-500/25 group-focus-visible:rounded-sm group-focus-visible:outline group-focus-visible:outline-offset-2"
+      >
+        Account registration
+      </span>
+
+      <div slot="panel" class="text-left text-sm">
+        To get started with {SITE_TITLE}, enter your email address above and
+        click 'Continue'.
+      </div>
+    </BasicPopover>
+  </div>
+
+  {/* //////// Demo only //////// */}
+  <DemoHelper
+    popover={{
+      button: {
+        attributes: {
+          id: "emailHelp",
+        },
+        text: "What's the email address?",
+      },
+      panel: {
+        html: `
+          <ul>
+            <li class="mb-2.5">
+              <div>magic@lopenling.org</div>
+              <div class="text-xs leading-normal text-stone-500">Shows magic link sign in flow.</div> 
+            </li>
+            <li class="mb-2.5">
+              <div>password@lopenling.org</div>
+              <div class="text-xs leading-normal text-stone-500">Shows password sign in flow.</div> 
+            </li>
+            <li>
+              <div>new@lopenling.org</div>
+              <div class="text-xs leading-normal text-stone-500">Shows new account creation flow.</div> 
+            </li>
+          </ul>
+        `,
+      },
+    }}
+  />
+</LayoutAccountAuthentication>
 
 <script>
   const emailForm = document.getElementById("emailForm");
@@ -122,8 +138,9 @@ const meta: TMetaInformation = {
     const emailInput = document.getElementById("email") as HTMLInputElement;
     const emailValue = emailInput.value.trim();
 
+    // Store the email address in session storage for later use in forgot password flow.
     if (emailValue) {
-      sessionStorage.setItem("userEmail", emailValue);
+      sessionStorage.setItem("accountEmail", emailValue);
     }
 
     // Quick and dirty way to demo multiple flows with one view.

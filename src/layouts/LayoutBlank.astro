@@ -1,39 +1,14 @@
 ---
-import { type TMetaInformation } from "@lib/types";
-import { SITE_TITLE } from "@scripts/data/constants";
-
+import { type TLayoutProps } from "@lib/types";
+import { htmlClass } from "@lib/cssClasses";
 import HeadElements from "@components/HeadElements/HeadElements.astro";
 
-type TProps = {
-  meta?: TMetaInformation;
-  htmlClass?: string;
-  bodyClass?: string;
-};
-
-const props: TProps = Astro.props;
+const props: TLayoutProps = Astro.props;
 ---
 
-<html
-  lang={props.meta?.lang}
-  class:list={[
-    "text-stone-700 selection:bg-primary-400/40 selection:text-primary-950",
-    props.htmlClass,
-  ]}
->
+<html lang={props.meta?.lang || "en"} class:list={[htmlClass, props.htmlClass]}>
   <head>
-    <title>
-      {props.meta?.title || ""}
-      {props.meta?.title && " - "}
-      {SITE_TITLE}
-    </title>
-    <meta name="description" content={props.meta?.description || ""} />
-    {
-      props.meta?.ogImage && (
-        <meta property="og:image" content={props.meta.ogImage} />
-      )
-    }
-
-    <HeadElements />
+    <HeadElements meta={props.meta} />
   </head>
 
   <body class:list={[props.bodyClass]}>

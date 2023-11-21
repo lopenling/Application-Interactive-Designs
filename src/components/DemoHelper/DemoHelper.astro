@@ -1,27 +1,91 @@
 ---
+// NB!
+// Not to be implemented in production. This component is only for the demo.
+
 import { type TProps } from "@components/DemoHelper/DemoHelper.types";
 import mergeAttributes from "@scripts/helpers/mergeAttributes";
+
+import BasicPopover from "@components/BasicPopover/BasicPopover.astro";
 
 const props: TProps = Astro.props;
 const attributes = mergeAttributes(
   {
-    title:
-      "NB! Not to be implemented in production. This component is just for the demo.",
-    class: `fixed bottom-0 left-1/2 flex -translate-x-1/2`,
+    class: `fixed z-50 bottom-0 left-1/2 flex -translate-x-1/2`,
   },
   props.attributes,
 );
+
+const buttonAttributes = mergeAttributes(
+  {
+    class: `flex animate-bounce-reverse bg-stone-900 px-2.5 py-1 text-xs leading-relaxed text-white hover:bg-stone-700 hover:[animation-play-state:paused] [animation-delay:2s]`,
+    href: `${props.button?.href ? props.button.href : ""}`,
+    tabindex: "-1",
+  },
+  props.button?.attributes,
+);
+
+const popoverAttributes = mergeAttributes({}, props.popover?.attributes);
 ---
 
 <div {...attributes}>
+  {props.button && <a {...buttonAttributes}>{props.button.name}</a>}
+
   {
-    props.button && (
-      <a
-        href={props.button.href}
-        class="flex animate-bounce bg-stone-950 px-3 py-1.5 text-xs text-white hover:bg-stone-800 hover:[animation-play-state:paused]"
+    props.popover && (
+      <BasicPopover
+        attributes={popoverAttributes}
+        position="top"
+        panel={{ width: props.popover.panel?.width }}
+        button={{ attributes: { tabindex: "-1" } }}
       >
-        {props.button.name}
-      </a>
+        <span
+          slot="button"
+          {...props.popover.button?.attributes}
+          class="js-demo-helper-popover-button flex transform px-2.5 py-1 text-xs leading-relaxed text-stone-600 underline decoration-transparent underline-offset-2 [animation-delay:2s] hover:text-stone-800 hover:decoration-black/15 hover:[animation-play-state:paused]"
+        >
+          {props.popover.button?.text}
+        </span>
+
+        <div slot="panel" class="text-left text-sm">
+          <Fragment set:html={props.popover.panel?.html} />
+        </div>
+      </BasicPopover>
     )
   }
 </div>
+
+<script>
+  /**
+   * Show animation and different styles for the DemoHelper Popover buttons if
+   * the user has not interacted with them before.
+   */
+  const demoHelperPopoverButtons = document.querySelectorAll(
+    ".js-demo-helper-popover-button",
+  );
+  const classesA = [
+    "animate-bounce-reverse",
+    "bg-stone-900",
+    "hover:bg-stone-700",
+    "text-white",
+  ];
+  const classesB = [
+    "text-stone-600",
+    "hover:text-stone-800",
+    "hover:decoration-black/15",
+  ];
+
+  demoHelperPopoverButtons.forEach((element) => {
+    if (sessionStorage.getItem(element.id) !== "seen") {
+      element.classList.add(...classesA);
+      element.classList.remove(...classesB);
+    }
+
+    element.addEventListener("click", function () {
+      if (element.id) {
+        sessionStorage.setItem(element.id, "seen");
+        element.classList.remove(...classesA);
+        element.classList.add(...classesB);
+      }
+    });
+  });
+</script>

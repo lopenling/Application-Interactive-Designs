@@ -1,6 +1,5 @@
 ---
 import { type TMetaInformation } from "@lib/types";
-import { SITE_TITLE } from "@scripts/data/constants";
 import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
 import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
@@ -10,7 +9,7 @@ import { IconDataEmailActionReadDocument } from "@scripts/icons/streamline/light
 
 const meta: TMetaInformation = {
   lang: "en",
-  title: `Sign in`,
+  title: `Reset link sent`,
   description: ``,
   ogImage: ``,
 };
@@ -27,18 +26,13 @@ const meta: TMetaInformation = {
     </div>
     <h3 class="mb-2 font-semibold text-primary-800">Check your inbox</h3>
     <p class="text-sm text-stone-700/70">
-      We have sent you a magic link. If you did not receive the email,
-      <button
-        type="button"
-        class="font-medium underline decoration-primary-700/25 underline-offset-2 outline-none transition hover:text-primary-700 hover:decoration-primary-700/50 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-1"
-      >
-        send a new one
-      </button>.
+      We have sent you a password reset link and instructions on how to set a
+      new password.
     </p>
   </div>
 
   {/* //////// Heading //////// */}
-  <span slot="heading">Sign in to {SITE_TITLE}</span>
+  <span slot="heading">Reset link sent</span>
 
   {/* //////// Footer //////// */}
   <div slot="footer">
@@ -54,7 +48,7 @@ const meta: TMetaInformation = {
   <DemoHelper
     button={{
       name: "Proceed to next view",
-      href: "/dashboard",
+      href: "/forgot-password/reset-password",
     }}
   />
 </LayoutAccountAuthentication>

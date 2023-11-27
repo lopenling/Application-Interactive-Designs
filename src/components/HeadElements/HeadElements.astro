@@ -1,5 +1,25 @@
+---
+import { type TProps } from "@components/HeadElements/HeadElements.types";
+import { SITE_TITLE } from "@scripts/data/constants";
+
+const props: TProps = Astro.props;
+---
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>
+  {props.meta?.title || ""}
+  {props.meta?.title && " - "}
+  {SITE_TITLE}
+</title>
+<meta name="description" content={props.meta?.description || ""} />
+
+{
+  props.meta?.ogImage && (
+    <meta property="og:image" content={props.meta.ogImage} />
+  )
+}
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -1,0 +1,84 @@
+---
+import { type TMetaInformation } from "@lib/types";
+
+import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
+import InputGroup from "@components/InputGroup/InputGroup.astro";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Forgot password`,
+  description: ``,
+  ogImage: ``,
+};
+---
+
+<LayoutAccountAuthentication meta={meta}>
+  <!-- Content -->
+  <div class="text-md mb-8">
+    <h3 class="mb-6 font-semibold text-primary-800">Setting a new password</h3>
+    <p class="mb-4">
+      Enter your email address and we’ll send you a link which will allow you to
+      set a new password.
+    </p>
+  </div>
+
+  <!-- Form -->
+  <form action="#" method="POST" id="emailForm">
+    <InputGroup
+      attributes={{ class: `mb-8` }}
+      label={{ text: "Email address" }}
+      input={{
+        attributes: {
+          name: "email",
+          id: "email",
+          type: "email",
+          inputtype: "email",
+          required: "",
+          autofocus: "",
+        },
+        appearance: "white",
+      }}
+    />
+    <div>
+      <button
+        type="submit"
+        class="flex w-full justify-center rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm transition hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+      >
+        Send reset link
+      </button>
+    </div>
+  </form>
+
+  {/* //////// Heading //////// */}
+  <span slot="heading">Forgot password?</span>
+
+  {/* //////// Footer //////// */}
+  <div slot="footer">
+    <a
+      href="/sign-in"
+      class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
+    >
+      Back to sign in
+    </a>
+  </div>
+</LayoutAccountAuthentication>
+
+<script>
+  const emailForm = document.getElementById("emailForm");
+  const emailInput = document.getElementById("email") as HTMLInputElement;
+  const savedEmail = sessionStorage.getItem("accountEmail");
+
+  if (emailInput && savedEmail) {
+    emailInput.value = savedEmail;
+  }
+
+  function handleFormSubmit(event: Event) {
+    event.preventDefault();
+    window.location.href = "/forgot-password/reset-link-sent";
+  }
+
+  // Add the event listener to the form submission
+  if (emailForm) {
+    emailForm.addEventListener("submit", handleFormSubmit);
+  }
+</script>

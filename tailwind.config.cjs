@@ -32,7 +32,7 @@ const customColors = {
 };
 
 module.exports = {
-  content: ["./src/**/*.{astro,vue,html,js,mjs,cjs,jsx,md,mdx}"],
+  content: ["./src/**/*.{astro,vue,html,js,mjs,cjs,ts,jsx,md,mdx}"],
   theme: {
     screens: {
       sm: "640px",

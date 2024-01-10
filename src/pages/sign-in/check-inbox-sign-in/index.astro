@@ -1,0 +1,18 @@
+---
+import LayoutBlank from "@layouts/LayoutBlank.astro";
+---
+
+<LayoutBlank />
+
+<script>
+  const savedEmail = sessionStorage.getItem("accountEmail");
+  const currentURL = new URL(window.location.href);
+
+  if (savedEmail == "password@lopenling.org") {
+    currentURL.pathname += "/magic-link-and-password";
+  } else {
+    currentURL.pathname += "/magic-link";
+  }
+
+  window.location.href = currentURL.href;
+</script>

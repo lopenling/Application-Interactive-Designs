@@ -15,6 +15,16 @@ const meta: TMetaInformation = {
   description: ``,
   ogImage: ``,
 };
+
+export function getStaticPaths() {
+  return [
+    { params: { variation: "magic-link" } },
+    { params: { variation: "magic-link-and-password" } },
+  ];
+}
+export const prerender = true;
+
+const { variation } = Astro.params;
 ---
 
 <LayoutAccountAuthentication meta={meta}>
@@ -39,28 +49,36 @@ const meta: TMetaInformation = {
   </div>
 
   <!-- Divider -->
-  <div class="relative mt-6">
-    <div class="absolute inset-0 flex items-center" aria-hidden="true">
-      <div class="w-full border-t border-stone-200"></div>
-    </div>
-    <div class="font-regular relative flex justify-center text-sm leading-6">
-      <span class="bg-white px-6 text-stone-500">Or</span>
-    </div>
-  </div>
+  {
+    variation == "magic-link-and-password" && (
+      <div class="relative mt-6">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <div class="w-full border-t border-stone-200" />
+        </div>
+        <div class="font-regular relative flex justify-center text-sm leading-6">
+          <span class="bg-white px-6 text-stone-500">Or</span>
+        </div>
+      </div>
+    )
+  }
 
   <!-- Button -->
-  <div class="mt-6">
-    <button
-      onclick="window.location.href='/sign-in/check-inbox-or-password-fields';"
-      type="button"
-      class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
-    >
-      <Icon data={IconDataLoginKey1} attributes={{ class: `h-4 w-4` }} />
-      <span class="text-sm font-semibold leading-6">
-        Sign in with password
-      </span>
-    </button>
-  </div>
+  {
+    variation == "magic-link-and-password" && (
+      <div class="mt-6">
+        <button
+          onclick="window.location.href='/sign-in/enter-password';"
+          type="button"
+          class="flex w-full items-center justify-center gap-3 rounded bg-white px-2 py-1 text-sm font-semibold text-stone-500 shadow-sm ring-1 ring-inset ring-stone-300 transition hover:bg-stone-50 hover:text-stone-700 focus-visible:outline focus-visible:-outline-offset-1"
+        >
+          <Icon data={IconDataLoginKey1} attributes={{ class: `h-4 w-4` }} />
+          <span class="text-sm font-semibold leading-6">
+            Sign in with password
+          </span>
+        </button>
+      </div>
+    )
+  }
 
   {/* //////// Heading //////// */}
   <span slot="heading">Sign in to {SITE_TITLE}</span>
@@ -71,7 +89,7 @@ const meta: TMetaInformation = {
       href="/sign-in"
       class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
     >
-      Go back a step
+      Back to sign in
     </a>
   </div>
 

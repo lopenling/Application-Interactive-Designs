@@ -55,10 +55,10 @@ const meta: TMetaInformation = {
   {/* //////// Footer //////// */}
   <div slot="footer">
     <a
-      href="/sign-in"
+      href="/sign-in/enter-password"
       class="font-normal leading-6 text-stone-500 underline decoration-transparent underline-offset-2 transition hover:text-stone-700 hover:decoration-stone-700/25 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-offset-2"
     >
-      Back to sign in
+      Go back a step
     </a>
   </div>
 </LayoutAccountAuthentication>
@@ -74,7 +74,7 @@ const meta: TMetaInformation = {
 
   function handleFormSubmit(event: Event) {
     event.preventDefault();
-    window.location.href = "/forgot-password/reset-link-sent";
+    window.location.href = "/forgot-password/check-inbox-password-reset";
   }
 
   // Add the event listener to the form submission

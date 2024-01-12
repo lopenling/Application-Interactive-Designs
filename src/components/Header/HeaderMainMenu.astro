@@ -1,0 +1,25 @@
+---
+import navigationData from "@scripts/data/navigationData";
+
+const currentPath = Astro.url.pathname;
+const navigation = navigationData(currentPath);
+---
+
+{
+  navigation.map((item) => (
+    <a
+      href={item.href}
+      class={`
+        ${
+          item.current
+            ? "border-primary-500 text-stone-900"
+            : "border-transparent text-stone-500 hover:border-stone-300 hover:text-stone-700"
+        } 
+        inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition
+      `}
+      aria-current={item.current ? "page" : undefined}
+    >
+      {item.name}
+    </a>
+  ))
+}

@@ -13,7 +13,7 @@ const meta: TMetaInformation = {
 ---
 
 <LayoutAccountAuthentication meta={meta}>
-  <!-- Content -->
+  {/* ---- Content ---- */}
   <div class="text-md mb-8">
     <h3 class="mb-6 font-semibold text-primary-800">Setting a new password</h3>
     <p class="mb-4">
@@ -22,8 +22,8 @@ const meta: TMetaInformation = {
     </p>
   </div>
 
-  <!-- Form -->
-  <form action="#" method="POST" id="emailForm">
+  {/* ---- Form ---- */}
+  <form action="/forgot-password/check-inbox-password-reset" method="POST">
     <InputGroup
       attributes={{ class: `mb-8` }}
       label={{ text: "Email address" }}
@@ -64,21 +64,11 @@ const meta: TMetaInformation = {
 </LayoutAccountAuthentication>
 
 <script>
-  const emailForm = document.getElementById("emailForm");
+  // Prefill email address if it was saved in session storage
   const emailInput = document.getElementById("email") as HTMLInputElement;
   const savedEmail = sessionStorage.getItem("accountEmail");
 
   if (emailInput && savedEmail) {
     emailInput.value = savedEmail;
-  }
-
-  function handleFormSubmit(event: Event) {
-    event.preventDefault();
-    window.location.href = "/forgot-password/check-inbox-password-reset";
-  }
-
-  // Add the event listener to the form submission
-  if (emailForm) {
-    emailForm.addEventListener("submit", handleFormSubmit);
   }
 </script>

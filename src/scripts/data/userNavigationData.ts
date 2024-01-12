@@ -7,15 +7,22 @@ export type TUserNavigationData = {
 export default function userNavigationData(currentPath?: string) {
   const data: TUserNavigationData = [
     {
-      name: "Glossary",
-      href: "/glossary",
+      name: "My account",
+      href: "/my-account",
       get current() {
         return this.href === currentPath;
       },
     },
     {
-      name: "Sign out",
-      href: "/sign-in",
+      name: "Organizations",
+      href: "/organizations",
+      get current() {
+        return this.href === currentPath;
+      },
+    },
+    {
+      name: "Glossary",
+      href: "/glossary",
       get current() {
         return this.href === currentPath;
       },

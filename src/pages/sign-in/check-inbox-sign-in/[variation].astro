@@ -28,7 +28,7 @@ const { variation } = Astro.params;
 ---
 
 <LayoutAccountAuthentication meta={meta}>
-  <!-- Content -->
+  {/* ---- Content ---- */}
   <div class="text-center">
     <div class="flex justify-center pb-6 pt-2 text-primary-400">
       <Icon
@@ -48,7 +48,7 @@ const { variation } = Astro.params;
     </p>
   </div>
 
-  <!-- Divider -->
+  {/* ---- Divider ---- */}
   {
     variation == "magic-link-and-password" && (
       <div class="relative mt-6">
@@ -62,7 +62,7 @@ const { variation } = Astro.params;
     )
   }
 
-  <!-- Button -->
+  {/* ---- Button ---- */}
   {
     variation == "magic-link-and-password" && (
       <div class="mt-6">
@@ -80,6 +80,14 @@ const { variation } = Astro.params;
     )
   }
 
+  {/* ---- Demo only ---- */}
+  <DemoHelper
+    button={{
+      name: "Proceed to next view",
+      href: "/dashboard",
+    }}
+  />
+
   {/* //////// Heading //////// */}
   <span slot="heading">Sign in to {SITE_TITLE}</span>
 
@@ -92,12 +100,4 @@ const { variation } = Astro.params;
       Back to sign in
     </a>
   </div>
-
-  {/* //////// Demo only //////// */}
-  <DemoHelper
-    button={{
-      name: "Proceed to next view",
-      href: "/dashboard",
-    }}
-  />
 </LayoutAccountAuthentication>

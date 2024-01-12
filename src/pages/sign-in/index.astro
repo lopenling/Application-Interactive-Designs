@@ -1,6 +1,7 @@
 ---
 import { type TMetaInformation } from "@lib/types";
 import { SITE_TITLE } from "@scripts/data/constants";
+import { signInEmailAddress } from "@scripts/data/demoHelperData";
 
 import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
 import InputGroup from "@components/InputGroup/InputGroup.astro";
@@ -22,8 +23,8 @@ const meta: TMetaInformation = {
 ---
 
 <LayoutAccountAuthentication meta={meta}>
-  <!-- Form -->
-  <form action="#" method="POST" id="emailForm">
+  {/* ---- Form ---- */}
+  <form action="/sign-in/form-submit" method="POST">
     <InputGroup
       attributes={{ class: `mb-8` }}
       label={{ text: "Email address" }}
@@ -49,7 +50,7 @@ const meta: TMetaInformation = {
     </div>
   </form>
 
-  <!-- Divider -->
+  {/* ---- Divider ---- */}
   <div class="relative mt-6">
     <div class="absolute inset-0 flex items-center" aria-hidden="true">
       <div class="w-full border-t border-stone-200"></div>
@@ -59,7 +60,7 @@ const meta: TMetaInformation = {
     </div>
   </div>
 
-  <!-- Social buttons -->
+  {/* ---- Social buttons ---- */}
   <div class="mt-6 grid grid-cols-2 gap-4">
     <a
       href="#"
@@ -76,6 +77,9 @@ const meta: TMetaInformation = {
       <span class="text-sm font-semibold leading-6">Meta</span>
     </a>
   </div>
+
+  {/* ---- Demo only ---- */}
+  <DemoHelper popover={signInEmailAddress} />
 
   {/* //////// Heading //////// */}
   <span slot="heading">Sign in to {SITE_TITLE}</span>
@@ -97,64 +101,16 @@ const meta: TMetaInformation = {
       </div>
     </BasicPopover>
   </div>
-
-  {/* //////// Demo only //////// */}
-  <DemoHelper
-    popover={{
-      button: {
-        attributes: {
-          id: "emailHelp",
-        },
-        text: "What's the email address?",
-      },
-      panel: {
-        html: `
-          <ul>
-            <li class="mb-2.5">
-              <div>magic@lopenling.org</div>
-              <div class="text-xs leading-normal text-stone-500">Shows magic link sign in flow.</div> 
-            </li>
-            <li class="mb-2.5">
-              <div>password@lopenling.org</div>
-              <div class="text-xs leading-normal text-stone-500">Shows password sign in flow.</div> 
-            </li>
-            <li>
-              <div>new@lopenling.org</div>
-              <div class="text-xs leading-normal text-stone-500">Shows new account creation flow.</div> 
-            </li>
-          </ul>
-        `,
-      },
-    }}
-  />
 </LayoutAccountAuthentication>
 
 <script>
-  const emailForm = document.getElementById("emailForm");
+  // Store email address in session storage.
+  // Needed for forgot password flow and also used for demo prototype.
+  const emailInput = document.getElementById("email") as HTMLInputElement;
 
-  function handleFormSubmit(event: Event) {
-    event.preventDefault();
-
-    const emailInput = document.getElementById("email") as HTMLInputElement;
-    const emailValue = emailInput.value.trim();
-
-    // Store the email address in session storage for later use in forgot password flow.
-    if (emailValue) {
-      sessionStorage.setItem("accountEmail", emailValue);
-    }
-
-    // Quick and dirty way to demo multiple flows with one view.
-    if (emailValue === "new@lopenling.org") {
-      window.location.href = "/sign-in/new-account";
-    } else if (emailValue === "password@lopenling.org") {
-      window.location.href = "/sign-in/enter-password";
-    } else {
-      window.location.href = "/sign-in/check-inbox-sign-in";
-    }
-  }
-
-  // Add the event listener to the form submission
-  if (emailForm) {
-    emailForm.addEventListener("submit", handleFormSubmit);
+  if (emailInput) {
+    emailInput.addEventListener("input", function () {
+      sessionStorage.setItem("accountEmail", emailInput.value.trim());
+    });
   }
 </script>

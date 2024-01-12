@@ -5,6 +5,8 @@ import LayoutBlank from "@layouts/LayoutBlank.astro";
 <LayoutBlank />
 
 <script>
+  // NB: Demo only, not to be used in production!
+  // Based on the entered email address, redirect to the appropriate page
   const savedEmail = sessionStorage.getItem("accountEmail");
   const currentURL = new URL(window.location.href);
 

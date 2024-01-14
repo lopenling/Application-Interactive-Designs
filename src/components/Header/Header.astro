@@ -6,6 +6,7 @@ import VueHeaderMobileMenuButton from "@components/Header/VueHeaderMobileMenuBut
 import VueHeaderMobileMenu from "@components/Header/VueHeaderMobileMenu.vue";
 
 const currentPath = Astro.url.pathname;
+const currentRole = Astro.url.searchParams.get("role");
 ---
 
 <nav class="bg-white shadow-sm">
@@ -21,19 +22,27 @@ const currentPath = Astro.url.pathname;
       </div>
       <div class="hidden sm:ml-6 sm:flex sm:items-center">
         <div class="ml-3">
-          <VueHeaderProfile currentPath={currentPath} client:load />
+          <VueHeaderProfile
+            currentPath={currentPath}
+            currentRole={currentRole}
+            client:load
+          />
         </div>
       </div>
 
       <div class="-mr-2 flex items-center sm:hidden">
-        <VueHeaderMobileMenuButton client:load />
+        <VueHeaderMobileMenuButton currentRole={currentRole} client:load />
       </div>
     </div>
   </div>
 
   <div class="relative">
     <div class="absolute -top-px left-0 right-0 z-20 bg-white shadow-xl">
-      <VueHeaderMobileMenu currentPath={currentPath} client:load />
+      <VueHeaderMobileMenu
+        currentPath={currentPath}
+        currentRole={currentRole}
+        client:load
+      />
     </div>
   </div>
 </nav>

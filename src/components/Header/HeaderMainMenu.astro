@@ -2,7 +2,8 @@
 import navigationData from "@scripts/data/navigationData";
 
 const currentPath = Astro.url.pathname;
-const navigation = navigationData(currentPath);
+const currentRole = Astro.url.searchParams.get("role");
+const navigation = navigationData(currentPath, currentRole);
 ---
 
 {

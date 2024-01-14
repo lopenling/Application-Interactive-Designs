@@ -13,5 +13,9 @@ const props: TLayoutProps = Astro.props;
 
   <body class:list={[props.bodyClass]}>
     <slot />
+
+    <script>
+      sessionStorage.setItem("lastPageSeen", window.location.href);
+    </script>
   </body>
 </html>

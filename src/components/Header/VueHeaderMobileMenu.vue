@@ -64,15 +64,15 @@ import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
 
 const props = defineProps<TProps>();
-const navigation = navigationData(props.currentPath);
-const userNavigation = userNavigationData(props.currentPath);
-const userNavigationExtra = userNavigationExtraData();
+const navigation = navigationData(props.currentPath, props.currentRole);
+const userNavigation = userNavigationData(props.currentPath, props.currentRole);
+const userNavigationExtra = userNavigationExtraData(props.currentRole);
 
 // Set up the store
 const multiStore = useStore($multiStore);
 let subStore = computed(() => multiStore.value["mobileMenuVisible"]);
 
-// Toggle the boolean value when the button is clicked
+// Toggle the boolean value in store when the button is clicked
 const closeMobileMenu = () => {
   updateStore("mobileMenuVisible", false);
 };

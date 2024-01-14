@@ -82,7 +82,7 @@ import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
 
 const props = defineProps<TProps>();
-const user = userData("admin");
-const userNavigation = userNavigationData(props.currentPath);
-const userNavigationExtra = userNavigationExtraData();
+const user = userData(props.currentRole);
+const userNavigation = userNavigationData(props.currentPath, props.currentRole);
+const userNavigationExtra = userNavigationExtraData(props.currentRole);
 </script>

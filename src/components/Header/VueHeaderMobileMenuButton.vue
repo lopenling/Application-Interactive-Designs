@@ -33,7 +33,10 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { type TProps } from "@components/Header/HeaderMobileMenuButton.types";
+import userData from "@scripts/data/userData";
+
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
@@ -44,8 +47,8 @@ import {
   IconDataClose,
 } from "@scripts/icons/streamline/regular.mjs";
 
-import userData from "@scripts/data/userData";
-const user = userData("admin");
+const props = defineProps<TProps>();
+const user = userData(props.currentRole);
 
 // Set up the store
 const multiStore = useStore($multiStore);
@@ -54,7 +57,7 @@ let subStore = computed(() => multiStore.value["mobileMenuVisible"]);
 // Set initial value for the `mobileMenuVisible` sub-store
 updateStore("mobileMenuVisible", false);
 
-// Toggle the boolean value when the button is clicked
+// Toggle the boolean value in store when the button is clicked
 const handleButtonClick = () => {
   updateStore("mobileMenuVisible", !subStore.value);
 };

@@ -1,25 +1,12 @@
 ---
-import { type TMetaInformation } from "@lib/types";
+import { type TMetaInformation, type TRole } from "@lib/types";
+import getRole from "@scripts/helpers/getRole";
 
-import LayoutBlank from "@layouts/LayoutBlank.astro";
-import Header from "@components/Header/Header.astro";
-import Icon from "@components/Icon/Icon.astro";
-
-import LocalVueHeading from "./_index/VueHeading.vue";
-import LocalVueCustomDictionaries from "./_index/VueCustomDictionaries.vue";
-import LocalVueNativeDictionaries from "./_index/VueNativeDictionaries.vue";
-
-import dictionariesData from "@scripts/data/dictionariesData";
-import organizationUsersData from "@scripts/data/organizationUsersData";
-
-const dictionaries = dictionariesData();
-const users = organizationUsersData();
-
-import {
-  IconDataBookClose2,
-  IconDataBookEdit,
-  IconDataSingleNeutral,
-} from "@scripts/icons/streamline/regular.mjs";
+import LayoutSettings from "@layouts/LayoutSettings.astro";
+import VuePartialStats from "./_partials/_VuePartialStats.vue";
+import VuePartialHeading from "./_partials/_VuePartialHeading.vue";
+import VuePartialCustomDictionaries from "./_partials/_VuePartialCustomDictionaries.vue";
+import VuePartialNativeDictionaries from "./_partials/_VuePartialNativeDictionaries.vue";
 
 const meta: TMetaInformation = {
   lang: "en",
@@ -27,50 +14,13 @@ const meta: TMetaInformation = {
   description: ``,
   ogImage: ``,
 };
+
+const role: TRole = getRole(Astro);
 ---
 
-<LayoutBlank meta={meta} htmlClass="bg-stone-100">
-  <Header />
-
-  <div class="px-4 pb-20 pt-4 sm:px-6">
-    <div class="mx-auto max-w-3xl">
-      <div
-        class="mb-12 flex flex-row flex-wrap gap-x-6 gap-y-1 sm:mb-6 sm:justify-end"
-      >
-        <div class="mt-2 flex items-center text-sm text-stone-500">
-          <Icon
-            data={IconDataBookEdit}
-            attributes={{
-              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
-            }}
-          />
-           0/3 custom
-        </div>
-
-        <div class="mt-2 flex items-center text-sm text-stone-500">
-          <Icon
-            data={IconDataBookClose2}
-            attributes={{
-              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
-            }}
-          />
-           18/{dictionaries.length} native
-        </div>
-
-        <div class="mt-2 flex items-center text-sm text-stone-500">
-          <Icon
-            data={IconDataSingleNeutral}
-            attributes={{
-              class: `mr-1.5 h-5 w-5 flex-shrink-0 text-stone-400`,
-            }}
-          />
-          {users.length}
-        </div>
-      </div>
-
-      <LocalVueHeading client:load />
-      <LocalVueCustomDictionaries client:load />
-      <LocalVueNativeDictionaries client:load />
-    </div>
-  </div>
-</LayoutBlank>
+<LayoutSettings meta={meta}>
+  <VuePartialStats role={role} client:load />
+  <VuePartialHeading role={role} client:load />
+  <VuePartialCustomDictionaries role={role} client:load />
+  <VuePartialNativeDictionaries role={role} client:load />
+</LayoutSettings>

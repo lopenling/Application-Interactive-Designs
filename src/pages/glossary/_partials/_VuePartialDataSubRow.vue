@@ -1,8 +1,7 @@
 <template>
   <div
     :class="[
-      index % 2 === 0 ? 'rounded-md bg-stone-50' : '',
-      index == 0 ? '' : '',
+      props.index % 2 === 0 ? 'rounded-md bg-stone-50' : '',
       'relative mx-4 flex justify-between pl-2',
     ]"
   >
@@ -14,13 +13,13 @@
         appearance="secondary"
         :switch="{
           attributes: {
-            disabled: !enabled,
+            ...(!props.dictionaryEnabled && { disabled: 'disabled' }),
           },
         }"
         :label="{
           attributes: { class: `[&]:font-normal` },
           toggleOpacity: true,
-          text: person.name,
+          text: props.person.name,
         }"
       />
     </div>
@@ -31,22 +30,26 @@
       <div class="hidden sm:block">
         <p class="flex text-xs leading-5 text-stone-500">
           <a
-            :href="`mailto:${person.email}`"
+            :href="`mailto:${props.person.email}`"
             class="relative truncate hover:underline"
-            >{{ person.email }}</a
           >
+            {{ props.person.email }}
+          </a>
         </p>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { type TOrganizationUsersData } from "@scripts/data/organizationUsersData";
 import VueToggle from "@components/Toggle/VueToggle.vue";
 
-const { person, index, enabled } = defineProps({
-  person: { type: Object },
-  index: { type: Number },
-  enabled: { type: Boolean },
-});
+// Define partial props
+type TProps = {
+  person: TOrganizationUsersData[number];
+  index: number;
+  dictionaryEnabled: boolean;
+};
+const props = defineProps<TProps>();
 </script>

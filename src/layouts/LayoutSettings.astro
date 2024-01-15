@@ -1,18 +1,29 @@
 ---
 import { type TLayoutProps } from "@lib/types";
 import { htmlClass } from "@lib/cssClasses";
+
 import HeadElements from "@components/HeadElements/HeadElements.astro";
+import Header from "@components/Header/Header.astro";
 
 const props: TLayoutProps = Astro.props;
 ---
 
-<html lang={props.meta?.lang || "en"} class:list={[htmlClass, props.htmlClass]}>
+<html
+  lang={props.meta?.lang || "en"}
+  class:list={["bg-stone-100", htmlClass, props.htmlClass]}
+>
   <head>
     <HeadElements meta={props.meta} />
   </head>
 
   <body class:list={[props.bodyClass]}>
-    <slot />
+    <Header />
+
+    <div class="px-4 pb-20 pt-4 sm:px-6">
+      <div class="mx-auto max-w-3xl">
+        <slot />
+      </div>
+    </div>
 
     <script>
       // NB: Demo only, not to be used in production!

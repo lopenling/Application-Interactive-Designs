@@ -1,6 +1,6 @@
 ---
 import { type TMetaInformation } from "@lib/types";
-import { SITE_TITLE } from "@scripts/data/constants";
+import { SITE_TITLE, DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
 import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
 import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
@@ -16,13 +16,13 @@ const meta: TMetaInformation = {
   ogImage: ``,
 };
 
+export const prerender = true;
 export function getStaticPaths() {
   return [
     { params: { variation: "magic-link" } },
     { params: { variation: "magic-link-and-password" } },
   ];
 }
-export const prerender = true;
 
 const { variation } = Astro.params;
 ---
@@ -84,7 +84,7 @@ const { variation } = Astro.params;
   <DemoHelper
     button={{
       name: "Proceed to next view",
-      href: "/dashboard",
+      href: "/dashboard" + `?role=${DEMO_ONLY_DEFAULT_ROLE}`,
     }}
   />
 

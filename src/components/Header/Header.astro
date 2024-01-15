@@ -1,16 +1,48 @@
 ---
-import { type TProps } from "@components/Header/Header.types";
+import HeaderLogo from "@components/Header/HeaderLogo.astro";
+import HeaderMainMenu from "@components/Header/HeaderMainMenu.astro";
+import VueHeaderProfile from "@components/Header/VueHeaderProfile.vue";
+import VueHeaderMobileMenuButton from "@components/Header/VueHeaderMobileMenuButton.vue";
+import VueHeaderMobileMenu from "@components/Header/VueHeaderMobileMenu.vue";
 
-import Logo from "@components/Logo/Logo.astro";
-import VueHeader from "@components/Header/VueHeader.vue";
-
-const props: TProps = Astro.props;
+const currentPath = Astro.url.pathname;
+const currentRole = Astro.url.searchParams.get("role");
 ---
 
-<VueHeader userRole={props.userRole} pathname={Astro.url.pathname} client:load>
-  <Fragment slot="logo">
-    <a href="/">
-      <Logo attributes={{ width: "30", height: "30" }} />
-    </a>
-  </Fragment>
-</VueHeader>
+<nav class="bg-white shadow-sm">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 justify-between">
+      <div class="flex">
+        <div class="flex flex-shrink-0 items-center">
+          <HeaderLogo />
+        </div>
+        <div class="hidden sm:-my-px sm:ml-8 sm:flex sm:space-x-8">
+          <HeaderMainMenu />
+        </div>
+      </div>
+      <div class="hidden sm:ml-6 sm:flex sm:items-center">
+        <div class="ml-3">
+          <VueHeaderProfile
+            currentPath={currentPath}
+            currentRole={currentRole}
+            client:load
+          />
+        </div>
+      </div>
+
+      <div class="-mr-2 flex items-center sm:hidden">
+        <VueHeaderMobileMenuButton currentRole={currentRole} client:load />
+      </div>
+    </div>
+  </div>
+
+  <div class="relative">
+    <div class="absolute -top-px left-0 right-0 z-20 bg-white shadow-xl">
+      <VueHeaderMobileMenu
+        currentPath={currentPath}
+        currentRole={currentRole}
+        client:load
+      />
+    </div>
+  </div>
+</nav>

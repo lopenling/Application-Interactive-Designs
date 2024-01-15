@@ -1,0 +1,64 @@
+---
+const currentUrl = Astro.url.href;
+---
+
+<html>
+  <head></head>
+  <body data-current-url={currentUrl}>
+    <script>
+      /**
+       * NB: Demo only, not to be used in production!
+       *
+       * The goal of this script is to redirect user back to the last page
+       * they saw. This is achieved by using the url string from `lastPageSeen`
+       * sessionStorage.
+       * However, this is not enough, because the last page seen might have
+       * query parameters, and we need to preserve them.
+       * The current page might also have query parameters, so these need to be
+       * merged together.
+       */
+
+      const lastPageSeen = sessionStorage.getItem("lastPageSeen");
+
+      if (lastPageSeen) {
+        // Create an URL object from the `lastPageSeen` and extract the query
+        // parameters into an object.
+        const lastPageUrl = new URL(lastPageSeen);
+        const lastPageQueryParams: { [key: string]: string } = {};
+
+        lastPageUrl.searchParams.forEach((value, key) => {
+          lastPageQueryParams[key] = value;
+        });
+
+        // Create an URL object from the body's `data-current-url` and extract
+        // the query parameters into an object.
+        const currentUrl = new URL(document.body.dataset.currentUrl as string);
+        const currentQueryParams: { [key: string]: string } = {};
+
+        currentUrl.searchParams.forEach((value, key) => {
+          currentQueryParams[key] = value;
+        });
+
+        // Merge both query parameters objects and create a new query string.
+        const newQueryParams = {
+          ...lastPageQueryParams,
+          ...currentQueryParams,
+        };
+        const newQueryParamsString = new URLSearchParams(
+          newQueryParams,
+        ).toString();
+
+        // Redirect to the last page seen with the new query parameters.
+        const baseUrl = `${lastPageUrl.origin}${lastPageUrl.pathname}`;
+
+        if (newQueryParamsString) {
+          window.location.href = baseUrl + "?" + newQueryParamsString;
+        } else {
+          window.location.href = baseUrl;
+        }
+      } else {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

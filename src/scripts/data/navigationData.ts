@@ -1,4 +1,8 @@
-import { DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
+import {
+  DEMO_ONLY_DEFAULT_ROLE,
+  DEMO_ONLY_DEFAULT_STATE,
+} from "@scripts/data/constants";
+import { type TRole, type TState } from "@lib/types";
 
 export type TNavigationData = {
   name: string;
@@ -7,29 +11,39 @@ export type TNavigationData = {
 }[];
 
 export default function navigationData(
-  currentPath?: string,
-  currentRole?: string | null,
+  path?: string,
+  role?: TRole,
+  state?: TState,
 ) {
   const data: TNavigationData = [
     {
-      name: "Placeholder",
-      href: "/dashboard" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      name: "Dashboard",
+      href:
+        "/dashboard" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
     {
-      name: "Navigation",
-      href: "/page-2" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      name: "Translate",
+      href:
+        "/translate" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
     {
-      name: "Items",
-      href: "/page-3" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      name: "Projects",
+      href:
+        "/projects" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
   ];

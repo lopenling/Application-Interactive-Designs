@@ -1,4 +1,8 @@
-import { DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
+import {
+  DEMO_ONLY_DEFAULT_ROLE,
+  DEMO_ONLY_DEFAULT_STATE,
+} from "@scripts/data/constants";
+import { type TRole, type TState } from "@lib/types";
 
 export type TUserNavigationData = {
   name: string;
@@ -7,29 +11,39 @@ export type TUserNavigationData = {
 }[];
 
 export default function userNavigationData(
-  currentPath?: string,
-  currentRole?: string | null,
+  path?: string,
+  role?: TRole,
+  state?: TState,
 ) {
   const data: TUserNavigationData = [
     {
       name: "My account",
-      href: "/my-account" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      href:
+        "/my-account" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
     {
-      name: "Organizations",
-      href: "/organizations" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      name: "Teams",
+      href:
+        "/teams" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
     {
       name: "Glossary",
-      href: "/glossary" + `?role=${currentRole || DEMO_ONLY_DEFAULT_ROLE}`,
+      href:
+        "/glossary" +
+        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
+        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
       get current() {
-        return this.href === currentPath;
+        return this.href.split("?")[0] === path;
       },
     },
   ];

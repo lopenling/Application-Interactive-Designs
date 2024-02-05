@@ -1,6 +1,6 @@
 import { DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
+import { type TRole } from "@lib/types";
 
-export type TRole = "admin" | "user";
 export type TUserData = {
   id: number;
   name: string;
@@ -9,7 +9,7 @@ export type TUserData = {
   imageUrl?: string;
 };
 
-export default function userData(currentRole: TRole): TUserData {
+export default function userData(role: TRole | undefined): TUserData {
   const defaultRole: TRole = DEMO_ONLY_DEFAULT_ROLE;
   const data: Record<TRole, TUserData> = {
     admin: {
@@ -28,8 +28,8 @@ export default function userData(currentRole: TRole): TUserData {
     },
   };
 
-  if (currentRole === "admin" || currentRole === "user") {
-    return data[currentRole];
+  if (role === "admin" || role === "user") {
+    return data[role];
   } else {
     return data[defaultRole];
   }

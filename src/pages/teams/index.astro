@@ -1,0 +1,28 @@
+---
+import { type TMetaInformation, type TRole, type TState } from "@lib/types";
+import getRole from "@scripts/helpers/getRole";
+import getState from "@scripts/helpers/getState";
+
+import LayoutSettings from "@layouts/LayoutSettings.astro";
+import VuePartialHeading from "./_partials/_VuePartialHeading.vue";
+import VuePartialPendingTeams from "./_partials/_VuePartialPendingTeams.vue";
+import VuePartialMyTeams from "./_partials/_VuePartialMyTeams.vue";
+import VuePartialOtherTeams from "./_partials/_VuePartialOtherTeams.vue";
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Teams`,
+  description: ``,
+  ogImage: ``,
+};
+
+const role: TRole = getRole(Astro);
+const state: TState = getState(Astro);
+---
+
+<LayoutSettings meta={meta}>
+  <VuePartialHeading client:load />
+  <VuePartialPendingTeams role={role} state={state} client:load />
+  <VuePartialMyTeams role={role} state={state} client:load />
+  <VuePartialOtherTeams role={role} state={state} client:load />
+</LayoutSettings>

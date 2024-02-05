@@ -1,5 +1,7 @@
 export { IconAddSquare, IconDataAddSquare } from "./regular/IconAddSquare.mjs";
+export { IconAdd, IconDataAdd } from "./regular/IconAdd.mjs";
 export { IconArrowDown1, IconDataArrowDown1 } from "./regular/IconArrowDown1.mjs";
+export { IconArrowRight, IconDataArrowRight } from "./regular/IconArrowRight.mjs";
 export { IconArrowUp1, IconDataArrowUp1 } from "./regular/IconArrowUp1.mjs";
 export { IconBookBookPages, IconDataBookBookPages } from "./regular/IconBookBookPages.mjs";
 export { IconBookClose2, IconDataBookClose2 } from "./regular/IconBookClose2.mjs";

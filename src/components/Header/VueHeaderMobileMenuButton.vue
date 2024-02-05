@@ -48,7 +48,7 @@ import {
 } from "@scripts/icons/streamline/regular.mjs";
 
 const props = defineProps<TProps>();
-const user = userData(props.currentRole);
+const user = userData(props.role);
 
 // Set up the store
 const multiStore = useStore($multiStore);

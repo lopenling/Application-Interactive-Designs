@@ -64,9 +64,9 @@ import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
 
 const props = defineProps<TProps>();
-const navigation = navigationData(props.currentPath, props.currentRole);
-const userNavigation = userNavigationData(props.currentPath, props.currentRole);
-const userNavigationExtra = userNavigationExtraData(props.currentRole);
+const navigation = navigationData(props.path, props.role, props.state);
+const userNavigation = userNavigationData(props.path, props.role, props.state);
+const userNavigationExtra = userNavigationExtraData(props.role, props.state);
 
 // Set up the store
 const multiStore = useStore($multiStore);

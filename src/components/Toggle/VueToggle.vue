@@ -4,7 +4,7 @@
       v-model="isToggled"
       v-bind="switchAttributes"
       :class="[
-        isToggled && props.appearance == 'secondary' && 'bg-secondary-600',
+        isToggled && props.appearance == 'secondary' && 'bg-secondary-400/80',
         isToggled && props.appearance == 'primary' && 'bg-primary-600',
         isToggled && props.switch?.attributes?.disabled && 'bg-stone-300',
         !isToggled && 'bg-stone-200',

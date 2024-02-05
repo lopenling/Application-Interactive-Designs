@@ -1,4 +1,7 @@
+import { type TRole, type TState } from "@lib/types";
+
 export type TProps = {
-  currentPath?: string;
-  currentRole?: string | null;
+  path?: string;
+  role?: TRole;
+  state?: TState;
 };

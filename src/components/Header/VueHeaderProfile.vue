@@ -74,16 +74,20 @@
 </template>
 
 <script setup lang="ts">
-import { type TProps } from "@components/Header/HeaderProfile.types";
+import { type AstroGlobal } from "astro";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import getRole from "@scripts/helpers/getRole";
 
 import userData from "@scripts/data/userData";
 import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
 
-const props = defineProps<TProps>();
+type TProps = { astro: AstroGlobal };
 
-const user = userData(props.role);
-const userNavigation = userNavigationData(props.path, props.role, props.state);
-const userNavigationExtra = userNavigationExtraData(props.role, props.state);
+const props = defineProps<TProps>();
+const role = getRole(props.astro);
+const user = userData(role);
+
+const userNavigation = userNavigationData(props.astro);
+const userNavigationExtra = userNavigationExtraData(props.astro);
 </script>

@@ -1,8 +1,6 @@
-import {
-  DEMO_ONLY_DEFAULT_ROLE,
-  DEMO_ONLY_DEFAULT_STATE,
-} from "@scripts/data/constants";
-import { type TRole, type TState } from "@lib/types";
+import { type AstroGlobal } from "astro";
+import getUrlParams from "@scripts/helpers/getUrlParams";
+import getCurrentPath from "@scripts/helpers/getCurrentPath";
 
 export type TUserNavigationData = {
   name: string;
@@ -10,40 +8,30 @@ export type TUserNavigationData = {
   get current(): boolean;
 }[];
 
-export default function userNavigationData(
-  path?: string,
-  role?: TRole,
-  state?: TState,
-) {
+export default function userNavigationData(Astro: AstroGlobal) {
+  const urlParams = getUrlParams(Astro);
+  const currentPath = getCurrentPath(Astro);
+
   const data: TUserNavigationData = [
     {
       name: "My account",
-      href:
-        "/my-account" +
-        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
-        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
+      href: "/my-account" + "?" + urlParams,
       get current() {
-        return this.href.split("?")[0] === path;
+        return this.href.split("?")[0] === currentPath;
       },
     },
     {
       name: "Teams",
-      href:
-        "/teams" +
-        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
-        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
+      href: "/teams" + "?" + urlParams,
       get current() {
-        return this.href.split("?")[0] === path;
+        return this.href.split("?")[0] === currentPath;
       },
     },
     {
       name: "Glossary",
-      href:
-        "/glossary" +
-        `?role=${role || DEMO_ONLY_DEFAULT_ROLE}` +
-        `&state=${state || DEMO_ONLY_DEFAULT_STATE}`,
+      href: "/glossary" + "?" + urlParams,
       get current() {
-        return this.href.split("?")[0] === path;
+        return this.href.split("?")[0] === currentPath;
       },
     },
   ];

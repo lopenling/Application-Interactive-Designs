@@ -1,11 +1,16 @@
-import { type TRole, type TState } from "@lib/types";
+import { type AstroGlobal } from "astro";
+import getRole from "@scripts/helpers/getRole";
+import getState from "@scripts/helpers/getState";
 
 export type TUserNavigationExtraData = {
   name: string;
   href: string;
 }[];
 
-export default function userNavigationExtraData(role?: TRole, state?: TState) {
+export default function userNavigationExtraData(astro: AstroGlobal) {
+  const role = getRole(astro);
+  const state = getState(astro);
+
   const data: TUserNavigationExtraData = [
     {
       name: "Sign out",

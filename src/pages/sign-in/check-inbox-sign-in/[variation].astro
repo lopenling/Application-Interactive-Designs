@@ -1,6 +1,6 @@
 ---
 import { type TMetaInformation } from "@lib/types";
-import { SITE_TITLE, DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
+import { SITE_TITLE } from "@scripts/data/constants";
 import DemoHelper from "@components/DemoHelper/DemoHelper.astro";
 
 import LayoutAccountAuthentication from "@layouts/LayoutAccountAuthentication.astro";
@@ -84,7 +84,7 @@ const { variation } = Astro.params;
   <DemoHelper
     button={{
       name: "Proceed to next view",
-      href: "/dashboard" + `?role=${DEMO_ONLY_DEFAULT_ROLE}`,
+      href: "/dashboard",
     }}
   />
 

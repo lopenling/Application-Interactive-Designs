@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { type TProps } from "@components/Header/HeaderMobileMenu.types";
+import { type AstroGlobal } from "astro";
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
@@ -63,10 +63,12 @@ import navigationData from "@scripts/data/navigationData";
 import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
 
+type TProps = { astro: AstroGlobal };
+
 const props = defineProps<TProps>();
-const navigation = navigationData(props.path, props.role, props.state);
-const userNavigation = userNavigationData(props.path, props.role, props.state);
-const userNavigationExtra = userNavigationExtraData(props.role, props.state);
+const navigation = navigationData(props.astro);
+const userNavigation = userNavigationData(props.astro);
+const userNavigationExtra = userNavigationExtraData(props.astro);
 
 // Set up the store
 const multiStore = useStore($multiStore);

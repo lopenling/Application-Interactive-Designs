@@ -17,9 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { type TProps } from "@components/Header/HeaderMainMenu.types";
+import { type AstroGlobal } from "astro";
 import navigationData from "@scripts/data/navigationData";
 
+type TProps = { astro: AstroGlobal };
+
 const props = defineProps<TProps>();
-const navigation = navigationData(props.path, props.role, props.state);
+const navigation = navigationData(props.astro);
 </script>

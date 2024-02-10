@@ -1,4 +1,7 @@
-import { DEMO_ONLY_DEFAULT_ROLE } from "@scripts/data/constants";
+import {
+  DEMO_ONLY_ROLES,
+  DEMO_ONLY_DEFAULT_ROLE,
+} from "@scripts/data/constants";
 import { type TRole } from "@lib/types";
 
 export type TUserData = {
@@ -28,7 +31,7 @@ export default function userData(role: TRole | undefined): TUserData {
     },
   };
 
-  if (role === "admin" || role === "user") {
+  if (role && DEMO_ONLY_ROLES.includes(role)) {
     return data[role];
   } else {
     return data[defaultRole];

@@ -34,8 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { type TProps } from "@components/Header/HeaderMobileMenuButton.types";
+import { type AstroGlobal } from "astro";
 import userData from "@scripts/data/userData";
+import getRole from "@scripts/helpers/getRole";
 
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
@@ -47,8 +48,11 @@ import {
   IconDataClose,
 } from "@scripts/icons/streamline/regular.mjs";
 
+type TProps = { astro: AstroGlobal };
+
 const props = defineProps<TProps>();
-const user = userData(props.role);
+const role = getRole(props.astro);
+const user = userData(role);
 
 // Set up the store
 const multiStore = useStore($multiStore);

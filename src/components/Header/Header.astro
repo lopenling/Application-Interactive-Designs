@@ -1,17 +1,9 @@
 ---
-import { type TRole, type TState } from "@lib/types";
-import getRole from "@scripts/helpers/getRole";
-import getState from "@scripts/helpers/getState";
-
 import HeaderLogo from "@components/Header/HeaderLogo.astro";
 import VueHeaderMainMenu from "@components/Header/VueHeaderMainMenu.vue";
 import VueHeaderProfile from "@components/Header/VueHeaderProfile.vue";
 import VueHeaderMobileMenuButton from "@components/Header/VueHeaderMobileMenuButton.vue";
 import VueHeaderMobileMenu from "@components/Header/VueHeaderMobileMenu.vue";
-
-const path = Astro.url.pathname;
-const role: TRole = getRole(Astro);
-const state: TState = getState(Astro);
 ---
 
 <nav class="bg-white shadow-sm">
@@ -22,29 +14,24 @@ const state: TState = getState(Astro);
           <HeaderLogo />
         </div>
         <div class="hidden sm:ml-8 sm:flex">
-          <VueHeaderMainMenu
-            path={path}
-            role={role}
-            state={state}
-            client:load
-          />
+          <VueHeaderMainMenu astro={Astro} client:load />
         </div>
       </div>
       <div class="hidden sm:ml-6 sm:flex sm:items-center">
         <div class="ml-3">
-          <VueHeaderProfile path={path} role={role} state={state} client:load />
+          <VueHeaderProfile astro={Astro} client:load />
         </div>
       </div>
 
       <div class="-mr-2 flex items-center sm:hidden">
-        <VueHeaderMobileMenuButton role={role} client:load />
+        <VueHeaderMobileMenuButton astro={Astro} client:load />
       </div>
     </div>
   </div>
 
   <div class="relative">
     <div class="absolute -top-px left-0 right-0 z-20 bg-white shadow-xl">
-      <VueHeaderMobileMenu path={path} role={role} state={state} client:load />
+      <VueHeaderMobileMenu astro={Astro} client:load />
     </div>
   </div>
 </nav>

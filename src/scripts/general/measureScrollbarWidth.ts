@@ -6,16 +6,11 @@
  * as CSS variable on the HTML element. Defaults to `true`.
  * @returns The scrollbar width.
  */
-export default function measureScrollbarWidth(
-  cssVariable: boolean = true,
-): number {
+export default function measureScrollbarWidth(cssVariable: boolean = true): number {
   let scrollbarWidth: number = window.innerWidth - document.body.clientWidth;
 
   if (cssVariable) {
-    document.documentElement.style.setProperty(
-      "--scrollbarWidth",
-      `${scrollbarWidth}px`,
-    );
+    document.documentElement.style.setProperty("--scrollbarWidth", `${scrollbarWidth}px`);
   }
 
   return scrollbarWidth;

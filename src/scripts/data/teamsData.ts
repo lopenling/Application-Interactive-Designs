@@ -1,37 +1,41 @@
 export type TTeam = {
   id: number;
   name: string;
-  users_admin: number[];
-  users_member: number[];
+  adminUserIds: number[];
+  memberUserIds: number[];
 };
 
-export type TTeamsData = TTeam[];
-
 export default function teamsData() {
-  const data: TTeamsData = [
+  const data: TTeam[] = [
     {
       id: 1,
       name: "Alpha",
-      users_admin: [2],
-      users_member: [3],
+      adminUserIds: [2],
+      memberUserIds: [3],
     },
     {
       id: 2,
       name: "Beta",
-      users_admin: [2],
-      users_member: [3],
+      adminUserIds: [2],
+      memberUserIds: [3],
     },
     {
       id: 3,
       name: "Gamma",
-      users_admin: [1],
-      users_member: [2, 3],
+      adminUserIds: [1],
+      memberUserIds: [2, 3],
     },
     {
       id: 4,
       name: "Delta",
-      users_admin: [1],
-      users_member: [2, 3],
+      adminUserIds: [1],
+      memberUserIds: [2, 3],
+    },
+    {
+      id: 5,
+      name: "Omega",
+      adminUserIds: [8],
+      memberUserIds: [],
     },
   ];
   return data;

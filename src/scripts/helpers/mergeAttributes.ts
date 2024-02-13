@@ -11,17 +11,12 @@
 
 type TAttributesObject = Record<string, string> | undefined;
 
-export default function mergeAttributes(
-  a: TAttributesObject,
-  b: TAttributesObject,
-) {
+export default function mergeAttributes(a: TAttributesObject, b: TAttributesObject) {
   if (a && b) {
     return {
       ...a,
       ...b,
-      class: `${a.class || ""} ${b.class || ""}`
-        .replace(/undefined/g, "")
-        .replace(/\s+/g, " "),
+      class: `${a.class || ""} ${b.class || ""}`.replace(/undefined/g, "").replace(/\s+/g, " "),
     };
   } else if (a) {
     a.class = (a.class || "").replace(/undefined/g, "").replace(/\s+/g, " ");

@@ -27,13 +27,6 @@ export default function userNavigationData(Astro: AstroGlobal) {
         return this.href.split("?")[0] === currentPath;
       },
     },
-    {
-      name: "Glossary",
-      href: "/glossary" + "?" + urlParams,
-      get current() {
-        return this.href.split("?")[0] === currentPath;
-      },
-    },
   ];
   return data;
 }

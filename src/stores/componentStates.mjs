@@ -28,9 +28,7 @@ export const $multiStore = deepMap(() => ({})); // Define it as an empty object
  */
 export function updateStore(storeKey, newStoreValue) {
   if (!storeKey) {
-    throw new Error(
-      "`storeKey` is needed to use `updateStore` on the correct store.",
-    );
+    throw new Error("`storeKey` is needed to use `updateStore` on the correct store.");
   }
   const updatedStores = { ...$multiStore.get(), [storeKey]: newStoreValue };
   $multiStore.set(updatedStores);
@@ -53,9 +51,7 @@ export function clearStore(storeKey) {
  */
 export function addArrayItemToStore(storeKey, value) {
   if (!storeKey) {
-    throw new Error(
-      "`storeKey` is needed to use `addArrayItemToStore` on the correct store.",
-    );
+    throw new Error("`storeKey` is needed to use `addArrayItemToStore` on the correct store.");
   }
   const currentStore = $multiStore.get();
   const newStoreValue = [...currentStore[storeKey], value];
@@ -75,17 +71,13 @@ export function addArrayItemToStore(storeKey, value) {
  */
 export function removeArrayItemFromStore(storeKey, value, key) {
   if (!storeKey) {
-    throw new Error(
-      "`storeKey` is needed to use `removeArrayItemFromStore` on the correct store.",
-    );
+    throw new Error("`storeKey` is needed to use `removeArrayItemFromStore` on the correct store.");
   }
   const currentStore = $multiStore.get();
   let newStoreValue;
 
   if (key) {
-    newStoreValue = currentStore[storeKey].filter(
-      (item) => item[key] !== value,
-    );
+    newStoreValue = currentStore[storeKey].filter((item) => item[key] !== value);
   } else {
     newStoreValue = currentStore[storeKey].filter((item) => item !== value);
   }
@@ -102,9 +94,7 @@ export function removeArrayItemFromStore(storeKey, value, key) {
  */
 export function addObjectPropertyToStore(storeKey, key, value) {
   if (!storeKey) {
-    throw new Error(
-      "`storeKey` is needed to use `addObjectPropertyToStore` on the correct store.",
-    );
+    throw new Error("`storeKey` is needed to use `addObjectPropertyToStore` on the correct store.");
   }
   const currentStore = $multiStore.get();
 

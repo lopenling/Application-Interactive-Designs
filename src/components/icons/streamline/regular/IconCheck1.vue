@@ -1,18 +1,10 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" :viewBox="viewBoxValue">
+    <desc>Check 1 Streamline Icon: https://streamlinehq.com</desc>
     <defs></defs>
-    <!-- <title>arrow-right</title> -->
+    <!-- <title>check-1</title> -->
     <path
-      d="m0.75 12 22.5 0"
-      fill="none"
-      stroke="currentcolor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      :stroke-width="strokeWidth"
-    ></path>
-    <path
-      d="M12.75 22.5 23.25 12 12.75 1.5"
-      fill-rule="evenodd"
+      d="M23.25 0.749 8.158 22.308a2.2 2.2 0 0 1 -3.569 0.059L0.75 17.249"
       fill="none"
       stroke="currentcolor"
       stroke-linecap="round"

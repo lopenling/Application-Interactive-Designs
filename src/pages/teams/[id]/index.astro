@@ -1,0 +1,36 @@
+---
+import { type TMetaInformation } from "@lib/types";
+import getRole from "@scripts/helpers/getRole";
+import teamsData from "@scripts/data/teamsData";
+
+import LayoutSettings from "@layouts/LayoutSettings.astro";
+import SingularTeamHeader from "./_partials/_SingularTeamHeader.vue";
+import SingularTeamCustomDictionaries from "./_partials/_SingularTeamCustomDictionaries.vue";
+import SingularTeamNativeDictionaries from "./_partials/_SingularTeamNativeDictionaries.vue";
+import SingularTeamFooter from "./_partials/_SingularTeamFooter.vue";
+
+const role = getRole(Astro);
+const currentId = Number(Astro.params.id);
+const teams = teamsData();
+const team = teams.find((obj) => obj.id == currentId);
+
+const meta: TMetaInformation = {
+  lang: "en",
+  title: `Team ${team && team.name ? team.name : ""}`,
+};
+---
+
+<LayoutSettings meta={meta}>
+  <SingularTeamHeader astro={Astro} client:load />
+  <SingularTeamCustomDictionaries astro={Astro} client:load />
+  <SingularTeamNativeDictionaries astro={Astro} client:load />
+  <SingularTeamFooter astro={Astro} client:load />
+
+  {
+    role !== "admin" && (
+      <div class="pointer-events-none fixed inset-0 flex items-center justify-center">
+        This is not the page you are looking for
+      </div>
+    )
+  }
+</LayoutSettings>

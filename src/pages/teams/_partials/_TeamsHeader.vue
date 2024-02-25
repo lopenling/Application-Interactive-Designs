@@ -4,10 +4,10 @@
   </SettingsTitle>
 
   <div
-    v-if="userTeamInvitationsReactive.length > 0 && state == 'filled'"
+    v-if="userTeamInvitationsInStore.length > 0 && state == 'filled'"
     class="-mt-4 mb-12 flex flex-col gap-y-4 sm:gap-y-2"
   >
-    <SettingsNotification v-for="invite in userTeamInvitationsReactive">
+    <SettingsNotification v-for="invite in userTeamInvitationsInStore">
       <SettingsNotificationText>
         {{ users.find((user) => user.id == invite.authorId)?.firstName }}
         {{ users.find((user) => user.id == invite.authorId)?.lastName }}
@@ -78,11 +78,12 @@ const user = userData(role);
  */
 
 const multiStore = useStore($multiStore);
-updateStore("userTeamInvitations", userTeamInvitations);
+if (!multiStore.value["userTeamInvitations"])
+  updateStore("userTeamInvitations", userTeamInvitations);
 
-const userTeamInvitationsReactive = computed(() => {
-  return multiStore.value["userTeamInvitations"] as TUserTeamInvitation[];
-});
+const userTeamInvitationsInStore = computed(
+  () => multiStore.value["userTeamInvitations"] as TUserTeamInvitation[],
+);
 
 /**
  * Reject invitation

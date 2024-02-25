@@ -3,21 +3,26 @@
     <CardHeaderHeading>Administrator role</CardHeaderHeading>
 
     <template #button>
-      <CardHeaderButton :iconComponent="IconAdd">New team</CardHeaderButton>
+      <CardHeaderButton
+        @click="console.log('TODO: Open the team adding modal')"
+        :iconComponent="IconAdd"
+      >
+        New team
+      </CardHeaderButton>
     </template>
   </CardHeader>
 
   <SettingsCard>
     <SettingsCardRowRoute
-      v-if="teamsUserIsAdminReactive.length > 0 && state == 'filled'"
-      v-for="(team, index) in teamsUserIsAdminReactive"
-      url="#"
+      v-if="teamsUserIsAdmin.length > 0 && state == 'filled'"
+      v-for="(team, index) in teamsUserIsAdmin"
+      :url="`/teams/${team.id}?` + getUrlParams(props.astro)"
       :index="index"
     >
       {{ team.name }}
     </SettingsCardRowRoute>
 
-    <SettingsCardRowMessage v-if="teamsUserIsAdminReactive.length === 0 || state == 'empty'">
+    <SettingsCardRowMessage v-if="teamsUserIsAdmin.length === 0 || state == 'empty'">
       No teams created yet
     </SettingsCardRowMessage>
   </SettingsCard>
@@ -33,6 +38,7 @@ import { type TTeam } from "@scripts/data/teamsData";
 
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
+import getUrlParams from "@scripts/helpers/getUrlParams";
 import userData from "@scripts/data/userData";
 import teamsData from "@scripts/data/teamsData";
 
@@ -42,7 +48,7 @@ import CardHeaderButton from "@components/CardHeader/CardHeaderButton.vue";
 import SettingsCard from "@components/SettingsCard/SettingsCard.vue";
 import SettingsCardRowMessage from "@components/SettingsCard/SettingsCardRowMessage.vue";
 import SettingsCardRowRoute from "@components/SettingsCard/SettingsCardRowRoute.vue";
-import IconAdd from "@components/icons/streamline/bold/IconAdd.vue";
+import IconAdd from "@components/icons/streamline/regular/IconAdd.vue";
 
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();
@@ -62,9 +68,9 @@ const teams = teamsData();
  */
 
 const multiStore = useStore($multiStore);
-updateStore("teams", teams);
+if (!multiStore.value["teams"]) updateStore("teams", teams);
 
-const teamsUserIsAdminReactive = computed(() => {
+const teamsUserIsAdmin = computed(() => {
   return (multiStore.value["teams"] as TTeam[])
     .filter((obj) => obj.adminUserIds.some((id) => id === user.id))
     .sort((a, b) => a.name.localeCompare(b.name));

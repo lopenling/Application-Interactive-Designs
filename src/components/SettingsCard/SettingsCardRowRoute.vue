@@ -13,9 +13,9 @@
       </div>
 
       <span
-        class="-mr-0.5 rounded-md px-2.5 text-primary-500/70 transition group-hover:translate-x-1 group-hover:text-primary-600/70"
+        class="rounded-md px-2.5 text-primary-500/70 transition group-hover:translate-x-1 group-hover:text-primary-600/70"
       >
-        <component :is="IconArrowRight" :attributes="{ class: 'h-4 w-4' }" />
+        <component :is="IconArrowRight" class="h-4 w-4" />
       </span>
     </a>
   </div>

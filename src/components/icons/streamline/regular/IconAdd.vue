@@ -1,7 +1,8 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" :viewBox="viewBoxValue">
+    <desc>Add Streamline Icon: https://streamlinehq.com</desc>
     <defs></defs>
-    <!-- <title>arrow-right</title> -->
+    <!-- <title>add</title> -->
     <path
       d="m0.75 12 22.5 0"
       fill="none"
@@ -11,8 +12,7 @@
       :stroke-width="strokeWidth"
     ></path>
     <path
-      d="M12.75 22.5 23.25 12 12.75 1.5"
-      fill-rule="evenodd"
+      d="m12 0.75 0 22.5"
       fill="none"
       stroke="currentcolor"
       stroke-linecap="round"

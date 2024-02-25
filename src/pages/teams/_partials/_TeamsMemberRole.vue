@@ -5,8 +5,8 @@
 
   <SettingsCard>
     <SettingsCardRowLabelAndButtons
-      v-if="teamsUserIsMemberReactive.length > 0 && state == 'filled'"
-      v-for="(team, index) in teamsUserIsMemberReactive"
+      v-if="teamsUserIsMember.length > 0 && state == 'filled'"
+      v-for="(team, index) in teamsUserIsMember"
       :index="index"
     >
       {{ team.name }}
@@ -16,7 +16,7 @@
       </template>
     </SettingsCardRowLabelAndButtons>
 
-    <SettingsCardRowMessage v-if="teamsUserIsMemberReactive.length === 0 || state == 'empty'">
+    <SettingsCardRowMessage v-if="teamsUserIsMember.length === 0 || state == 'empty'">
       No teams joined yet
     </SettingsCardRowMessage>
   </SettingsCard>
@@ -65,9 +65,9 @@ const teams = teamsData();
  */
 
 const multiStore = useStore($multiStore);
-updateStore("teams", teams);
+if (!multiStore.value["teams"]) updateStore("teams", teams);
 
-const teamsUserIsMemberReactive = computed(() => {
+const teamsUserIsMember = computed(() => {
   return (multiStore.value["teams"] as TTeam[])
     .filter((obj) => obj.memberUserIds.some((id) => id === user.id))
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -96,5 +96,7 @@ const leaveTeam = (teamId: TTeam["id"]) => {
     removeArrayItemFromStore("teams", teamId, "id");
     addArrayItemToStore("teams", newTeamData);
   }
+
+  console.log("TODO: Show modal where user must write the team name to confirm leaving the team.");
 };
 </script>

@@ -6,7 +6,9 @@
   >
     <component
       :is="props.iconComponent"
-      :attributes="{ class: 'h-3 w-3 flex-shrink-0 text-secondary-300/70' }"
+      class="h-3 w-3 flex-shrink-0 text-secondary-300/70"
+      data-stroke-width="2.5"
+      data-expand-by="1"
     />
     <slot></slot>
   </button>

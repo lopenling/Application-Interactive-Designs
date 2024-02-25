@@ -1,13 +1,13 @@
-export type TUsersData = {
+export type TUser = {
   id: number;
   email: string;
   firstName: string;
   lastName: string;
   avatarUrl: string | undefined;
-}[];
+};
 
 export default function teamsData() {
-  const data: TUsersData = [
+  const data: TUser[] = [
     {
       id: 1,
       email: "barbara.smith@example.com",

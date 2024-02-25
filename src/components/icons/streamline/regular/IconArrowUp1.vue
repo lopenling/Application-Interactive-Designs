@@ -1,22 +1,15 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" :viewBox="viewBoxValue">
+    <desc>Arrow Up 1 Streamline Icon: https://streamlinehq.com</desc>
     <defs></defs>
-    <!-- <title>arrow-right</title> -->
+    <!-- <title>arrow-up-1</title> -->
     <path
-      d="m0.75 12 22.5 0"
+      d="M0.75 17.189 11.47 6.47a0.749 0.749 0 0 1 1.06 0l10.72 10.719"
       fill="none"
       stroke="currentcolor"
       stroke-linecap="round"
       stroke-linejoin="round"
-      :stroke-width="strokeWidth"
-    ></path>
-    <path
-      d="M12.75 22.5 23.25 12 12.75 1.5"
       fill-rule="evenodd"
-      fill="none"
-      stroke="currentcolor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
       :stroke-width="strokeWidth"
     ></path>
   </svg>

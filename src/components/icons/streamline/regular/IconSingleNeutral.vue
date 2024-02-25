@@ -1,9 +1,10 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" :viewBox="viewBoxValue">
+    <desc>Single Neutral Streamline Icon: https://streamlinehq.com</desc>
     <defs></defs>
-    <!-- <title>arrow-right</title> -->
+    <!-- <title>single-neutral</title> -->
     <path
-      d="m0.75 12 22.5 0"
+      d="M6.75 6a5.25 5.25 0 1 0 10.5 0 5.25 5.25 0 1 0 -10.5 0"
       fill="none"
       stroke="currentcolor"
       stroke-linecap="round"
@@ -11,8 +12,7 @@
       :stroke-width="strokeWidth"
     ></path>
     <path
-      d="M12.75 22.5 23.25 12 12.75 1.5"
-      fill-rule="evenodd"
+      d="M2.25 23.25a9.75 9.75 0 0 1 19.5 0"
       fill="none"
       stroke="currentcolor"
       stroke-linecap="round"

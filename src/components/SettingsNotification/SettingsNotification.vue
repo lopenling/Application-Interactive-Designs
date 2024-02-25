@@ -6,7 +6,7 @@
       <slot name="default" />
     </div>
 
-    <div class="group -mt-0.5 flex items-center text-sm sm:mx-4 sm:mr-3.5 sm:mt-0">
+    <div class="group -mt-0.5 flex items-center text-sm sm:mx-4 sm:mr-4 sm:mt-0">
       <slot name="buttons" />
     </div>
   </div>

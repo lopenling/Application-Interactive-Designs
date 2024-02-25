@@ -5,7 +5,7 @@
         <slot name="default" />
       </div>
 
-      <div class="-mr-0.5 flex gap-2">
+      <div class="flex gap-2">
         <slot name="buttons" />
       </div>
     </div>

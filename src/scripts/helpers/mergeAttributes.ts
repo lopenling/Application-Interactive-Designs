@@ -1,3 +1,4 @@
+// To be deprecated
 /**
  * Merge attributes
  *

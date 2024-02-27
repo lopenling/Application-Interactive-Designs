@@ -97,7 +97,7 @@
             userId: selectedUserInFilterInStore.id,
             dictionaryId: dictionary.id,
             teamId: singularTeamId,
-            dictionaryType: 'custom',
+            dictionaryType: 'native',
           })
         "
         :index="index"

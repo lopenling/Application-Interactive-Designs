@@ -17,7 +17,7 @@ export default function userData(role: TRole): TUserData {
       name: "David Jones",
       email: "david.jones@example.com",
       initials: "DJ",
-      imageUrl: "/images/avatars/admin.jpg",
+      imageUrl: "/images/avatars/david_jones.jpg",
     },
     user: {
       id: 3,

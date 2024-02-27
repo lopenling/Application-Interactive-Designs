@@ -1,7 +1,10 @@
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
-import { $multiStore } from "@stores/componentStates.mjs";
+import { $multiStore, updateStore } from "@stores/componentStates.mjs";
 import { type TTeam } from "@scripts/data/teamsData";
+import teamsData from "@scripts/data/teamsData";
+
+// NB: Demo only, not to be used in production!
 
 /**
  * Is Dictionary In Excluded Users
@@ -21,7 +24,10 @@ export default function isDictionaryInExcludedUsers({
   teamId,
   dictionaryType,
 }: TIsDictionaryInExcludedUsers) {
+  const teams = teamsData();
+
   const multiStore = useStore($multiStore);
+  if (!multiStore.value["teams"]) updateStore("teams", teams);
   const teamsInStore = computed(() => multiStore.value["teams"] as TTeam[]);
   const singularTeam = computed(
     () => teamsInStore.value.find((team) => team.id === teamId) as TTeam,

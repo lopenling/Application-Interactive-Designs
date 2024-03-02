@@ -2,22 +2,16 @@
   <Menu as="div" class="relative">
     <div class="flex gap-3">
       <MenuButton
-        class="group relative flex rounded-md bg-white text-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+        class="group relative flex rounded-md bg-white text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
       >
         <span class="absolute -inset-1.5"></span>
         <span class="sr-only">Open user menu</span>
-        <img
-          v-if="user.imageUrl"
-          class="h-8 w-8 rounded-md"
-          :src="user.imageUrl"
-          alt=""
+        <BaseAvatar
+          :user="signedInUser"
+          :group-hover="true"
+          :hide-image="state == 'empty'"
+          size-class="size-8"
         />
-        <span
-          v-else
-          class="flex h-8 w-8 items-center justify-center rounded-md bg-primary-400/25 text-center text-sm font-bold tracking-tight text-primary-600/75 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 group-hover:bg-primary-400/40 group-hover:text-primary-600/90"
-        >
-          <span>{{ user.initials }}</span>
-        </span>
       </MenuButton>
     </div>
 
@@ -32,17 +26,11 @@
       <MenuItems
         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
-        <MenuItem
-          v-for="item in userNavigation"
-          :key="item.name"
-          v-slot="{ active }"
-        >
+        <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
           <a
             :href="item.href"
             :class="[
-              item.current
-                ? 'border-primary-500 font-medium text-stone-900'
-                : 'border-transparent',
+              item.current ? 'border-primary-500 font-medium text-stone-900' : 'border-transparent',
               active ? 'bg-stone-100' : '',
               'block border-l-2 px-4 py-2 text-sm text-stone-700 ',
             ]"
@@ -53,11 +41,7 @@
 
         <div class="my-2 border-b border-gray-100"></div>
 
-        <MenuItem
-          v-for="item in userNavigationExtra"
-          :key="item.name"
-          v-slot="{ active }"
-        >
+        <MenuItem v-for="item in userNavigationExtra" :key="item.name" v-slot="{ active }">
           <a
             :href="item.href"
             :class="[
@@ -77,16 +61,20 @@
 import { type AstroGlobal } from "astro";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import getRole from "@scripts/helpers/getRole";
+import getState from "@scripts/helpers/getState";
 
-import userData from "@scripts/data/userData";
+import signedInUserData from "@scripts/data/signedInUserData";
 import userNavigationData from "@scripts/data/userNavigationData";
 import userNavigationExtraData from "@scripts/data/userNavigationExtraData";
+
+import BaseAvatar from "@components/BaseAvatar/BaseAvatar.vue";
 
 type TProps = { astro: AstroGlobal };
 
 const props = defineProps<TProps>();
 const role = getRole(props.astro);
-const user = userData(role);
+const state = getState(props.astro);
+const signedInUser = signedInUserData(role);
 
 const userNavigation = userNavigationData(props.astro);
 const userNavigationExtra = userNavigationExtraData(props.astro);

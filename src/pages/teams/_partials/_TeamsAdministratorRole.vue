@@ -39,7 +39,7 @@ import { type TTeam } from "@scripts/data/teamsData";
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
 import getUrlParams from "@scripts/helpers/getUrlParams";
-import userData from "@scripts/data/userData";
+import signedInUserData from "@scripts/data/signedInUserData";
 import teamsData from "@scripts/data/teamsData";
 
 import CardHeader from "@components/CardHeader/CardHeader.vue";
@@ -55,7 +55,7 @@ const props = defineProps<TProps>();
 
 const role = getRole(props.astro);
 const state = getState(props.astro);
-const user = userData(role);
+const signedInUser = signedInUserData(role);
 const teams = teamsData();
 
 /**
@@ -63,7 +63,7 @@ const teams = teamsData();
  *
  * Setup the multi-store.
  * Setup the sub-store inside multi-store by assigning a `storeKey` and initial value.
- * Reactively get teams from `teams` store where `user.id` is included in
+ * Reactively get teams from `teams` store where `signedInUser.id` is included in
  * `adminUserIds` array and sort them by `name`.
  */
 
@@ -72,7 +72,7 @@ if (!multiStore.value["teams"]) updateStore("teams", teams);
 
 const teamsUserIsAdmin = computed(() => {
   return (multiStore.value["teams"] as TTeam[])
-    .filter((obj) => obj.adminUserIds.some((id) => id === user.id))
+    .filter((obj) => obj.adminUserIds.some((id) => id === signedInUser.id))
     .sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>

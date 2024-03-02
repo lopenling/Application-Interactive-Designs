@@ -37,7 +37,7 @@ import { type TTeam } from "@scripts/data/teamsData";
 
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
-import userData from "@scripts/data/userData";
+import signedInUserData from "@scripts/data/signedInUserData";
 import teamsData from "@scripts/data/teamsData";
 
 import CardHeader from "@components/CardHeader/CardHeader.vue";
@@ -52,7 +52,7 @@ const props = defineProps<TProps>();
 
 const role = getRole(props.astro);
 const state = getState(props.astro);
-const user = userData(role);
+const signedInUser = signedInUserData(role);
 const teams = teamsData();
 
 /**
@@ -60,7 +60,7 @@ const teams = teamsData();
  *
  * Setup the multi-store.
  * Setup the sub-store inside multi-store by assigning a `storeKey` and initial value.
- * Reactively get teams from `teams` store where `user.id` is included in
+ * Reactively get teams from `teams` store where `signedInUser.id` is included in
  * `users_admin` array and sort them by `name`.
  */
 
@@ -69,7 +69,7 @@ if (!multiStore.value["teams"]) updateStore("teams", teams);
 
 const teamsUserIsMember = computed(() => {
   return (multiStore.value["teams"] as TTeam[])
-    .filter((obj) => obj.memberUserIds.some((id) => id === user.id))
+    .filter((obj) => obj.memberUserIds.some((id) => id === signedInUser.id))
     .sort((a, b) => a.name.localeCompare(b.name));
 });
 
@@ -78,7 +78,7 @@ const teamsUserIsMember = computed(() => {
  *
  * Retrieve current team data from the `teams` store for the team the user wants
  * to leave, based on the ID.
- * Create a new team data object based on the current team data and remove `user.id`
+ * Create a new team data object based on the current team data and remove `signedInUser.id`
  * from `memberUserIds`.
  * Replace the current team data with the new team data in the `teams` store.
  */
@@ -87,7 +87,7 @@ const leaveTeam = (teamId: TTeam["id"]) => {
   const currentTeamData = (multiStore.value["teams"] as TTeam[]).find((team) => team.id == teamId);
 
   if (currentTeamData) {
-    const newMemberUserIds = currentTeamData.memberUserIds.filter((id) => id !== user.id);
+    const newMemberUserIds = currentTeamData.memberUserIds.filter((id) => id !== signedInUser.id);
     const newTeamData = {
       ...currentTeamData,
       memberUserIds: newMemberUserIds,

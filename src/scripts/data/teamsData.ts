@@ -6,13 +6,19 @@ export type TTeam = {
   enabledCustomDictionaryIds: number[];
   disabledCustomDictionaryIds: number[];
   enabledNativeDictionaryIds: number[];
-  excludedUsers: TTeamsExcludedUser[];
+  excludedUsers: TTeamExcludedUser[];
+  invitedUsers: TTeamInvitedUser[];
 };
 
-export type TTeamsExcludedUser = {
+export type TTeamExcludedUser = {
   id: number;
   customDictionaryIds: number[];
   nativeDictionaryIds: number[];
+};
+
+export type TTeamInvitedUser = {
+  id: number;
+  role: "admin" | "member";
 };
 
 export default function teamsData() {
@@ -20,8 +26,12 @@ export default function teamsData() {
     {
       id: 1,
       name: "Alpha",
-      adminUserIds: [2],
-      memberUserIds: [4, 6, 8, 10, 12, 14, 16],
+      adminUserIds: [2, 16],
+      memberUserIds: [4, 6, 12, 14],
+      invitedUsers: [
+        { id: 10, role: "admin" },
+        { id: 8, role: "member" },
+      ],
       enabledCustomDictionaryIds: [1],
       disabledCustomDictionaryIds: [],
       enabledNativeDictionaryIds: [1, 2, 3, 5, 6, 7, 8, 17],
@@ -39,6 +49,7 @@ export default function teamsData() {
       name: "Beta",
       adminUserIds: [2],
       memberUserIds: [1, 3, 4, 5],
+      invitedUsers: [],
       enabledCustomDictionaryIds: [2],
       disabledCustomDictionaryIds: [],
       enabledNativeDictionaryIds: [
@@ -51,6 +62,7 @@ export default function teamsData() {
       name: "Gamma",
       adminUserIds: [1],
       memberUserIds: [2, 3],
+      invitedUsers: [],
       enabledCustomDictionaryIds: [3],
       disabledCustomDictionaryIds: [30],
       enabledNativeDictionaryIds: [1, 2, 3],
@@ -64,6 +76,7 @@ export default function teamsData() {
       name: "Delta",
       adminUserIds: [1],
       memberUserIds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+      invitedUsers: [],
       enabledCustomDictionaryIds: [],
       disabledCustomDictionaryIds: [4],
       enabledNativeDictionaryIds: [],
@@ -74,6 +87,7 @@ export default function teamsData() {
       name: "Omega",
       adminUserIds: [8],
       memberUserIds: [],
+      invitedUsers: [{ id: 2, role: "admin" }],
       enabledCustomDictionaryIds: [],
       disabledCustomDictionaryIds: [],
       enabledNativeDictionaryIds: [

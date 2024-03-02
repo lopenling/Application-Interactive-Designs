@@ -6,7 +6,7 @@ export type TUser = {
   avatarUrl: string | undefined;
 };
 
-export default function teamsData() {
+export default function usersData() {
   const data: TUser[] = [
     {
       id: 1,

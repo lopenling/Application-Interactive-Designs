@@ -51,7 +51,7 @@ import getState from "@scripts/helpers/getState";
 import userTeamInvitationsData from "@scripts/data/userTeamInvitationsData";
 import teamsData from "@scripts/data/teamsData";
 import usersData from "@scripts/data/usersData";
-import userData from "@scripts/data/userData";
+import signedInUserData from "@scripts/data/signedInUserData";
 
 import SettingsTitle from "@components/SettingsTitle/SettingsTitle.vue";
 import SettingsTitleText from "@components/SettingsTitle/SettingsTitleText.vue";
@@ -67,7 +67,7 @@ const state = getState(props.astro);
 const userTeamInvitations = userTeamInvitationsData();
 const teams = teamsData();
 const users = usersData();
-const user = userData(role);
+const signedInUser = signedInUserData(role);
 
 /**
  * Store
@@ -102,7 +102,7 @@ const rejectInvitation = (inviteId: TUserTeamInvitation["id"]) => {
  * Retrieve current team data from the `teams` store for the team where the user
  * is invited to, based on the `inviteTeamId`.
  * Create a new team data object based on the current team data and merge
- * `user.id` to the `adminUserIds` or `memberUserIds` array correspondingly.
+ * `signedInUser.id` to the `adminUserIds` or `memberUserIds` array correspondingly.
  * Replace the current team data with the new team data in the `teams` store.
  * Remove the invitation from the `userTeamInvitations` store which `id`
  * corresponds to the `inviteId`.
@@ -123,13 +123,13 @@ const acceptInvitation = (
     if (inviteRole == "Administrator") {
       newTeamData = {
         ...currentTeamData,
-        adminUserIds: [...currentTeamData.adminUserIds, user.id],
+        adminUserIds: [...currentTeamData.adminUserIds, signedInUser.id],
       };
     }
     if (inviteRole == "Member") {
       newTeamData = {
         ...currentTeamData,
-        memberUserIds: [...currentTeamData.memberUserIds, user.id],
+        memberUserIds: [...currentTeamData.memberUserIds, signedInUser.id],
       };
     }
 

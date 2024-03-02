@@ -10,7 +10,7 @@ import teamsData from "@scripts/data/teamsData";
  * Get User Role In Team By Id
  *
  * Check if the team's `adminUserIds` or `memberUserIds` includes `userId`.
- * Return "Administrator" or "Member" accordingly.
+ * Return "administrator" or "member" accordingly.
  * If the user is not found check if the user is in the team's `invitedUsers`
  * and return the role accordingly.
  */
@@ -25,10 +25,10 @@ export default function getUserRoleInTeamById(userId: number, teamId: number) {
     () => teamsInStore.value.find((team) => team.id === teamId) as TTeam,
   );
 
-  if (singularTeam.value.adminUserIds.includes(userId)) return "Administrator";
-  if (singularTeam.value.memberUserIds.includes(userId)) return "Member";
+  if (singularTeam.value.adminUserIds.includes(userId)) return "administrator";
+  if (singularTeam.value.memberUserIds.includes(userId)) return "member";
 
   const invitee = singularTeam.value.invitedUsers.find((user) => user.id === userId);
-  if (invitee && invitee.role === "admin") return "Administrator";
-  if (invitee && invitee.role === "member") return "Member";
+  if (invitee && invitee.role === "admin") return "administrator";
+  if (invitee && invitee.role === "member") return "member";
 }

@@ -4,26 +4,45 @@
   </SettingsTitle>
 
   <div
-    v-if="userTeamInvitationsInStore.length > 0 && state == 'filled'"
+    v-if="teamsUserIsInvitedTo.length > 0 && state == 'filled'"
     class="-mt-4 mb-12 flex flex-col gap-y-4 sm:gap-y-2"
   >
-    <SettingsNotification v-for="invite in userTeamInvitationsInStore">
+    <SettingsNotification v-for="team in teamsUserIsInvitedTo">
       <SettingsNotificationText>
-        {{ users.find((user) => user.id == invite.authorId)?.firstName }}
-        {{ users.find((user) => user.id == invite.authorId)?.lastName }}
-        invites you to join
-        <span class="font-semibold">{{
-          teams.find((team) => team.id == invite.teamId)?.name
-        }}</span>
-        as {{ invite.role }}
+        {{
+          getUserFullNameById(
+            team.invitedUsers.find((obj) => obj.id == signedInUser.id)!.inviteAuthorId,
+          )
+        }}
+        invites you to become
+        {{ getUserRoleInTeamById(signedInUser.id, team.id) === "administrator" ? "an" : "" }}
+        {{ getUserRoleInTeamById(signedInUser.id, team.id) === "member" ? "a" : "" }}
+        {{ getUserRoleInTeamById(signedInUser.id, team.id) }}
+        of <span class="font-semibold">{{ team.name }}</span> team.
       </SettingsNotificationText>
 
       <template #buttons>
-        <SettingsNotificationButton @click="rejectInvitation(invite.id)" :separator="true">
+        <SettingsNotificationButton
+          @click="
+            updateTeamsInvitedUsersData({
+              userId: signedInUser.id,
+              payload: false,
+              teamId: team.id,
+            })
+          "
+          :separator="true"
+        >
           Reject
         </SettingsNotificationButton>
         <SettingsNotificationButton
-          @click="acceptInvitation(invite.id, invite.teamId, invite.role)"
+          @click="
+            updateTeamsInvitedUsersData({
+              userId: signedInUser.id,
+              role: team.invitedUsers.find((obj) => obj.id == signedInUser.id)!.role,
+              payload: true,
+              teamId: team.id,
+            })
+          "
         >
           Accept
         </SettingsNotificationButton>
@@ -35,22 +54,18 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
-import {
-  $multiStore,
-  updateStore,
-  addArrayItemToStore,
-  removeArrayItemFromStore,
-} from "@stores/componentStates.mjs";
+import { $multiStore, updateStore } from "@stores/componentStates.mjs";
 
 import { type AstroGlobal } from "astro";
 import { type TTeam } from "@scripts/data/teamsData";
-import { type TUserTeamInvitation } from "@scripts/data/userTeamInvitationsData";
 
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
-import userTeamInvitationsData from "@scripts/data/userTeamInvitationsData";
+import getUserFullNameById from "@scripts/helpers/getUserFullNameById";
+import getUserRoleInTeamById from "@scripts/helpers/getUserRoleInTeamById";
+import updateTeamsInvitedUsersData from "@scripts/helpers/updateTeamsInvitedUsersData";
+
 import teamsData from "@scripts/data/teamsData";
-import usersData from "@scripts/data/usersData";
 import signedInUserData from "@scripts/data/signedInUserData";
 
 import SettingsTitle from "@components/SettingsTitle/SettingsTitle.vue";
@@ -64,9 +79,7 @@ const props = defineProps<TProps>();
 
 const role = getRole(props.astro);
 const state = getState(props.astro);
-const userTeamInvitations = userTeamInvitationsData();
 const teams = teamsData();
-const users = usersData();
 const signedInUser = signedInUserData(role);
 
 /**
@@ -74,68 +87,15 @@ const signedInUser = signedInUserData(role);
  *
  * Setup the multi-store.
  * Setup the sub-store inside multi-store with `storeKey` and initial value.
- * Reactively get team invitations from `userTeamInvitations` store.
+ * Reactively get data from stores
  */
 
 const multiStore = useStore($multiStore);
-if (!multiStore.value["userTeamInvitations"])
-  updateStore("userTeamInvitations", userTeamInvitations);
+if (!multiStore.value["teams"]) updateStore("teams", teams);
 
-const userTeamInvitationsInStore = computed(
-  () => multiStore.value["userTeamInvitations"] as TUserTeamInvitation[],
-);
-
-/**
- * Reject invitation
- *
- * Remove the invitation from the `userTeamInvitations` store which `id`
- * corresponds to the `inviteId`.
- */
-
-const rejectInvitation = (inviteId: TUserTeamInvitation["id"]) => {
-  removeArrayItemFromStore("userTeamInvitations", inviteId, "id");
-};
-
-/**
- * Accept invitation
- *
- * Retrieve current team data from the `teams` store for the team where the user
- * is invited to, based on the `inviteTeamId`.
- * Create a new team data object based on the current team data and merge
- * `signedInUser.id` to the `adminUserIds` or `memberUserIds` array correspondingly.
- * Replace the current team data with the new team data in the `teams` store.
- * Remove the invitation from the `userTeamInvitations` store which `id`
- * corresponds to the `inviteId`.
- */
-
-const acceptInvitation = (
-  inviteId: TUserTeamInvitation["id"],
-  inviteTeamId: TUserTeamInvitation["teamId"],
-  inviteRole: TUserTeamInvitation["role"],
-) => {
-  const currentTeamData = (multiStore.value["teams"] as TTeam[]).find(
-    (team) => team.id == inviteTeamId,
+const teamsUserIsInvitedTo = computed(() => {
+  return (multiStore.value["teams"] as TTeam[]).filter((obj) =>
+    obj.invitedUsers.some((invite) => invite.id === signedInUser.id),
   );
-
-  if (currentTeamData) {
-    let newTeamData = {};
-
-    if (inviteRole == "Administrator") {
-      newTeamData = {
-        ...currentTeamData,
-        adminUserIds: [...currentTeamData.adminUserIds, signedInUser.id],
-      };
-    }
-    if (inviteRole == "Member") {
-      newTeamData = {
-        ...currentTeamData,
-        memberUserIds: [...currentTeamData.memberUserIds, signedInUser.id],
-      };
-    }
-
-    removeArrayItemFromStore("teams", inviteTeamId, "id");
-    addArrayItemToStore("teams", newTeamData);
-    removeArrayItemFromStore("userTeamInvitations", inviteId, "id");
-  }
-};
+});
 </script>

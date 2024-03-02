@@ -21,7 +21,7 @@
         :person="person"
       >
         <template #extraData>
-          {{ getUserRoleInTeamById(person.id, singularTeam.id) }}
+          <span class="capitalize">{{ getUserRoleInTeamById(person.id, singularTeam.id) }}</span>
         </template>
         <template #buttons>
           <SettingsCardSubtleButton @click="console.log('TODO: Open the member edit modal')">
@@ -39,7 +39,7 @@
       >
         <template #extraData>
           <div>
-            <div>{{ getUserRoleInTeamById(person.id, singularTeam.id) }}</div>
+            <div class="capitalize">{{ getUserRoleInTeamById(person.id, singularTeam.id) }}</div>
             <div class="text-xs leading-5">Invitation pending</div>
           </div>
         </template>
@@ -130,8 +130,8 @@ const sortedPeople = computed(() => {
     const roleA = getUserRoleInTeamById(a.id, singularTeam.value.id);
     const roleB = getUserRoleInTeamById(b.id, singularTeam.value.id);
 
-    if (roleA === "Administrator" && roleB !== "Administrator") return -1;
-    if (roleA !== "Administrator" && roleB === "Administrator") return 1;
+    if (roleA === "administrator" && roleB !== "administrator") return -1;
+    if (roleA !== "administrator" && roleB === "administrator") return 1;
 
     if (a.firstName < b.firstName) return -1;
     if (a.firstName > b.firstName) return 1;
@@ -153,8 +153,8 @@ const sortedInvitedPeople = computed(() => {
       const roleA = getUserRoleInTeamById(a.id, singularTeam.value.id);
       const roleB = getUserRoleInTeamById(b.id, singularTeam.value.id);
 
-      if (roleA === "Administrator" && roleB !== "Administrator") return -1;
-      if (roleA !== "Administrator" && roleB === "Administrator") return 1;
+      if (roleA === "administrator" && roleB !== "administrator") return -1;
+      if (roleA !== "administrator" && roleB === "administrator") return 1;
 
       if (a.firstName < b.firstName) return -1;
       if (a.firstName > b.firstName) return 1;

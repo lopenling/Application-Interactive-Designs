@@ -22,14 +22,14 @@
       </template>
     </CardHeader>
 
-    <SettingsCard>
+    <SettingsCard class="divide-y">
       <SettingsCardRowExpandableToggle
         v-if="
           combinedCustomDictionaryIds.length > 0 &&
           !selectedUserInFilterInStore &&
           state == 'filled'
         "
-        v-for="(dictionary, index) in customDictionariesInStore.filter((dictionary) =>
+        v-for="dictionary in customDictionariesInStore.filter((dictionary) =>
           combinedCustomDictionaryIds.includes(dictionary.id),
         )"
         @update:modelValue="
@@ -40,7 +40,6 @@
           })
         "
         :is-toggled="singularTeam.enabledCustomDictionaryIds.includes(dictionary.id)"
-        :index="index"
       >
         {{ dictionary.name }}
         <span
@@ -58,15 +57,13 @@
         </span>
 
         <template #extraButtons>
-          <SettingsCardSubtleButton @click="console.log('TODO: Open the dictionary edit modal')"
-            >Edit</SettingsCardSubtleButton
-          >
+          <SettingsCardSubtleButton @click="console.log('TODO: Open the dictionary edit modal')">
+            Edit
+          </SettingsCardSubtleButton>
         </template>
         <template #expandableArea>
           <SettingsCardSubRowToggle
-            v-for="(user, index) in usersInStore.filter((user) =>
-              combinedUserIds.includes(user.id),
-            )"
+            v-for="user in usersInStore.filter((user) => combinedUserIds.includes(user.id))"
             @update:modelValue="
               updateTeamsExcludedUsersData({
                 userId: user.id,
@@ -85,7 +82,6 @@
               })
             "
             :is-grayscale="!singularTeam.enabledCustomDictionaryIds.includes(dictionary.id)"
-            :index="index"
           >
             {{ getUserFullNameById(user.id) }}
 
@@ -98,7 +94,7 @@
 
       <SettingsCardRowToggle
         v-if="selectedUserInFilterInStore"
-        v-for="(dictionary, index) in customDictionariesInStore.filter((dictionary) =>
+        v-for="dictionary in customDictionariesInStore.filter((dictionary) =>
           showDisabledDictionariesInStore
             ? singularTeam.enabledCustomDictionaryIds.includes(dictionary.id) ||
               singularTeam.disabledCustomDictionaryIds.includes(dictionary.id)
@@ -121,7 +117,6 @@
             dictionaryType: 'custom',
           })
         "
-        :index="index"
         appearance="secondary"
       >
         {{ dictionary.name }}

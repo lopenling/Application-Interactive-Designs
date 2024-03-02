@@ -17,7 +17,7 @@
       <!-- Team members -->
       <SettingsCardRowPersonDetailsWithButtons
         v-if="state == 'filled'"
-        v-for="(person, index) in sortedPeople"
+        v-for="person in sortedPeople"
         :person="person"
       >
         <template #extraData>
@@ -33,7 +33,7 @@
       <!-- Invited people -->
       <SettingsCardRowPersonDetailsWithButtons
         v-if="state == 'filled'"
-        v-for="(person, index) in sortedInvitedPeople"
+        v-for="person in sortedInvitedPeople"
         :person="person"
         :subdue-image="true"
       >

@@ -1,8 +1,7 @@
 <template>
   <div
     :class="[
-      'relative mx-4 flex flex-col flex-wrap gap-y-0.5 px-2 py-2.5 pl-[52px] sm:flex-row sm:pl-2',
-      (props.index && props.index % 2) === 0 && 'rounded-md bg-stone-50',
+      'relative mx-4 flex flex-col flex-wrap gap-y-0.5 px-2 py-2.5 pl-[52px] odd:rounded-md odd:bg-stone-50 sm:flex-row sm:pl-2',
     ]"
   >
     <div :class="['-ml-[44px] w-full sm:ml-0', slots.extraData && 'sm:w-1/2']">
@@ -35,7 +34,6 @@ import BaseToggleLabel from "@components/BaseToggle/BaseToggleLabel.vue";
 type TProps = {
   isToggled: boolean;
   isGrayscale?: boolean;
-  index?: number;
 };
 const props = defineProps<TProps>();
 const slots = useSlots();

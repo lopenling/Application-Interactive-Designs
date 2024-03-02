@@ -3,11 +3,10 @@
     <CardHeaderHeading>Member role</CardHeaderHeading>
   </CardHeader>
 
-  <SettingsCard>
+  <SettingsCard class="divide-y">
     <SettingsCardRowLabelAndButtons
       v-if="teamsUserIsMember.length > 0 && state == 'filled'"
-      v-for="(team, index) in teamsUserIsMember"
-      :index="index"
+      v-for="team in teamsUserIsMember"
     >
       {{ team.name }}
 

@@ -12,12 +12,11 @@
     </template>
   </CardHeader>
 
-  <SettingsCard>
+  <SettingsCard class="divide-y">
     <SettingsCardRowRoute
       v-if="teamsUserIsAdmin.length > 0 && state == 'filled'"
-      v-for="(team, index) in teamsUserIsAdmin"
+      v-for="team in teamsUserIsAdmin"
       :url="`/teams/${team.id}?` + getUrlParams(props.astro)"
-      :index="index"
     >
       {{ team.name }}
     </SettingsCardRowRoute>

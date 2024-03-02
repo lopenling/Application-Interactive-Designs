@@ -16,7 +16,7 @@
     <SettingsCard>
       <SettingsCardRowExpandableToggle
         v-if="!selectedUserInFilterInStore"
-        v-for="(dictionary, index) in nativeDictionariesInStore"
+        v-for="dictionary in nativeDictionariesInStore"
         @update:modelValue="
           updateTeamsNativeDictionariesData({
             dictionaryId: dictionary.id,
@@ -25,7 +25,6 @@
           })
         "
         :is-toggled="singularTeam.enabledNativeDictionaryIds.includes(dictionary.id)"
-        :index="index"
       >
         {{ dictionary.name }}
         <span
@@ -44,9 +43,7 @@
 
         <template #expandableArea>
           <SettingsCardSubRowToggle
-            v-for="(user, index) in usersInStore.filter((user) =>
-              combinedUserIds.includes(user.id),
-            )"
+            v-for="user in usersInStore.filter((user) => combinedUserIds.includes(user.id))"
             @update:modelValue="
               updateTeamsExcludedUsersData({
                 userId: user.id,
@@ -65,7 +62,6 @@
               })
             "
             :is-grayscale="!singularTeam.enabledNativeDictionaryIds.includes(dictionary.id)"
-            :index="index"
           >
             {{ getUserFullNameById(user.id) }}
 
@@ -78,7 +74,7 @@
 
       <SettingsCardRowToggle
         v-if="selectedUserInFilterInStore"
-        v-for="(dictionary, index) in nativeDictionariesInStore.filter((dictionary) =>
+        v-for="dictionary in nativeDictionariesInStore.filter((dictionary) =>
           showDisabledDictionariesInStore
             ? true
             : singularTeam.enabledNativeDictionaryIds.includes(dictionary.id),
@@ -100,7 +96,6 @@
             dictionaryType: 'native',
           })
         "
-        :index="index"
         appearance="secondary"
       >
         {{ dictionary.name }}

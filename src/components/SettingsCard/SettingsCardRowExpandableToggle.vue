@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="div" :class="[props.index != 0 && 'border-t']" v-slot="{ open }">
+  <Disclosure as="div" v-slot="{ open }">
     <div class="flex items-center justify-between gap-2 px-4">
       <BaseToggle
         @update:modelValue="$emit('update:modelValue', $event)"
@@ -60,7 +60,6 @@ import IconArrowUp1 from "@components/icons/streamline/regular/IconArrowUp1.vue"
 type TProps = {
   isToggled: boolean;
   isGrayscale?: boolean;
-  index?: number;
   appearance?: TBaseToggleProps["appearance"];
   expandIconComponent?: object;
 };

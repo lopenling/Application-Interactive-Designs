@@ -13,7 +13,7 @@
       </CardHeaderHeading>
     </CardHeader>
 
-    <SettingsCard>
+    <SettingsCard class="divide-y">
       <SettingsCardRowExpandableToggle
         v-if="!selectedUserInFilterInStore"
         v-for="dictionary in nativeDictionariesInStore"

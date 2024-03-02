@@ -19,6 +19,7 @@ export type TTeamExcludedUser = {
 export type TTeamInvitedUser = {
   id: number;
   role: "admin" | "member";
+  inviteAuthorId: number;
 };
 
 export default function teamsData() {
@@ -29,8 +30,8 @@ export default function teamsData() {
       adminUserIds: [2, 16],
       memberUserIds: [4, 6, 12, 14],
       invitedUsers: [
-        { id: 10, role: "admin" },
-        { id: 8, role: "member" },
+        { id: 10, role: "admin", inviteAuthorId: 2 },
+        { id: 3, role: "member", inviteAuthorId: 2 },
       ],
       enabledCustomDictionaryIds: [1],
       disabledCustomDictionaryIds: [],
@@ -87,7 +88,7 @@ export default function teamsData() {
       name: "Omega",
       adminUserIds: [8],
       memberUserIds: [],
-      invitedUsers: [{ id: 2, role: "admin" }],
+      invitedUsers: [{ id: 2, role: "admin", inviteAuthorId: 8 }],
       enabledCustomDictionaryIds: [],
       disabledCustomDictionaryIds: [],
       enabledNativeDictionaryIds: [

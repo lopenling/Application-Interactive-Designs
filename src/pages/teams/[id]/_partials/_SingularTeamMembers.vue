@@ -63,13 +63,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
 
 import { type AstroGlobal } from "astro";
 import { type TTeam } from "@scripts/data/teamsData";
 import { type TUser } from "@scripts/data/usersData";
+import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
 
 import signedInUserData from "@scripts/data/signedInUserData";
 import usersData from "@scripts/data/usersData";
@@ -111,20 +112,28 @@ const teams = teamsData();
 const multiStore = useStore($multiStore);
 if (!multiStore.value["users"]) updateStore("users", users);
 if (!multiStore.value["teams"]) updateStore("teams", teams);
+if (!multiStore.value["selectedUserInFilter"]) updateStore("selectedUserInFilter", null);
 
 const usersInStore = computed(() => multiStore.value["users"] as TUser[]);
 const teamsInStore = computed(() => multiStore.value["teams"] as TTeam[]);
 const singularTeam = computed(
   () => teamsInStore.value.find((team) => team.id === singularTeamId) as TTeam,
 );
+const selectedUserInFilterInStore = computed(
+  () => multiStore.value["selectedUserInFilter"] as TOption,
+);
 const combinedUserIds = computed(() => [
   ...singularTeam.value.adminUserIds,
   ...singularTeam.value.memberUserIds,
 ]);
 
-const people = computed(() =>
-  usersInStore.value.filter((user) => combinedUserIds.value.includes(user.id)),
-);
+const people = computed(() => {
+  if (selectedUserInFilterInStore.value?.id != null) {
+    return usersInStore.value.filter((user) => user.id === selectedUserInFilterInStore.value?.id);
+  }
+  return usersInStore.value.filter((user) => combinedUserIds.value.includes(user.id));
+});
+
 const sortedPeople = computed(() => {
   return people.value.slice().sort((a, b) => {
     const roleA = getUserRoleInTeamById(a.id, singularTeam.value.id);
@@ -141,6 +150,8 @@ const sortedPeople = computed(() => {
 });
 
 const invitedPeople = computed(() => {
+  if (selectedUserInFilterInStore.value?.id != null) return [];
+
   if (singularTeam.value.invitedUsers) {
     const invitedUserIds = singularTeam.value.invitedUsers.map((user) => user.id);
 

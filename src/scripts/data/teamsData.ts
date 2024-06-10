@@ -40,7 +40,6 @@ export default function teamsData() {
         { id: 2, customDictionaryIds: [1], nativeDictionaryIds: [3] },
         { id: 4, customDictionaryIds: [], nativeDictionaryIds: [3] },
         { id: 6, customDictionaryIds: [1], nativeDictionaryIds: [] },
-        { id: 8, customDictionaryIds: [], nativeDictionaryIds: [3] },
         { id: 14, customDictionaryIds: [1], nativeDictionaryIds: [3] },
         { id: 16, customDictionaryIds: [1], nativeDictionaryIds: [3] },
       ],

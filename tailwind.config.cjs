@@ -60,8 +60,9 @@ module.exports = {
           },
         },
       },
-      // backgroundImage: ({ theme }) => ({
-      // }),
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      },
       borderColor: ({ theme }) => ({
         DEFAULT: theme("colors.stone.200", "currentColor"),
       }),
@@ -123,8 +124,9 @@ module.exports = {
       // },
       // ringWidth: {
       // },
-      // spacing: {
-      // },
+      spacing: {
+        0.75: "0.1875rem",
+      },
       transitionDuration: {
         DEFAULT: "125ms",
       },

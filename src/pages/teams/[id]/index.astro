@@ -9,6 +9,7 @@ import SingularTeamMembers from "./_partials/_SingularTeamMembers.vue";
 import SingularTeamCustomDictionaries from "./_partials/_SingularTeamCustomDictionaries.vue";
 import SingularTeamNativeDictionaries from "./_partials/_SingularTeamNativeDictionaries.vue";
 import SingularTeamFooter from "./_partials/_SingularTeamFooter.vue";
+import SingularTeamModalEditMember from "./_partials/_SingularTeamModalEditMember.vue";
 
 const role = getRole(Astro);
 const currentId = Number(Astro.params.id);
@@ -27,6 +28,8 @@ const meta: TMetaInformation = {
   <SingularTeamCustomDictionaries astro={Astro} client:load />
   <SingularTeamNativeDictionaries astro={Astro} client:load />
   <SingularTeamFooter astro={Astro} client:load />
+
+  <SingularTeamModalEditMember client:load />
 
   {
     role !== "admin" && (

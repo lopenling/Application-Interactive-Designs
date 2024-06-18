@@ -33,7 +33,7 @@ const wideButtons = inject<boolean>("wideButtons");
 
 const handleClick = () => {
   if (props.closeModal && name) {
-    eventBus.emit("modal-close", name);
+    eventBus.emit("close-modal", { name: name });
   }
 };
 </script>

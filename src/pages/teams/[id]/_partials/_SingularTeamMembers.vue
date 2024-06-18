@@ -24,7 +24,9 @@
           <span class="capitalize">{{ getUserRoleInTeamById(person.id, singularTeam.id) }}</span>
         </template>
         <template #buttons>
-          <SettingsCardSubtleButton @click="console.log('TODO: Open the member edit modal')">
+          <SettingsCardSubtleButton
+            @click="openModalTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
+          >
             Edit
           </SettingsCardSubtleButton>
         </template>
@@ -63,18 +65,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
+import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
-import { type TTeam } from "@scripts/data/teamsData";
-import { type TUser } from "@scripts/data/usersData";
 import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
+import { type TSingularTeamModalEditMember } from "./_SingularTeamModalEditMember.vue";
 
 import signedInUserData from "@scripts/data/signedInUserData";
-import usersData from "@scripts/data/usersData";
-import teamsData from "@scripts/data/teamsData";
+import usersData, { type TUser } from "@scripts/data/usersData";
+import teamsData, { type TTeam } from "@scripts/data/teamsData";
 
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
@@ -99,6 +101,10 @@ const state = getState(props.astro);
 const signedInUser = signedInUserData(role);
 const users = usersData();
 const teams = teamsData();
+
+const openModalTeamEditMember = (data: TSingularTeamModalEditMember) => {
+  eventBus.emit("open-modal", { name: "team-edit-member", data: data });
+};
 
 /**
  * Store

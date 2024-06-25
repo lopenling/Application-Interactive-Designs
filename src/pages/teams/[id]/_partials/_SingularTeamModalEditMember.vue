@@ -9,15 +9,11 @@
       </div>
     </div>
 
-    <div class="text-left">
-      <label class="mb-1 block text-sm font-medium leading-6 text-stone-900" for="role">Role</label>
-      <input
-        class="block w-full rounded-md border-0 bg-white py-1.5 text-stone-800 ring-1 ring-inset ring-stone-300 transition placeholder:text-stone-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:w-1/2 sm:text-sm sm:leading-6"
-        type="text"
-        name="role"
-        id="role"
-        :value="getUserRoleInTeamById(data.user.id, data.teamId)"
-      />
+    <div class="mb-0 w-full text-left sm:w-1/2">
+      <BaseListbox v-model="selectedRoleInEditTeamMember" :options="userRoles">
+        <BaseListboxLabel>Role</BaseListboxLabel>
+        <BaseListboxInput appearance="white" />
+      </BaseListbox>
     </div>
 
     <template #illustration>
@@ -37,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, watch, computed } from "vue";
 
 import eventBus from "@scripts/general/eventBus";
 import usersData, { type TUser } from "@scripts/data/usersData";
@@ -49,6 +45,9 @@ import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogOption from "@components/ModalDialog/ModalDialogOption.vue";
 
 import BaseAvatar from "@components/BaseAvatar/BaseAvatar.vue";
+import BaseListbox from "@components/BaseListbox/BaseListbox.vue";
+import BaseListboxLabel from "@components/BaseListbox/BaseListboxLabel.vue";
+import BaseListboxInput from "@components/BaseListbox/BaseListboxInput.vue";
 
 export type TSingularTeamModalEditMember = {
   userId: number;
@@ -63,6 +62,7 @@ type TData = {
 const users = usersData();
 const data = ref({} as TData);
 const hasData = ref(true);
+const selectedRoleInEditTeamMember = ref(null);
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "team-edit-member") return;
@@ -75,4 +75,9 @@ eventBus.on("open-modal", (event: any) => {
   data.value.user = singularUser;
   data.value.teamId = event.data.teamId;
 });
+
+const userRoles = [
+  { id: 1, value: "Administrator", selected: true },
+  { id: 2, value: "Member" },
+];
 </script>

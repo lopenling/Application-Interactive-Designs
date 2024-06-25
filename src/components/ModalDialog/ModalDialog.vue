@@ -30,7 +30,7 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative w-full transform overflow-hidden rounded-lg bg-white p-4 pt-6 text-left shadow-xl transition-all 2xs:p-6 2xs:pt-8 sm:my-8 sm:p-8 sm:pb-6"
+              class="relative w-full transform rounded-lg bg-white p-4 pt-6 text-left shadow-xl transition-all 2xs:p-6 2xs:pt-8 sm:my-8 sm:p-8 sm:pb-6"
               :class="[
                 props.maxWidth == 'xs' && 'sm:max-w-xs',
                 props.maxWidth == 'sm' && 'sm:max-w-sm',

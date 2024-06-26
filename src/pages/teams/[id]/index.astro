@@ -17,7 +17,7 @@ const role = getRole(Astro);
 const pinia = createPinia();
 const teamsStore = useTeamsStore(pinia);
 const teamdId = Number(Astro.params.id);
-const singularTeam = teamsStore.getCurrentTeam(teamdId);
+const singularTeam = teamsStore.getTeamById(teamdId);
 
 const meta: TMetaInformation = {
   lang: "en",

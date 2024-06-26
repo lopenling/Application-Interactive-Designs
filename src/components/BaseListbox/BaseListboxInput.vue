@@ -14,7 +14,7 @@
         props.shadow && 'shadow-sm',
       ]"
     >
-      <span v-if="selectedOption?.value" class="block truncate first-letter:capitalize">
+      <span v-if="selectedOption?.value" class="block truncate">
         {{ selectedOption?.label }}
       </span>
       <span v-else class="block truncate text-stone-400">
@@ -50,10 +50,7 @@
             class="relative cursor-default select-none py-2 pl-3 pr-10"
             :class="[active ? 'bg-primary-300 text-primary-900' : 'text-stone-800']"
           >
-            <span
-              class="block truncate first-letter:capitalize"
-              :class="[selected ? 'font-semibold' : 'font-normal']"
-            >
+            <span class="block truncate" :class="[selected ? 'font-semibold' : 'font-normal']">
               {{ option?.label }}
             </span>
 

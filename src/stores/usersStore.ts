@@ -136,11 +136,11 @@ const users: TUser[] = [
 export const userRoles: TUserRoles = {
   administrator: {
     value: "administrator",
-    label: "administrator",
+    label: "Administrator",
   },
   member: {
     value: "member",
-    label: "member",
+    label: "Member",
   },
 };
 

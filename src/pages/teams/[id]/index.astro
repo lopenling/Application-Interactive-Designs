@@ -21,7 +21,7 @@ const singularTeam = teamsStore.getTeamById(teamdId);
 
 const meta: TMetaInformation = {
   lang: "en",
-  title: `Team ${singularTeam || ""}`,
+  title: `Team ${singularTeam?.name || ""}`,
 };
 ---
 

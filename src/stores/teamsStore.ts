@@ -104,7 +104,7 @@ export const useTeamsStore = defineStore("teamsStore", {
     teams: teams,
   }),
   getters: {
-    getCurrentTeam: (state) => {
+    getTeamById: (state) => {
       return (teamId: number) => state.teams.find((obj) => obj.id == teamId);
     },
     getUserRoleByUserId: (state) => {
@@ -118,6 +118,15 @@ export const useTeamsStore = defineStore("teamsStore", {
         if (invitee && invitee.role === userRoles.administrator.value)
           return userRoles.administrator;
         if (invitee && invitee.role === userRoles.member.value) return userRoles.member;
+      };
+    },
+    isUserInvitePendingByUserId: (state) => {
+      return (userId: number, teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+
+        const invitee = team?.invitedUsers.find((user) => user.id === userId);
+        if (invitee) return true;
+        return false;
       };
     },
   },

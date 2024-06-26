@@ -46,7 +46,9 @@
           </div>
         </template>
         <template #buttons>
-          <SettingsCardSubtleButton @click="console.log('TODO: Open the member edit modal')">
+          <SettingsCardSubtleButton
+            @click="openModalTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
+          >
             Edit
           </SettingsCardSubtleButton>
         </template>

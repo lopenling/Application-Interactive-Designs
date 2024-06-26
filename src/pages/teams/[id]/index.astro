@@ -1,7 +1,6 @@
 ---
 import { type TMetaInformation } from "@lib/types";
 import getRole from "@scripts/helpers/getRole";
-import teamsData from "@scripts/data/teamsData";
 
 import LayoutSettings from "@layouts/LayoutSettings.astro";
 import SingularTeamHeader from "./_partials/_SingularTeamHeader.vue";
@@ -11,14 +10,18 @@ import SingularTeamNativeDictionaries from "./_partials/_SingularTeamNativeDicti
 import SingularTeamFooter from "./_partials/_SingularTeamFooter.vue";
 import SingularTeamModalEditMember from "./_partials/_SingularTeamModalEditMember.vue";
 
+import { createPinia } from "pinia";
+import { useTeamsStore } from "@stores/teamsStore.ts";
+
 const role = getRole(Astro);
-const currentId = Number(Astro.params.id);
-const teams = teamsData();
-const team = teams.find((obj) => obj.id == currentId);
+const pinia = createPinia();
+const teamsStore = useTeamsStore(pinia);
+const teamdId = Number(Astro.params.id);
+const singularTeam = teamsStore.getCurrentTeam(teamdId);
 
 const meta: TMetaInformation = {
   lang: "en",
-  title: `Team ${team && team.name ? team.name : ""}`,
+  title: `Team ${singularTeam || ""}`,
 };
 ---
 

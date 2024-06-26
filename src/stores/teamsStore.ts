@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { roles, type TSingularRole } from "@stores/usersStore";
+import { userRoles, type TSingularUserRole } from "@stores/usersStore";
 
 export type TTeam = {
   id: number;
@@ -21,7 +21,7 @@ export type TTeamExcludedUser = {
 
 export type TTeamInvitedUser = {
   id: number;
-  role: TSingularRole["value"];
+  role: TSingularUserRole["value"];
   inviteAuthorId: number;
 };
 
@@ -32,8 +32,8 @@ const teams: TTeam[] = [
     adminUserIds: [2, 16],
     memberUserIds: [4, 6, 12, 14],
     invitedUsers: [
-      { id: 10, role: roles.administrator.value, inviteAuthorId: 2 },
-      { id: 3, role: roles.member.value, inviteAuthorId: 2 },
+      { id: 10, role: userRoles.administrator.value, inviteAuthorId: 2 },
+      { id: 3, role: userRoles.member.value, inviteAuthorId: 2 },
     ],
     enabledCustomDictionaryIds: [1],
     disabledCustomDictionaryIds: [],
@@ -89,7 +89,7 @@ const teams: TTeam[] = [
     name: "Omega",
     adminUserIds: [8],
     memberUserIds: [],
-    invitedUsers: [{ id: 2, role: roles.administrator.value, inviteAuthorId: 8 }],
+    invitedUsers: [{ id: 2, role: userRoles.administrator.value, inviteAuthorId: 8 }],
     enabledCustomDictionaryIds: [],
     disabledCustomDictionaryIds: [],
     enabledNativeDictionaryIds: [
@@ -111,12 +111,13 @@ export const useTeamsStore = defineStore("teamsStore", {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
 
-        if (team?.adminUserIds.includes(userId)) return roles.administrator;
-        if (team?.memberUserIds.includes(userId)) return roles.member;
+        if (team?.adminUserIds.includes(userId)) return userRoles.administrator;
+        if (team?.memberUserIds.includes(userId)) return userRoles.member;
 
         const invitee = team?.invitedUsers.find((user) => user.id === userId);
-        if (invitee && invitee.role === roles.administrator.value) return roles.administrator;
-        if (invitee && invitee.role === roles.member.value) return roles.member;
+        if (invitee && invitee.role === userRoles.administrator.value)
+          return userRoles.administrator;
+        if (invitee && invitee.role === userRoles.member.value) return userRoles.member;
       };
     },
   },

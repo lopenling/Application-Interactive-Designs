@@ -2,7 +2,7 @@
   <div class="relative">
     <ListboxButton
       v-bind="$attrs"
-      class="relative w-full cursor-default rounded-md border-0 py-1.5 pl-3 pr-10 text-left text-stone-800 ring-1 ring-inset ring-stone-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600 data-[headlessui-state=open]:outline-none data-[headlessui-state=open]:ring-2 data-[headlessui-state=open]:ring-inset data-[headlessui-state=open]:ring-primary-600 sm:text-sm sm:leading-6"
+      class="relative w-full cursor-default rounded-md border-0 py-1.5 pl-3 pr-10 text-left text-sm leading-6 text-stone-800 ring-1 ring-inset ring-stone-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600 data-[headlessui-state=open]:outline-none data-[headlessui-state=open]:ring-2 data-[headlessui-state=open]:ring-inset data-[headlessui-state=open]:ring-primary-600"
       :class="[
         props.appearance == 'white'
           ? 'bg-white'
@@ -14,12 +14,13 @@
         props.shadow && 'shadow-sm',
       ]"
     >
-      <span v-if="selectedOption" v-text="selectedOption?.value" class="block truncate" />
-      <span
-        v-if="!selectedOption"
-        v-text="props.placeholder || 'Select an option'"
-        class="block truncate text-stone-400"
-      />
+      <span v-if="selectedOption?.value" class="block truncate first-letter:capitalize">
+        {{ selectedOption?.label }}
+      </span>
+      <span v-else class="block truncate text-stone-400">
+        {{ props.placeholder || "Select an option" }}
+      </span>
+
       <span
         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-stone-400 transition duration-0 group-[:has(button:focus)]:text-primary-500 group-data-[headlessui-state=open]:text-primary-500"
       >
@@ -39,9 +40,9 @@
         class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
       >
         <ListboxOption
-          v-for="option in sortedOptions"
+          v-for="option in options"
           as="template"
-          :key="option?.id"
+          :key="option?.value"
           :value="option"
           v-slot="{ active, selected }"
         >
@@ -49,8 +50,11 @@
             class="relative cursor-default select-none py-2 pl-3 pr-10"
             :class="[active ? 'bg-primary-300 text-primary-900' : 'text-stone-800']"
           >
-            <span class="block truncate" :class="[selected ? 'font-semibold' : 'font-normal']">
-              {{ option?.value }}
+            <span
+              class="block truncate first-letter:capitalize"
+              :class="[selected ? 'font-semibold' : 'font-normal']"
+            >
+              {{ option?.label }}
             </span>
 
             <span
@@ -68,10 +72,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, type ComputedRef } from "vue";
 import { ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/vue";
-import type { ComputedRef } from "vue";
 import { type TOption } from "@components/BaseListbox/BaseListbox.vue";
+
+import IconArrowDown1 from "@components/icons/streamline/regular/IconArrowDown1.vue";
+import IconCheck1 from "@components/icons/streamline/regular/IconCheck1.vue";
 
 defineOptions({
   inheritAttrs: false,
@@ -85,8 +91,5 @@ type TProps = {
 
 const props = defineProps<TProps>();
 const selectedOption = <ComputedRef<TOption>>inject("selectedOption");
-const sortedOptions = <ComputedRef<TOption[]>>inject("sortedOptions");
-
-import IconArrowDown1 from "@components/icons/streamline/regular/IconArrowDown1.vue";
-import IconCheck1 from "@components/icons/streamline/regular/IconCheck1.vue";
+const options = <ComputedRef<TOption[]>>inject("options");
 </script>

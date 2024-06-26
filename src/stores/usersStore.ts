@@ -8,12 +8,12 @@ export type TUser = {
   avatarUrl: string | undefined;
 };
 
-export type TRoles = {
-  administrator: TSingularRole;
-  member: TSingularRole;
+export type TUserRoles = {
+  administrator: TSingularUserRole;
+  member: TSingularUserRole;
 };
 
-export type TSingularRole = {
+export type TSingularUserRole = {
   value: string;
   label: string;
 };
@@ -133,7 +133,7 @@ const users: TUser[] = [
   },
 ];
 
-export const roles: TRoles = {
+export const userRoles: TUserRoles = {
   administrator: {
     value: "administrator",
     label: "administrator",
@@ -148,4 +148,15 @@ export const useUsersStore = defineStore("usersStore", {
   state: () => ({
     users: users,
   }),
+  getters: {
+    getUserById: (state) => {
+      return (userId: number) => state.users.find((user) => user.id === userId);
+    },
+    getUserFullNameById: (state) => {
+      return (userId: number) => {
+        const { firstName, lastName } = state.users.find((user) => user.id === userId) || {};
+        return `${firstName ? firstName : ""} ${lastName ? lastName : ""}`;
+      };
+    },
+  },
 });

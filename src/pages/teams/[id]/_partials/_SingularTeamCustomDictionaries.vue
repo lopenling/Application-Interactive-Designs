@@ -54,7 +54,10 @@
         </span>
 
         <template #extraButtons>
-          <SettingsCardSubtleButton @click="console.log('TODO: Open the dictionary edit modal')">
+          <SettingsCardSubtleButton
+            @click="openModalTeamEditCustomDictionary({ dictionaryId: dictionary.id })"
+            :iconComponent="IconAdd"
+          >
             Edit
           </SettingsCardSubtleButton>
         </template>
@@ -156,6 +159,7 @@ import { type TTeam } from "@scripts/data/teamsData";
 import { type TUser } from "@scripts/data/usersData";
 import { type TCustomDictionary } from "@scripts/data/customDictionariesData";
 import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
+import { type TSingularTeamModalEditCustomDictionary } from "./_SingularTeamModalEditCustomDictionary.vue";
 
 import usersData from "@scripts/data/usersData";
 import teamsData from "@scripts/data/teamsData";
@@ -194,6 +198,9 @@ const customDictionaries = customDictionariesData();
 
 const openModalTeamNewCustomDictionary = () => {
   eventBus.emit("open-modal", { name: "team-new-custom-dictionary" });
+};
+const openModalTeamEditCustomDictionary = (data: TSingularTeamModalEditCustomDictionary) => {
+  eventBus.emit("open-modal", { name: "team-edit-custom-dictionary", data: data });
 };
 
 /**

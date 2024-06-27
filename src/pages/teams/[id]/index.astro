@@ -11,6 +11,7 @@ import SingularTeamFooter from "./_partials/_SingularTeamFooter.vue";
 import SingularTeamModalNewMember from "./_partials/_SingularTeamModalNewMember.vue";
 import SingularTeamModalEditMember from "./_partials/_SingularTeamModalEditMember.vue";
 import SingularTeamModalNewCustomDictionary from "./_partials/_SingularTeamModalNewCustomDictionary.vue";
+import SingularTeamModalEditCustomDictionary from "./_partials/_SingularTeamModalEditCustomDictionary.vue";
 
 import { createPinia } from "pinia";
 import { useTeamsStore } from "@stores/teamsStore.ts";
@@ -37,6 +38,7 @@ const meta: TMetaInformation = {
   <SingularTeamModalNewMember client:load />
   <SingularTeamModalEditMember client:load />
   <SingularTeamModalNewCustomDictionary client:load />
+  <SingularTeamModalEditCustomDictionary client:load />
 
   {
     role !== "admin" && (

@@ -1,6 +1,6 @@
 <template>
   <ModalDialog name="team-new-custom-dictionary" max-width="2xl" :separate-buttons="true">
-    <p class="max-w-prose text-pretty text-left">
+    <p class="max-w-prose text-pretty">
       The CSV file must be in the correct format, make sure it follows the template which you can
       <button
         type="button"
@@ -34,8 +34,8 @@
       </div>
     </div>
     <p class="max-w-prose text-left text-stone-500">
-      The uploaded CSV file size must be less than 100MB.<br />
-      A team can have up to {{ MAX_CUSTOM_DICTIONARIES }} custom dictionaries.
+      The uploaded CSV file size must be less than 100MB. A team can have up to
+      {{ MAX_CUSTOM_DICTIONARIES }} custom dictionaries.
     </p>
 
     <template #title>Add a new custom dictionary</template>

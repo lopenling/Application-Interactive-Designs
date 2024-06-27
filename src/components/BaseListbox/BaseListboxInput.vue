@@ -17,7 +17,7 @@
       <span v-if="selectedOption?.value" class="block truncate">
         {{ selectedOption?.label }}
       </span>
-      <span v-else class="block truncate text-stone-400">
+      <span v-else class="block min-h-6 truncate text-stone-400">
         {{ props.placeholder || "Select an option" }}
       </span>
 

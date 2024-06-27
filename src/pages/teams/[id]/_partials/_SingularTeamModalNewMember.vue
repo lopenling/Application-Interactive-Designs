@@ -2,11 +2,9 @@
   <ModalDialog name="team-new-member" max-width="2xl" :separate-buttons="true">
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row">
       <div class="sm:basis-3/5">
-        <label class="mb-1.5 block text-sm font-medium leading-6 text-stone-800" for="email">
-          Email address
-        </label>
-        <input
-          class="block w-full rounded-md border-0 bg-white py-1.5 text-stone-800 ring-1 ring-inset ring-stone-300 transition placeholder:text-stone-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+        <BaseLabel for="email">Email address</BaseLabel>
+        <BaseInput
+          appearance="white"
           type="email"
           name="email"
           id="email"
@@ -51,6 +49,8 @@ import { userRoles, type TSingularUserRole } from "@stores/usersStore";
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
+import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
+import BaseInput from "@components/BaseInput/BaseInput.vue";
 import BaseListbox from "@components/BaseListbox/BaseListbox.vue";
 import BaseListboxLabel from "@components/BaseListbox/BaseListboxLabel.vue";
 import BaseListboxInput from "@components/BaseListbox/BaseListboxInput.vue";

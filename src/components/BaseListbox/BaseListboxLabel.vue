@@ -1,9 +1,12 @@
 <template>
-  <ListboxLabel class="mb-1.5 block text-sm font-medium leading-6 text-stone-800">
-    <slot name="default" />
+  <ListboxLabel as="template">
+    <BaseLabel>
+      <slot name="default" />
+    </BaseLabel>
   </ListboxLabel>
 </template>
 
 <script setup lang="ts">
 import { ListboxLabel } from "@headlessui/vue";
+import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
 </script>

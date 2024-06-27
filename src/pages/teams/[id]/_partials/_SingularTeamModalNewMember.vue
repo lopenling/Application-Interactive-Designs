@@ -65,13 +65,11 @@ const teamsStore = useTeamsStore();
 const singularTeam = ref({} as TTeam);
 const selectedRoleInEditTeamMember = ref(userRoles.member as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
-const openModal = ref(false);
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "team-new-member") return;
   let teamId: TSingularTeamModalNewMember["teamId"] = event.data.teamId;
 
   singularTeam.value = teamsStore.getTeamById(teamId)!;
-  openModal.value = true;
 });
 </script>

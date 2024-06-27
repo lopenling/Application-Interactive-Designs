@@ -1,10 +1,5 @@
 <template>
-  <ModalDialog
-    v-if="singularUser && singularTeam && selectedRoleInEditTeamMember"
-    name="team-edit-member"
-    max-width="xl"
-    :separate-buttons="true"
-  >
+  <ModalDialog name="team-edit-member" max-width="xl" :separate-buttons="true">
     <template #default="{ iconButtonsOverflowWidth }">
       <div class="mb-4 flex flex-col">
         <div class="min-w-0 text-base font-semibold leading-6 text-stone-900">

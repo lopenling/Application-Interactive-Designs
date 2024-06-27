@@ -2,7 +2,7 @@
   <button
     type="button"
     :class="[
-      'inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto',
+      'inline-flex w-full justify-center rounded-md px-3.5 py-2 text-sm font-semibold shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto',
       props.appearance == 'primary' &&
         'bg-primary-600 text-white hover:bg-primary-500 focus-visible:outline-primary-600',
       props.appearance == 'danger' &&

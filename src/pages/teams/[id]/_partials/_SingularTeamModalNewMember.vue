@@ -8,7 +8,7 @@
           type="email"
           name="email"
           id="email"
-          inputtype="email"
+          inputmode="email"
           required
         />
       </div>

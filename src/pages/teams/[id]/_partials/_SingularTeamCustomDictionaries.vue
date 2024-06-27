@@ -13,10 +13,7 @@
       </CardHeaderHeading>
 
       <template #button>
-        <CardHeaderButton
-          @click="console.log('TODO: Open the dictionary adding modal')"
-          :iconComponent="IconAdd"
-        >
+        <CardHeaderButton @click="openModalTeamNewCustomDictionary()" :iconComponent="IconAdd">
           New dictionary
         </CardHeaderButton>
       </template>
@@ -152,6 +149,7 @@
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
+import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
 import { type TTeam } from "@scripts/data/teamsData";
@@ -193,6 +191,10 @@ const state = getState(props.astro);
 const users = usersData();
 const teams = teamsData();
 const customDictionaries = customDictionariesData();
+
+const openModalTeamNewCustomDictionary = () => {
+  eventBus.emit("open-modal", { name: "team-new-custom-dictionary" });
+};
 
 /**
  * Store

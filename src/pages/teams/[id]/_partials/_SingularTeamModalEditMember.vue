@@ -5,34 +5,41 @@
     max-width="xl"
     :separate-buttons="true"
   >
-    <div class="mb-4 flex flex-col">
-      <div class="text-base font-semibold leading-6 text-stone-900">
-        <span
-          v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)"
-          class="block truncate"
-        >
-          {{ singularUser.email }}
-        </span>
-        <span v-else>
-          {{ usersStore.getUserFullNameById(singularUser.id) }}
-        </span>
+    <template #default="{ iconButtonsOverflowWidth }">
+      <div class="mb-4 flex flex-col">
+        <div class="min-w-0 text-base font-semibold leading-6 text-stone-900">
+          <div
+            v-if="iconButtonsOverflowWidth > 0"
+            class="float-right ml-2.5 hidden h-2.5 sm:block"
+            :style="`width: ${iconButtonsOverflowWidth}px;`"
+          />
+          <span
+            v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)"
+            class="block truncate"
+          >
+            {{ singularUser.email }}
+          </span>
+          <span v-else>
+            {{ usersStore.getUserFullNameById(singularUser.id) }}
+          </span>
+        </div>
+        <div class="text-xs leading-5 text-stone-500/85">
+          <span v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)">
+            Invitation pending
+          </span>
+          <span v-else class="block truncate">
+            {{ singularUser.email }}
+          </span>
+        </div>
       </div>
-      <div class="text-xs leading-5 text-stone-500/85">
-        <span v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)">
-          Invitation pending
-        </span>
-        <span v-else class="block truncate">
-          {{ singularUser.email }}
-        </span>
-      </div>
-    </div>
 
-    <div class="mb-0 w-full text-left sm:w-1/2">
-      <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
-        <BaseListboxLabel>Role</BaseListboxLabel>
-        <BaseListboxInput appearance="white" />
-      </BaseListbox>
-    </div>
+      <div class="mb-0 w-full text-left sm:w-1/2">
+        <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
+          <BaseListboxLabel>Role</BaseListboxLabel>
+          <BaseListboxInput appearance="white" />
+        </BaseListbox>
+      </div>
+    </template>
 
     <template #illustration>
       <ModalDialogIllustration
@@ -87,12 +94,11 @@ const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "team-edit-member") return;
+  let userId: TSingularTeamModalEditMember["userId"] = event.data.userId;
+  let teamId: TSingularTeamModalEditMember["teamId"] = event.data.teamId;
 
-  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleByUserId(
-    event.data.userId,
-    event.data.teamId,
-  )!;
-  singularTeam.value = teamsStore.getTeamById(event.data.teamId)!;
-  singularUser.value = usersStore.getUserById(event.data.userId)!;
+  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleByUserId(userId, teamId)!;
+  singularTeam.value = teamsStore.getTeamById(teamId)!;
+  singularUser.value = usersStore.getUserById(userId)!;
 });
 </script>

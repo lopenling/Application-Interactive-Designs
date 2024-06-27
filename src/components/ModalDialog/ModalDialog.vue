@@ -51,26 +51,36 @@
                 <!-- Illustration -->
                 <div
                   v-if="slots.illustration"
-                  class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center sm:mx-0 sm:h-10 sm:w-10"
+                  :class="!slots.default && slots.illustration && 'sm:h-px sm:overflow-visible'"
                 >
-                  <slot name="illustration" />
+                  <div
+                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center sm:mx-0 sm:h-10 sm:w-10"
+                  >
+                    <slot name="illustration" />
+                  </div>
                 </div>
 
                 <!-- Content -->
                 <div
-                  class="grow text-center sm:text-left"
+                  class="min-w-0 grow text-center sm:text-left"
                   :class="slots.illustration && 'mt-3 sm:ml-4 sm:mt-0'"
                 >
                   <DialogTitle
                     v-if="slots.title"
                     as="h3"
-                    class="text-base font-semibold leading-6 text-stone-900"
+                    class="text-base font-semibold leading-5 text-stone-800 sm:text-lg sm:font-medium sm:leading-6"
+                    :class="slots.illustration && 'sm:mt-2'"
                   >
+                    <div
+                      v-if="iconButtonsOverflowWidth > 0"
+                      class="float-right ml-2.5 hidden h-2.5 sm:block"
+                      :style="`width: ${iconButtonsOverflowWidth}px;`"
+                    />
                     <slot name="title" />
                   </DialogTitle>
 
-                  <div class="text-sm" :class="slots.title && 'mt-2'">
-                    <slot name="default" />
+                  <div v-if="slots.default" class="text-sm" :class="slots.title && 'mt-3'">
+                    <slot name="default" :iconButtonsOverflowWidth="iconButtonsOverflowWidth" />
                   </div>
                 </div>
               </div>
@@ -81,8 +91,8 @@
                 class="flex flex-wrap gap-x-3 gap-y-4 sm:flex-row-reverse"
                 :class="
                   props.separateButtons
-                    ? 'mt-4 border-t pt-4 2xs:mt-6 2xs:pt-6 sm:mt-6 sm:pt-3'
-                    : 'mt-6 sm:mt-6'
+                    ? 'mt-8 border-t pt-4 2xs:mt-10 2xs:pt-6 sm:mt-9 sm:pt-3'
+                    : 'mt-9 sm:mt-6'
                 "
               >
                 <slot name="buttons" />
@@ -149,7 +159,7 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItems } from "@headlessui/vue";
 
-import { ref, provide, useSlots } from "vue";
+import { ref, computed, provide, useSlots } from "vue";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import eventBus from "@scripts/general/eventBus";
 import ModalDialogBackdrop from "@components/ModalDialog/ModalDialogBackdrop.vue";
@@ -183,6 +193,17 @@ const props = defineProps<TProps>();
 const slots = useSlots();
 const open = ref(props.isOpen);
 const renderInitialFocusWorkaround = ref(true);
+
+const iconButtonsOverflowWidth = computed(() => {
+  const iconButtonWidth = 36; // in pixels
+  const iconButtonsGap = 4; // in pixels
+  let width = 0;
+  if (!props.stayOpen) width += iconButtonWidth;
+  if (slots.options) width += iconButtonWidth;
+  if (slots.options && !props.stayOpen) width += iconButtonsGap;
+  if (width > 0) width -= iconButtonWidth / 2;
+  return width;
+});
 
 const handleClose = () => {
   if (props.stayOpen) return;

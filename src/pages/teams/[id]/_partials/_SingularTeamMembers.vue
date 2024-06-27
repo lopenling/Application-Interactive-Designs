@@ -5,7 +5,7 @@
 
       <template #button>
         <CardHeaderButton
-          @click="console.log('TODO: Open the member adding modal')"
+          @click="openModalTeamNewMember({ teamId: singularTeam.id })"
           :iconComponent="IconAdd"
         >
           New member
@@ -74,6 +74,7 @@ import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
 import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
+import { type TSingularTeamModalNewMember } from "./_SingularTeamModalNewMember.vue";
 import { type TSingularTeamModalEditMember } from "./_SingularTeamModalEditMember.vue";
 
 import signedInUserData from "@scripts/data/signedInUserData";
@@ -104,10 +105,12 @@ const signedInUser = signedInUserData(role);
 const users = usersData();
 const teams = teamsData();
 
+const openModalTeamNewMember = (data: TSingularTeamModalNewMember) => {
+  eventBus.emit("open-modal", { name: "team-new-member", data: data });
+};
 const openModalTeamEditMember = (data: TSingularTeamModalEditMember) => {
   eventBus.emit("open-modal", { name: "team-edit-member", data: data });
 };
-
 /**
  * Store
  *

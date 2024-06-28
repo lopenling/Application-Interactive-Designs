@@ -5,7 +5,7 @@
 
       <template #button>
         <CardHeaderButton
-          @click="openModalTeamNewMember({ teamId: singularTeam.id })"
+          @click="openModalSingularTeamNewMember({ teamId: singularTeam.id })"
           :iconComponent="IconAdd"
         >
           New member
@@ -25,7 +25,7 @@
         </template>
         <template #buttons>
           <SettingsCardSubtleButton
-            @click="openModalTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
+            @click="openModalSingularTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
           >
             Edit
           </SettingsCardSubtleButton>
@@ -47,7 +47,7 @@
         </template>
         <template #buttons>
           <SettingsCardSubtleButton
-            @click="openModalTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
+            @click="openModalSingularTeamEditMember({ userId: person.id, teamId: singularTeam.id })"
           >
             Edit
           </SettingsCardSubtleButton>
@@ -105,11 +105,11 @@ const signedInUser = signedInUserData(role);
 const users = usersData();
 const teams = teamsData();
 
-const openModalTeamNewMember = (data: TSingularTeamModalNewMember) => {
-  eventBus.emit("open-modal", { name: "team-new-member", data: data });
+const openModalSingularTeamNewMember = (data: TSingularTeamModalNewMember) => {
+  eventBus.emit("open-modal", { name: "singular-team-new-member", data: data });
 };
-const openModalTeamEditMember = (data: TSingularTeamModalEditMember) => {
-  eventBus.emit("open-modal", { name: "team-edit-member", data: data });
+const openModalSingularTeamEditMember = (data: TSingularTeamModalEditMember) => {
+  eventBus.emit("open-modal", { name: "singular-team-edit-member", data: data });
 };
 /**
  * Store

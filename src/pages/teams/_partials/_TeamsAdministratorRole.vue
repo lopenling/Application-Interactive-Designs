@@ -3,10 +3,7 @@
     <CardHeaderHeading>Administrator role</CardHeaderHeading>
 
     <template #button>
-      <CardHeaderButton
-        @click="console.log('TODO: Open the team adding modal')"
-        :iconComponent="IconAdd"
-      >
+      <CardHeaderButton @click="openModalTeamsNewTeam()" :iconComponent="IconAdd">
         New team
       </CardHeaderButton>
     </template>
@@ -31,6 +28,7 @@
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore } from "@stores/componentStates.mjs";
+import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
 import { type TTeam } from "@scripts/data/teamsData";
@@ -56,6 +54,10 @@ const role = getRole(props.astro);
 const state = getState(props.astro);
 const signedInUser = signedInUserData(role);
 const teams = teamsData();
+
+const openModalTeamsNewTeam = () => {
+  eventBus.emit("open-modal", { name: "teams-new-team" });
+};
 
 /**
  * Store

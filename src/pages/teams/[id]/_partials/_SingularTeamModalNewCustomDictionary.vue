@@ -1,5 +1,5 @@
 <template>
-  <ModalDialog name="team-new-custom-dictionary" max-width="2xl" :separate-buttons="true">
+  <ModalDialog name="singular-team-new-custom-dictionary" max-width="2xl" :separate-buttons="true">
     <p class="max-w-prose text-pretty">
       The CSV file must be in the correct format, make sure it follows the template which you can
       <button
@@ -57,6 +57,6 @@ import BaseInputFile from "@components/BaseInputFile/BaseInputFile.vue";
 import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue";
 
 eventBus.on("open-modal", (event: any) => {
-  if (event.name !== "team-new-custom-dictionary") return;
+  if (event.name !== "singular-team-new-custom-dictionary") return;
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <ModalDialog name="team-edit-member" max-width="xl" :separate-buttons="true">
+  <ModalDialog name="singular-team-edit-member" max-width="xl" :separate-buttons="true">
     <template #default="{ iconButtonsOverflowWidth }">
       <div class="mb-4 flex flex-col">
         <div class="min-w-0 text-base font-semibold leading-6 text-stone-900">
@@ -88,7 +88,7 @@ const selectedRoleInEditTeamMember = ref({} as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
 
 eventBus.on("open-modal", (event: any) => {
-  if (event.name !== "team-edit-member") return;
+  if (event.name !== "singular-team-edit-member") return;
   let userId: TSingularTeamModalEditMember["userId"] = event.data.userId;
   let teamId: TSingularTeamModalEditMember["teamId"] = event.data.teamId;
 

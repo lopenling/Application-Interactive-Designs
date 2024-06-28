@@ -13,7 +13,10 @@
       </CardHeaderHeading>
 
       <template #button>
-        <CardHeaderButton @click="openModalTeamNewCustomDictionary()" :iconComponent="IconAdd">
+        <CardHeaderButton
+          @click="openModalSingularTeamNewCustomDictionary()"
+          :iconComponent="IconAdd"
+        >
           New dictionary
         </CardHeaderButton>
       </template>
@@ -55,7 +58,7 @@
 
         <template #extraButtons>
           <SettingsCardSubtleButton
-            @click="openModalTeamEditCustomDictionary({ dictionaryId: dictionary.id })"
+            @click="openModalSingularTeamEditCustomDictionary({ dictionaryId: dictionary.id })"
             :iconComponent="IconAdd"
           >
             Edit
@@ -196,11 +199,13 @@ const users = usersData();
 const teams = teamsData();
 const customDictionaries = customDictionariesData();
 
-const openModalTeamNewCustomDictionary = () => {
-  eventBus.emit("open-modal", { name: "team-new-custom-dictionary" });
+const openModalSingularTeamNewCustomDictionary = () => {
+  eventBus.emit("open-modal", { name: "singular-team-new-custom-dictionary" });
 };
-const openModalTeamEditCustomDictionary = (data: TSingularTeamModalEditCustomDictionary) => {
-  eventBus.emit("open-modal", { name: "team-edit-custom-dictionary", data: data });
+const openModalSingularTeamEditCustomDictionary = (
+  data: TSingularTeamModalEditCustomDictionary,
+) => {
+  eventBus.emit("open-modal", { name: "singular-team-edit-custom-dictionary", data: data });
 };
 
 /**

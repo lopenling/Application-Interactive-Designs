@@ -1,5 +1,10 @@
 <template>
-  <ModalDialog name="singular-team-new-member" max-width="2xl" :separate-buttons="true">
+  <ModalDialog
+    name="singular-team-new-member"
+    max-width="2xl"
+    :separate-buttons="true"
+    enable-initial-focus="smAndUp"
+  >
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row">
       <div class="sm:basis-3/5">
         <BaseLabel for="email">Email address</BaseLabel>

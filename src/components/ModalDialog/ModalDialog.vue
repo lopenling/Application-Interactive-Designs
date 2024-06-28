@@ -9,11 +9,15 @@
         keyboard navigation experience and will remove the dummy button once it loses focus.
       -->
       <button
-        v-if="!props.enableInitialFocus && renderInitialFocusWorkaround"
+        v-if="
+          (!props.enableInitialFocus || props.enableInitialFocus == 'smAndUp') &&
+          renderInitialFocusWorkaround
+        "
         @blur="renderInitialFocusWorkaround = false"
         type="button"
         aria-hidden="true"
         class="fixed left-0 top-0 -z-50 h-0 w-0 overflow-hidden opacity-0 outline-none"
+        :class="props.enableInitialFocus == 'smAndUp' ? 'block sm:hidden' : 'block'"
       ></button>
 
       <ModalDialogBackdrop />
@@ -187,7 +191,7 @@ type TProps = {
     | "full";
   wideButtons?: boolean;
   separateButtons?: boolean;
-  enableInitialFocus?: boolean;
+  enableInitialFocus?: boolean | "smAndUp";
 };
 
 const props = defineProps<TProps>();

@@ -1,5 +1,10 @@
 <template>
-  <ModalDialog name="teams-new-team" max-width="md">
+  <ModalDialog
+    name="teams-new-team"
+    max-width="lg"
+    enable-initial-focus="smAndUp"
+    :separate-buttons="false"
+  >
     <div class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left">
       <form id="newTeamForm" @submit.prevent="handleFormSubmit">
         <BaseInputText
@@ -17,7 +22,7 @@
       </form>
     </div>
 
-    <template #title>What is your team's name?</template>
+    <template #title>Give the team a name</template>
     <template #buttons>
       <ModalDialogButton appearance="primary" :close-modal="false" type="submit" form="newTeamForm">
         Continue

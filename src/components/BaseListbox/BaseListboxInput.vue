@@ -2,15 +2,15 @@
   <div class="relative">
     <ListboxButton
       v-bind="$attrs"
-      class="relative w-full cursor-default rounded-md border-0 py-1.5 pl-3 pr-10 text-left text-sm leading-6 text-stone-800 ring-1 ring-inset ring-stone-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600 data-[headlessui-state=open]:outline-none data-[headlessui-state=open]:ring-2 data-[headlessui-state=open]:ring-inset data-[headlessui-state=open]:ring-primary-600"
+      class="relative w-full cursor-default rounded-md border-0 py-1.5 pl-3 pr-10 text-left text-sm leading-6 text-stone-800 ring-1 ring-inset focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600 data-[headlessui-state=open]:outline-none data-[headlessui-state=open]:ring-2 data-[headlessui-state=open]:ring-inset data-[headlessui-state=open]:ring-primary-600"
       :class="[
         props.appearance == 'white'
-          ? 'bg-white'
+          ? 'bg-white ring-stone-300'
           : props.appearance == 'transparent'
-            ? 'bg-transparent'
+            ? 'bg-transparent ring-black/[15%]'
             : props.appearance == 'gray'
-              ? 'bg-stone-50 focus:bg-primary-50 focus:text-primary-800'
-              : 'bg-stone-50 focus:bg-primary-50 focus:text-primary-800',
+              ? 'bg-stone-50 ring-stone-300 focus:bg-primary-50 focus:text-primary-800'
+              : 'bg-stone-50 ring-stone-300 focus:bg-primary-50 focus:text-primary-800',
         props.shadow && 'shadow-sm',
       ]"
     >
@@ -18,7 +18,7 @@
         {{ selectedOption?.label }}
       </span>
       <span v-else class="block min-h-6 truncate text-stone-400">
-        {{ props.placeholder || "Select an option" }}
+        {{ placeholder }}
       </span>
 
       <span
@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, type ComputedRef } from "vue";
+import { inject, computed, type ComputedRef } from "vue";
 import { ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/vue";
 import { type TOption } from "@components/BaseListbox/BaseListbox.vue";
 
@@ -89,4 +89,10 @@ type TProps = {
 const props = defineProps<TProps>();
 const selectedOption = <ComputedRef<TOption>>inject("selectedOption");
 const options = <ComputedRef<TOption[]>>inject("options");
+
+const placeholder = computed(() => {
+  if (props.placeholder) return props.placeholder;
+  if (typeof props.placeholder === "string" && props.placeholder.length === 0) return "";
+  return "Select an option";
+});
 </script>

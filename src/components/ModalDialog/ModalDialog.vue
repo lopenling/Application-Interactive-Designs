@@ -62,8 +62,8 @@
 
                 <!-- Content -->
                 <div
-                  class="min-w-0 grow text-center sm:text-left"
-                  :class="slots.illustration && 'mt-3 sm:ml-4 sm:mt-0'"
+                  class="min-w-0 grow sm:text-left"
+                  :class="slots.illustration && 'mt-3 text-center sm:ml-4 sm:mt-0'"
                 >
                   <DialogTitle
                     v-if="slots.title"
@@ -73,7 +73,8 @@
                   >
                     <div
                       v-if="iconButtonsOverflowWidth > 0"
-                      class="float-right ml-2.5 hidden h-2.5 sm:block"
+                      class="float-right ml-2.5 h-2.5 sm:block"
+                      :class="slots.illustration ? 'hidden' : 'block'"
                       :style="`width: ${iconButtonsOverflowWidth}px;`"
                     />
                     <slot name="title" />

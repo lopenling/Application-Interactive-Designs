@@ -1,5 +1,5 @@
 <template>
-  <ModalDialog name="team-new-member" max-width="2xl" :separate-buttons="true">
+  <ModalDialog name="singular-team-new-member" max-width="2xl" :separate-buttons="true">
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row">
       <div class="sm:basis-3/5">
         <BaseLabel for="email">Email address</BaseLabel>
@@ -67,7 +67,7 @@ const selectedRoleInEditTeamMember = ref(userRoles.member as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
 
 eventBus.on("open-modal", (event: any) => {
-  if (event.name !== "team-new-member") return;
+  if (event.name !== "singular-team-new-member") return;
   let teamId: TSingularTeamModalNewMember["teamId"] = event.data.teamId;
 
   singularTeam.value = teamsStore.getTeamById(teamId)!;

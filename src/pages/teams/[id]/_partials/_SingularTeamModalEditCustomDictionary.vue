@@ -1,5 +1,5 @@
 <template>
-  <ModalDialog name="team-edit-custom-dictionary" max-width="xl" :separate-buttons="true">
+  <ModalDialog name="singular-team-edit-custom-dictionary" max-width="xl" :separate-buttons="true">
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4">
       <div class="sm:w-1/2">
         <BaseLabel for="dictionary-name">Name</BaseLabel>
@@ -55,7 +55,7 @@ const singularCustomDictionary = ref({} as TCustomDictionary);
 const dictionaryName = ref("");
 
 eventBus.on("open-modal", (event: any) => {
-  if (event.name !== "team-edit-custom-dictionary") return;
+  if (event.name !== "singular-team-edit-custom-dictionary") return;
   let dictionaryId: TSingularTeamModalEditCustomDictionary["dictionaryId"] =
     event.data.dictionaryId;
 

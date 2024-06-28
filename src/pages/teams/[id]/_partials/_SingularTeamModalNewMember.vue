@@ -3,7 +3,7 @@
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row">
       <div class="sm:basis-3/5">
         <BaseLabel for="email">Email address</BaseLabel>
-        <BaseInput
+        <BaseInputText
           appearance="white"
           type="email"
           name="email"
@@ -15,7 +15,7 @@
       <div class="sm:basis-2/5">
         <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
           <BaseListboxLabel>Role</BaseListboxLabel>
-          <BaseListboxInput appearance="white" placeholder=" " />
+          <BaseListboxInput appearance="white" />
         </BaseListbox>
       </div>
     </div>
@@ -50,7 +50,7 @@ import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
 import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
-import BaseInput from "@components/BaseInput/BaseInput.vue";
+import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 import BaseListbox from "@components/BaseListbox/BaseListbox.vue";
 import BaseListboxLabel from "@components/BaseListbox/BaseListboxLabel.vue";
 import BaseListboxInput from "@components/BaseListbox/BaseListboxInput.vue";

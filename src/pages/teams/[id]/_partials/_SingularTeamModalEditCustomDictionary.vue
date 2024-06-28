@@ -3,7 +3,7 @@
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4">
       <div class="sm:w-1/2">
         <BaseLabel for="dictionary-name">Name</BaseLabel>
-        <BaseInput
+        <BaseInputText
           v-model="dictionaryName"
           appearance="white"
           type="text"
@@ -42,7 +42,7 @@ import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogOption from "@components/ModalDialog/ModalDialogOption.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
 import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
-import BaseInput from "@components/BaseInput/BaseInput.vue";
+import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 
 import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue";
 

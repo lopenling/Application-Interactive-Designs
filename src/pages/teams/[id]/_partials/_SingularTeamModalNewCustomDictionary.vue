@@ -12,7 +12,7 @@
     <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4">
       <div class="sm:w-1/2">
         <BaseLabel for="dictionary-name">Name</BaseLabel>
-        <BaseInput
+        <BaseInputText
           appearance="white"
           type="text"
           name="dictionary-name"
@@ -23,14 +23,7 @@
       </div>
       <div>
         <BaseLabel for="dictionary-file">CSV file</BaseLabel>
-        <BaseInput
-          appearance="white"
-          type="text"
-          name="dictionary-file"
-          id="dictionary-file"
-          inputmode="text"
-          required
-        />
+        <BaseInputFile id="dictionary-file" appearance="transparent" />
       </div>
     </div>
     <p class="max-w-prose text-left text-stone-500">
@@ -58,7 +51,8 @@ import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
 import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
-import BaseInput from "@components/BaseInput/BaseInput.vue";
+import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
+import BaseInputFile from "@components/BaseInputFile/BaseInputFile.vue";
 
 import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue";
 

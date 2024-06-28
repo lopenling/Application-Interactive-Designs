@@ -1,10 +1,16 @@
 <template>
-  <ModalDialog name="singular-team-new-custom-dictionary" max-width="2xl" :separate-buttons="true">
+  <ModalDialog
+    name="singular-team-new-custom-dictionary"
+    max-width="2xl"
+    :separate-buttons="true"
+    enable-initial-focus="smAndUp"
+  >
     <p class="max-w-prose text-pretty">
       The CSV file must be in the correct format, make sure it follows the template which you can
       <button
         type="button"
         class="-mx-px inline-flex rounded-md px-px font-semibold text-primary-600 underline underline-offset-2 transition hover:text-primary-500 focus-visible:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-0"
+        :tabindex="downloadButtonTabIndex"
       >
         download here</button
       >.
@@ -23,7 +29,7 @@
       </div>
       <div>
         <BaseLabel for="dictionary-file">CSV file</BaseLabel>
-        <BaseInputFile id="dictionary-file" appearance="transparent" />
+        <BaseInputFile id="dictionary-file" tabindex="-1" appearance="transparent" />
       </div>
     </div>
     <p class="max-w-prose text-left text-stone-500">
@@ -36,7 +42,11 @@
       <ModalDialogIllustration :icon-component="IconBookEdit" appearance="primary" />
     </template>
     <template #buttons>
-      <ModalDialogButton appearance="primary" :close-modal="true">
+      <ModalDialogButton
+        appearance="primary"
+        :close-modal="true"
+        @focus="downloadButtonTabIndex = 0"
+      >
         Upload dictionary
       </ModalDialogButton>
     </template>
@@ -44,6 +54,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { MAX_CUSTOM_DICTIONARIES } from "@scripts/data/constants";
 
@@ -59,4 +70,6 @@ import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue"
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-new-custom-dictionary") return;
 });
+
+const downloadButtonTabIndex = ref(-1);
 </script>

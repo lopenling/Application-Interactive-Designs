@@ -107,6 +107,20 @@ export const useTeamsStore = defineStore("teamsStore", {
     getTeamById: (state) => {
       return (teamId: number) => state.teams.find((obj) => obj.id == teamId);
     },
+    getTeamsWhereUserIsAdminByUserId: (state) => {
+      return (userId: number) => {
+        const teams = state.teams
+          .filter((team) => team.adminUserIds.some((id) => id === userId))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return teams;
+      };
+    },
+    getNewTeamId: (state) => {
+      return () => {
+        const highestId = Math.max(...state.teams.map((team) => team.id));
+        return highestId + 1;
+      };
+    },
     getUserRoleByUserId: (state) => {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
@@ -130,4 +144,22 @@ export const useTeamsStore = defineStore("teamsStore", {
       };
     },
   },
+  actions: {
+    addTeam({ teamId, teamName, userId }: { teamId: number; teamName: string; userId: number }) {
+      this.teams.push({
+        id: teamId,
+        name: teamName,
+        adminUserIds: [userId],
+        memberUserIds: [],
+        invitedUsers: [],
+        enabledCustomDictionaryIds: [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        ],
+        disabledCustomDictionaryIds: [],
+        enabledNativeDictionaryIds: [],
+        excludedUsers: [],
+      });
+    },
+  },
+  persist: true,
 });

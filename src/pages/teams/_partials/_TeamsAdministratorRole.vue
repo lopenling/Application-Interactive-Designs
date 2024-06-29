@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore } from "@stores/teamsStore";
 
@@ -49,7 +50,9 @@ const state = getState(props.astro);
 const signedInUser = signedInUserData(role);
 
 const teamsStore = useTeamsStore();
-const teamsWhereUserIsAdmin = teamsStore.getTeamsWhereUserIsAdminByUserId(signedInUser.id);
+const teamsWhereUserIsAdmin = computed(() =>
+  teamsStore.getTeamsWhereUserIsAdminByUserId(signedInUser.id),
+);
 
 const openModalTeamsNewTeam = () => {
   eventBus.emit("open-modal", { name: "teams-new-team" });

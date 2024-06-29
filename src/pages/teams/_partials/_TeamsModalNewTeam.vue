@@ -5,22 +5,24 @@
     enable-initial-focus="smAndUp"
     :separate-buttons="false"
   >
-    <div class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left">
-      <form id="newTeamForm" @submit.prevent="handleFormSubmit">
-        <BaseInputText
-          v-model="newTeamName"
-          appearance="white"
-          type="text"
-          name="newTeamName"
-          id="newTeamName"
-          inputmode="text"
-          pattern="[a-zA-Z0-9_\-\(\)][a-zA-Z0-9_\-\(\) ]{1,49}"
-          autocomplete="off"
-          title="2-50 letters, no special characters except _ - ( )"
-          required
-        />
-      </form>
-    </div>
+    <form
+      id="newTeamForm"
+      @submit.prevent="handleFormSubmit"
+      class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left"
+    >
+      <BaseInputText
+        v-model="newTeamName"
+        appearance="white"
+        type="text"
+        name="newTeamName"
+        id="newTeamName"
+        inputmode="text"
+        pattern="[a-zA-Z0-9_\-\(\)][a-zA-Z0-9_\-\(\) ]{1,49}"
+        autocomplete="off"
+        title="2-50 letters, no special characters except _ - ( )"
+        required
+      />
+    </form>
 
     <template #title>Give the team a name</template>
     <template #buttons>

@@ -4,21 +4,23 @@
       You will loose access to team {{ singularTeam.name }} and all of it's materials. Write the
       team name below to confirm.
     </p>
-    <div class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left">
-      <form id="leaveTeamForm" @submit.prevent="handleFormSubmit">
-        <BaseLabel for="leaveTeamName">Team name</BaseLabel>
-        <BaseInputText
-          v-model="leaveTeamName"
-          appearance="white"
-          type="text"
-          name="leaveTeamName"
-          id="leaveTeamName"
-          inputmode="text"
-          autocomplete="off"
-          required
-        />
-      </form>
-    </div>
+    <form
+      id="leaveTeamForm"
+      @submit.prevent="handleFormSubmit"
+      class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left"
+    >
+      <BaseLabel for="leaveTeamName">Team name</BaseLabel>
+      <BaseInputText
+        v-model="leaveTeamName"
+        appearance="white"
+        type="text"
+        name="leaveTeamName"
+        id="leaveTeamName"
+        inputmode="text"
+        autocomplete="off"
+        required
+      />
+    </form>
 
     <template #title>Are you sure you wish to leave?</template>
     <template #illustration>

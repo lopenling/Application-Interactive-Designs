@@ -107,13 +107,21 @@ export const useTeamsStore = defineStore("teamsStore", {
     getTeamById: (state) => {
       return (teamId: number) => state.teams.find((obj) => obj.id == teamId);
     },
-getTeamIndexById: (state) => {
+    getTeamIndexById: (state) => {
       return (teamId: number) => state.teams.findIndex((team) => team["id"] === teamId);
     },
     getTeamsWhereUserIsAdminByUserId: (state) => {
       return (userId: number) => {
         const teams = state.teams
           .filter((team) => team.adminUserIds.some((id) => id === userId))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return teams;
+      };
+    },
+    getTeamsWhereUserIsMemberByUserId: (state) => {
+      return (userId: number) => {
+        const teams = state.teams
+          .filter((team) => team.memberUserIds.some((id) => id === userId))
           .sort((a, b) => a.name.localeCompare(b.name));
         return teams;
       };
@@ -151,18 +159,18 @@ getTeamIndexById: (state) => {
     addTeam({ teamId, teamName, userId }: { teamId: number; teamName: string; userId: number }) {
       this.$patch((state) => {
         state.teams.push({
-        id: teamId,
-        name: teamName,
-        adminUserIds: [userId],
-        memberUserIds: [],
-        invitedUsers: [],
-        enabledCustomDictionaryIds: [
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        ],
-        disabledCustomDictionaryIds: [],
-        enabledNativeDictionaryIds: [],
-        excludedUsers: [],
-});
+          id: teamId,
+          name: teamName,
+          adminUserIds: [userId],
+          memberUserIds: [],
+          invitedUsers: [],
+          enabledCustomDictionaryIds: [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          ],
+          disabledCustomDictionaryIds: [],
+          enabledNativeDictionaryIds: [],
+          excludedUsers: [],
+        });
       });
     },
     removeUserFromTeamByUserId({ userId, teamId }: { userId: number; teamId: number }) {

@@ -6,6 +6,7 @@ import TeamsHeader from "./_partials/_TeamsHeader.vue";
 import TeamsAdministratorRole from "./_partials/_TeamsAdministratorRole.vue";
 import TeamsMemberRole from "./_partials/_TeamsMemberRole.vue";
 import TeamsModalNewTeam from "./_partials/_TeamsModalNewTeam.vue";
+import TeamsModalLeaveTeam from "./_partials/_TeamsModalLeaveTeam.vue";
 
 const meta: TMetaInformation = {
   lang: "en",
@@ -19,4 +20,5 @@ const meta: TMetaInformation = {
   <TeamsMemberRole astro={Astro} client:load />
 
   <TeamsModalNewTeam astro={Astro} client:load />
+  <TeamsModalLeaveTeam astro={Astro} client:load />
 </LayoutSettings>

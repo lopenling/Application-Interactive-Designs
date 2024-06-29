@@ -5,17 +5,21 @@
 
   <SettingsCard class="divide-y">
     <SettingsCardRowLabelAndButtons
-      v-if="teamsUserIsMember.length > 0 && state == 'filled'"
-      v-for="team in teamsUserIsMember"
+      v-if="teamsWhereUserIsMember.length > 0 && state == 'filled'"
+      v-for="team in teamsWhereUserIsMember"
     >
       {{ team.name }}
 
       <template #buttons>
-        <SettingsCardSubtleButton @click="leaveTeam(team.id)">Leave team</SettingsCardSubtleButton>
+        <SettingsCardSubtleButton
+          @click="openModalTeamsLeaveTeam({ userId: signedInUser.id, teamId: team.id })"
+        >
+          Leave team
+        </SettingsCardSubtleButton>
       </template>
     </SettingsCardRowLabelAndButtons>
 
-    <SettingsCardRowMessage v-if="teamsUserIsMember.length === 0 || state == 'empty'">
+    <SettingsCardRowMessage v-if="teamsWhereUserIsMember.length === 0 || state == 'empty'">
       No teams joined yet
     </SettingsCardRowMessage>
   </SettingsCard>
@@ -23,21 +27,15 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "@nanostores/vue";
-import {
-  $multiStore,
-  updateStore,
-  addArrayItemToStore,
-  removeArrayItemFromStore,
-} from "@stores/componentStates.mjs";
+import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
-import { type TTeam } from "@scripts/data/teamsData";
+import { type TTeamsModalLeaveTeam } from "./_TeamsModalLeaveTeam.vue";
 
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
 import signedInUserData from "@scripts/data/signedInUserData";
-import teamsData from "@scripts/data/teamsData";
+import { useTeamsStore } from "@stores/teamsStore";
 
 import CardHeader from "@components/CardHeader/CardHeader.vue";
 import CardHeaderHeading from "@components/CardHeader/CardHeaderHeading.vue";
@@ -48,54 +46,16 @@ import SettingsCardSubtleButton from "@components/SettingsCard/SettingsCardSubtl
 
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();
-
 const role = getRole(props.astro);
 const state = getState(props.astro);
 const signedInUser = signedInUserData(role);
-const teams = teamsData();
 
-/**
- * Store
- *
- * Setup the multi-store.
- * Setup the sub-store inside multi-store by assigning a `storeKey` and initial value.
- * Reactively get teams from `teams` store where `signedInUser.id` is included in
- * `users_admin` array and sort them by `name`.
- */
+const teamsStore = useTeamsStore();
+const teamsWhereUserIsMember = computed(() =>
+  teamsStore.getTeamsWhereUserIsMemberByUserId(signedInUser.id),
+);
 
-const multiStore = useStore($multiStore);
-if (!multiStore.value["teams"]) updateStore("teams", teams);
-
-const teamsUserIsMember = computed(() => {
-  return (multiStore.value["teams"] as TTeam[])
-    .filter((obj) => obj.memberUserIds.some((id) => id === signedInUser.id))
-    .sort((a, b) => a.name.localeCompare(b.name));
-});
-
-/**
- * Leave team
- *
- * Retrieve current team data from the `teams` store for the team the user wants
- * to leave, based on the ID.
- * Create a new team data object based on the current team data and remove `signedInUser.id`
- * from `memberUserIds`.
- * Replace the current team data with the new team data in the `teams` store.
- */
-
-const leaveTeam = (teamId: TTeam["id"]) => {
-  const currentTeamData = (multiStore.value["teams"] as TTeam[]).find((team) => team.id == teamId);
-
-  if (currentTeamData) {
-    const newMemberUserIds = currentTeamData.memberUserIds.filter((id) => id !== signedInUser.id);
-    const newTeamData = {
-      ...currentTeamData,
-      memberUserIds: newMemberUserIds,
-    };
-
-    removeArrayItemFromStore("teams", teamId, "id");
-    addArrayItemToStore("teams", newTeamData);
-  }
-
-  console.log("TODO: Show modal where user must write the team name to confirm leaving the team.");
+const openModalTeamsLeaveTeam = (data: TTeamsModalLeaveTeam) => {
+  eventBus.emit("open-modal", { name: "teams-leave-team", data: data });
 };
 </script>

@@ -107,6 +107,9 @@ export const useTeamsStore = defineStore("teamsStore", {
     getTeamById: (state) => {
       return (teamId: number) => state.teams.find((obj) => obj.id == teamId);
     },
+getTeamIndexById: (state) => {
+      return (teamId: number) => state.teams.findIndex((team) => team["id"] === teamId);
+    },
     getTeamsWhereUserIsAdminByUserId: (state) => {
       return (userId: number) => {
         const teams = state.teams
@@ -146,7 +149,8 @@ export const useTeamsStore = defineStore("teamsStore", {
   },
   actions: {
     addTeam({ teamId, teamName, userId }: { teamId: number; teamName: string; userId: number }) {
-      this.teams.push({
+      this.$patch((state) => {
+        state.teams.push({
         id: teamId,
         name: teamName,
         adminUserIds: [userId],
@@ -158,6 +162,16 @@ export const useTeamsStore = defineStore("teamsStore", {
         disabledCustomDictionaryIds: [],
         enabledNativeDictionaryIds: [],
         excludedUsers: [],
+});
+      });
+    },
+    removeUserFromTeamByUserId({ userId, teamId }: { userId: number; teamId: number }) {
+      const team = this.getTeamById(teamId);
+      const updatedMemberUserIds = team?.memberUserIds.filter((id) => id !== userId);
+      const teamIndex = this.getTeamIndexById(teamId);
+
+      this.$patch((state) => {
+        state.teams[teamIndex].memberUserIds = updatedMemberUserIds!;
       });
     },
   },

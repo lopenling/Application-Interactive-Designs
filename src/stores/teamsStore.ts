@@ -107,6 +107,7 @@ const teams: TTeam[] = [
 export const useTeamsStore = defineStore("teamsStore", {
   state: () => ({
     teams: teams,
+    userInFilter: null,
   }),
   getters: {
     getTeamById: (state) => {
@@ -172,6 +173,12 @@ export const useTeamsStore = defineStore("teamsStore", {
         return team?.adminUserIds
           .concat(team?.memberUserIds)
           .concat(team?.invitedUsers.map((user) => user.id));
+      };
+    },
+    getAllCustomDictionaryIdsInTeam: (state) => {
+      return (teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.enabledCustomDictionaryIds.concat(team?.disabledCustomDictionaryIds);
       };
     },
     isUserInvitePendingByUserId: (state) => {

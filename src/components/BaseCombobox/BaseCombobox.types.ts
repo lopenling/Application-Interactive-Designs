@@ -1,4 +1,5 @@
 export type TProps = {
+  modelValue: any;
   options?: TOption[];
   storeKey?: string;
 };

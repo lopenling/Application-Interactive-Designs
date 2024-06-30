@@ -8,6 +8,8 @@ import SingularTeamMembers from "./_partials/_SingularTeamMembers.vue";
 import SingularTeamCustomDictionaries from "./_partials/_SingularTeamCustomDictionaries.vue";
 import SingularTeamNativeDictionaries from "./_partials/_SingularTeamNativeDictionaries.vue";
 import SingularTeamFooter from "./_partials/_SingularTeamFooter.vue";
+import SingularTeamModalRenameTeam from "./_partials/_SingularTeamModalRenameTeam.vue";
+import SingularTeamModalDeleteTeam from "./_partials/_SingularTeamModalDeleteTeam.vue";
 import SingularTeamModalNewMember from "./_partials/_SingularTeamModalNewMember.vue";
 import SingularTeamModalEditMember from "./_partials/_SingularTeamModalEditMember.vue";
 import SingularTeamModalNewCustomDictionary from "./_partials/_SingularTeamModalNewCustomDictionary.vue";
@@ -35,6 +37,8 @@ const meta: TMetaInformation = {
   <SingularTeamNativeDictionaries astro={Astro} client:load />
   <SingularTeamFooter astro={Astro} client:load />
 
+  <SingularTeamModalRenameTeam client:load />
+  <SingularTeamModalDeleteTeam astro={Astro} client:load />
   <SingularTeamModalNewMember client:load />
   <SingularTeamModalEditMember client:load />
   <SingularTeamModalNewCustomDictionary client:load />

@@ -7,16 +7,15 @@ export type TUser = {
   lastName: string;
   avatarUrl: string | undefined;
 };
-
 export type TUserRoles = {
   administrator: TSingularUserRole;
   member: TSingularUserRole;
 };
-
 export type TSingularUserRole = {
   value: string;
   label: string;
 };
+export type TUserRoleKeys = keyof TUserRoles;
 
 const users: TUser[] = [
   {

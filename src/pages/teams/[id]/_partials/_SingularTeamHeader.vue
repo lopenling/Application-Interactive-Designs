@@ -15,6 +15,22 @@
 
     <SettingsTitle>
       <SettingsTitleText>Team {{ singularTeam.name }}</SettingsTitleText>
+      <template #options>
+        <div class="py-1">
+          <SettingsTitleOption
+            @click="openModalSingularTeamRenameTeam({ teamId: singularTeam.id })"
+          >
+            Rename team
+          </SettingsTitleOption>
+        </div>
+        <div class="py-1">
+          <SettingsTitleOption
+            @click="openModalSingularTeamDeleteTeam({ teamId: singularTeam.id })"
+          >
+            Delete team
+          </SettingsTitleOption>
+        </div>
+      </template>
     </SettingsTitle>
 
     <div class="-mt-4 mb-12 grid auto-cols-fr grid-cols-12 gap-4">
@@ -34,11 +50,14 @@
 import { computed } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $multiStore, updateStore, clearStore } from "@stores/componentStates.mjs";
+import eventBus from "@scripts/general/eventBus";
 
 import { type AstroGlobal } from "astro";
 import { type TUser } from "@scripts/data/usersData";
 import { type TTeam } from "@scripts/data/teamsData";
 import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
+import { type TSingularTeamModalRenameTeam } from "./_SingularTeamModalRenameTeam.vue";
+import { type TSingularTeamModalDeleteTeam } from "./_SingularTeamModalDeleteTeam.vue";
 
 import { MAX_CUSTOM_DICTIONARIES } from "@scripts/data/constants";
 import getRole from "@scripts/helpers/getRole";
@@ -50,12 +69,20 @@ import SettingsStats from "@components/SettingsStats/SettingsStats.vue";
 import SettingsStatsDatum from "@components/SettingsStats/SettingsStatsDatum.vue";
 import SettingsTitle from "@components/SettingsTitle/SettingsTitle.vue";
 import SettingsTitleText from "@components/SettingsTitle/SettingsTitleText.vue";
+import SettingsTitleOption from "@components/SettingsTitle/SettingsTitleOption.vue";
 import BaseCombobox from "@components/BaseCombobox/BaseCombobox.vue";
 import BaseComboboxInput from "@components/BaseCombobox/BaseComboboxInput.vue";
 import BaseActionLink from "@components/BaseActionLink/BaseActionLink.vue";
 
 import IconSingleNeutral from "@components/icons/streamline/regular/IconSingleNeutral.vue";
 import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue";
+
+const openModalSingularTeamRenameTeam = (data: TSingularTeamModalRenameTeam) => {
+  eventBus.emit("open-modal", { name: "singular-team-rename-team", data: data });
+};
+const openModalSingularTeamDeleteTeam = (data: TSingularTeamModalDeleteTeam) => {
+  eventBus.emit("open-modal", { name: "singular-team-delete-team", data: data });
+};
 
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();

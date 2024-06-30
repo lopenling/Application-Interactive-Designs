@@ -66,7 +66,7 @@ const leaveTeamName = ref("");
 
 const handleFormSubmit = () => {
   // TODO: Actually check if the entered team name matches the team name
-  teamsStore.removeUserFromTeamByUserId({
+  teamsStore.removeUserFromTeam({
     userId: singularUser.value.id,
     teamId: singularTeam.value.id,
   });

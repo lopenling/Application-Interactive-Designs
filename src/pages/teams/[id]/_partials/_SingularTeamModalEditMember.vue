@@ -92,7 +92,7 @@ eventBus.on("open-modal", (event: any) => {
   let userId: TSingularTeamModalEditMember["userId"] = event.data.userId;
   let teamId: TSingularTeamModalEditMember["teamId"] = event.data.teamId;
 
-  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleByUserId(userId, teamId)!;
+  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleInTeamByUserId(userId, teamId)!;
   singularTeam.value = teamsStore.getTeamById(teamId)!;
   singularUser.value = usersStore.getUserById(userId)!;
 });

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { userRoles, type TSingularUserRole } from "@stores/usersStore";
+import { userRoles, type TSingularUserRole, type TUserRoleKeys } from "@stores/usersStore";
 
 export type TTeam = {
   id: number;
@@ -110,6 +110,12 @@ export const useTeamsStore = defineStore("teamsStore", {
     getTeamIndexById: (state) => {
       return (teamId: number) => state.teams.findIndex((team) => team["id"] === teamId);
     },
+    getNewTeamId: (state) => {
+      return () => {
+        const highestId = Math.max(...state.teams.map((team) => team.id));
+        return highestId + 1;
+      };
+    },
     getTeamsWhereUserIsAdminByUserId: (state) => {
       return (userId: number) => {
         const teams = state.teams
@@ -126,13 +132,7 @@ export const useTeamsStore = defineStore("teamsStore", {
         return teams;
       };
     },
-    getNewTeamId: (state) => {
-      return () => {
-        const highestId = Math.max(...state.teams.map((team) => team.id));
-        return highestId + 1;
-      };
-    },
-    getUserRoleByUserId: (state) => {
+    getUserRoleInTeamByUserId: (state) => {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
 
@@ -143,6 +143,22 @@ export const useTeamsStore = defineStore("teamsStore", {
         if (invitee && invitee.role === userRoles.administrator.value)
           return userRoles.administrator;
         if (invitee && invitee.role === userRoles.member.value) return userRoles.member;
+      };
+    },
+    getUserIdsInTeamByRoleKey: (state) => {
+      return (teamId: number, roleKey: TUserRoleKeys) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+
+        if (roleKey === userRoles.administrator.value) return team?.adminUserIds;
+        if (roleKey === userRoles.member.value) return team?.memberUserIds;
+      };
+    },
+    getAllUserIdsInTeam: (state) => {
+      return (teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.adminUserIds
+          .concat(team?.memberUserIds)
+          .concat(team?.invitedUsers.map((user) => user.id));
       };
     },
     isUserInvitePendingByUserId: (state) => {
@@ -171,6 +187,20 @@ export const useTeamsStore = defineStore("teamsStore", {
           enabledNativeDictionaryIds: [],
           excludedUsers: [],
         });
+      });
+    },
+    renameTeam({ teamId, teamName }: { teamId: number; teamName: string }) {
+      const teamIndex = this.getTeamIndexById(teamId);
+
+      this.$patch((state) => {
+        state.teams[teamIndex].name = teamName;
+      });
+    },
+    deleteTeam({ teamId }: { teamId: number }) {
+      const teamIndex = this.getTeamIndexById(teamId);
+
+      this.$patch((state) => {
+        state.teams.splice(teamIndex, 1);
       });
     },
     removeUserFromTeamByUserId({ userId, teamId }: { userId: number; teamId: number }) {

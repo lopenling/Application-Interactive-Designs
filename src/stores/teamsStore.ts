@@ -12,18 +12,23 @@ export type TTeam = {
   excludedUsers: TTeamExcludedUser[];
   invitedUsers: TTeamInvitedUser[];
 };
-
 export type TTeamExcludedUser = {
   id: number;
   customDictionaryIds: number[];
   nativeDictionaryIds: number[];
 };
-
 export type TTeamInvitedUser = {
   id: number;
-  role: TSingularUserRole["value"];
+  role: TSingularUserRole;
   inviteAuthorId: number;
 };
+
+type TAddTeam = { teamId: number; teamName: string; userId: number };
+type TRenameTeam = { teamId: number; teamName: string };
+type TDeleteTeam = { teamId: number };
+type TAddUserToTeam = { userId: number; teamId: number; role: TSingularUserRole };
+type TRemoveUserFromTeam = { userId: number; teamId: number };
+type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
 
 const teams: TTeam[] = [
   {
@@ -32,8 +37,8 @@ const teams: TTeam[] = [
     adminUserIds: [2, 16],
     memberUserIds: [4, 6, 12, 14],
     invitedUsers: [
-      { id: 10, role: userRoles.administrator.value, inviteAuthorId: 2 },
-      { id: 3, role: userRoles.member.value, inviteAuthorId: 2 },
+      { id: 10, role: userRoles.administrator, inviteAuthorId: 2 },
+      { id: 3, role: userRoles.member, inviteAuthorId: 2 },
     ],
     enabledCustomDictionaryIds: [1],
     disabledCustomDictionaryIds: [],
@@ -89,7 +94,7 @@ const teams: TTeam[] = [
     name: "Omega",
     adminUserIds: [8],
     memberUserIds: [],
-    invitedUsers: [{ id: 2, role: userRoles.administrator.value, inviteAuthorId: 8 }],
+    invitedUsers: [{ id: 2, role: userRoles.administrator, inviteAuthorId: 8 }],
     enabledCustomDictionaryIds: [],
     disabledCustomDictionaryIds: [],
     enabledNativeDictionaryIds: [
@@ -132,6 +137,14 @@ export const useTeamsStore = defineStore("teamsStore", {
         return teams;
       };
     },
+    getTeamsWhereUserIsInvitedByUserId: (state) => {
+      return (userId: number) => {
+        const teams = state.teams
+          .filter((team) => team.invitedUsers.some((user) => user.id === userId))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return teams;
+      };
+    },
     getUserRoleInTeamByUserId: (state) => {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
@@ -140,9 +153,9 @@ export const useTeamsStore = defineStore("teamsStore", {
         if (team?.memberUserIds.includes(userId)) return userRoles.member;
 
         const invitee = team?.invitedUsers.find((user) => user.id === userId);
-        if (invitee && invitee.role === userRoles.administrator.value)
+        if (invitee && invitee.role.value === userRoles.administrator.value)
           return userRoles.administrator;
-        if (invitee && invitee.role === userRoles.member.value) return userRoles.member;
+        if (invitee && invitee.role.value === userRoles.member.value) return userRoles.member;
       };
     },
     getUserIdsInTeamByRoleKey: (state) => {
@@ -172,7 +185,7 @@ export const useTeamsStore = defineStore("teamsStore", {
     },
   },
   actions: {
-    addTeam({ teamId, teamName, userId }: { teamId: number; teamName: string; userId: number }) {
+    addTeam({ teamId, teamName, userId }: TAddTeam) {
       this.$patch((state) => {
         state.teams.push({
           id: teamId,
@@ -189,28 +202,46 @@ export const useTeamsStore = defineStore("teamsStore", {
         });
       });
     },
-    renameTeam({ teamId, teamName }: { teamId: number; teamName: string }) {
+    TRenameTeam({ teamId, teamName }: TRenameTeam) {
+      const teamIndex = this.getTeamIndexById(teamId);
+      this.$patch((state) => (state.teams[teamIndex].name = teamName));
+    },
+    deleteTeam({ teamId }: TDeleteTeam) {
+      const teamIndex = this.getTeamIndexById(teamId);
+      this.$patch((state) => state.teams.splice(teamIndex, 1));
+    },
+    addUserToTeam({ userId, teamId, role }: TAddUserToTeam) {
+      const team = this.getTeamById(teamId);
       const teamIndex = this.getTeamIndexById(teamId);
 
       this.$patch((state) => {
-        state.teams[teamIndex].name = teamName;
+        if (role.value === userRoles.administrator.value) {
+          const updatedAdminUserIds = team?.adminUserIds.concat(userId);
+          state.teams[teamIndex].adminUserIds = updatedAdminUserIds!;
+        }
+        if (role.value === userRoles.member.value) {
+          const updatedMemberUserIds = team?.memberUserIds.concat(userId);
+          state.teams[teamIndex].memberUserIds = updatedMemberUserIds!;
+        }
       });
     },
-    deleteTeam({ teamId }: { teamId: number }) {
-      const teamIndex = this.getTeamIndexById(teamId);
-
-      this.$patch((state) => {
-        state.teams.splice(teamIndex, 1);
-      });
-    },
-    removeUserFromTeamByUserId({ userId, teamId }: { userId: number; teamId: number }) {
+    removeUserFromTeam({ userId, teamId }: TRemoveUserFromTeam) {
       const team = this.getTeamById(teamId);
       const updatedMemberUserIds = team?.memberUserIds.filter((id) => id !== userId);
       const teamIndex = this.getTeamIndexById(teamId);
 
-      this.$patch((state) => {
-        state.teams[teamIndex].memberUserIds = updatedMemberUserIds!;
-      });
+      this.$patch((state) => (state.teams[teamIndex].memberUserIds = updatedMemberUserIds!));
+    },
+    resolveUserInvite({ userId, teamId, acceptInvite }: TResolveUserInvite) {
+      const team = this.getTeamById(teamId);
+      const invite = team?.invitedUsers.find((user) => user.id === userId);
+      if (!invite) return;
+
+      const updatedInvitedUsers = team?.invitedUsers.filter((user) => user.id !== userId);
+      const teamIndex = this.getTeamIndexById(teamId);
+
+      this.$patch((state) => (state.teams[teamIndex].invitedUsers = updatedInvitedUsers!));
+      if (acceptInvite) this.addUserToTeam({ userId, teamId, role: invite.role });
     },
   },
   persist: true,

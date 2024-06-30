@@ -7,7 +7,7 @@
     <form
       id="leaveTeamForm"
       @submit.prevent="handleFormSubmit"
-      class="mt-4 flex flex-col gap-x-4 gap-y-2.5 text-left"
+      class="mt-4 flex flex-col text-left"
     >
       <BaseLabel for="leaveTeamName">Team name</BaseLabel>
       <BaseInputText
@@ -22,9 +22,9 @@
       />
     </form>
 
-    <template #title>Are you sure you wish to leave?</template>
+    <template #title>Do you really want to leave?</template>
     <template #illustration>
-      <ModalDialogIllustration :icon-component="IconRoadSignWarning" appearance="danger" />
+      <ModalDialogIllustration :icon-component="IconAlertCircle" appearance="danger" />
     </template>
     <template #buttons>
       <ModalDialogButton
@@ -51,7 +51,7 @@ import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
 import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 
-import IconRoadSignWarning from "@components/icons/streamline/regular/IconRoadSignWarning.vue";
+import IconAlertCircle from "@components/icons/streamline/regular/IconAlertCircle.vue";
 
 export type TTeamsModalLeaveTeam = {
   userId: number;

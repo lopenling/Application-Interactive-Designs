@@ -1,5 +1,14 @@
 <template>
-  <Combobox as="div" by="id" v-model="selectedOption" nullable v-slot="{ open }" class="group">
+  <Combobox
+    :modelValue="modelValue"
+    @update:modelValue="(value) => emit('update:modelValue', value)"
+    v-model="selectedOption"
+    as="div"
+    by="id"
+    nullable
+    v-slot="{ open }"
+    class="group"
+  >
     <slot name="default" />
   </Combobox>
 </template>
@@ -18,6 +27,8 @@ const query = ref("");
 provide("storeKey", props.storeKey);
 provide("query", query);
 
+const emit = defineEmits(["update:modelValue"]);
+
 /**
  * selectedOption
  *
@@ -28,7 +39,7 @@ provide("query", query);
  * Watch the `selectedOption` for changes and update the store when it changes.
  */
 
-let selectedOption = ref<TOption>(null);
+const selectedOption = ref(props.modelValue);
 let selectedOptionIndex = props.options?.findIndex((item) => item?.selected === true);
 
 if (props.options && selectedOptionIndex && selectedOptionIndex >= 0) {
@@ -36,7 +47,7 @@ if (props.options && selectedOptionIndex && selectedOptionIndex >= 0) {
 }
 
 watch(selectedOption, () => {
-  updateStore(props.storeKey, selectedOption);
+  if (props.storeKey) updateStore(props.storeKey, selectedOption);
 });
 
 provide("selectedOption", selectedOption);
@@ -55,12 +66,11 @@ let filteredOptions = computed(() => {
     if (query.value === "") {
       values = props.options;
     } else {
-      values = props.options.filter(
-        (option) =>
-          option?.value
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.value.toLowerCase().replace(/\s+/g, "")),
+      values = props.options.filter((option) =>
+        option?.value
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .includes(query.value.toLowerCase().replace(/\s+/g, "")),
       );
     }
 

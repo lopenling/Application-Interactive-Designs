@@ -6,7 +6,6 @@
         (singularTeam.disabledCustomDictionaryIds.length > 0 ||
           singularTeam.enabledNativeDictionaryIds.length < nativeDictionariesInStore.length)
       "
-      class="col-span-full self-center md:col-span-6"
     >
       <BaseActionLink
         @click="updateStore('showDisabledDictionaries', !showDisabledDictionariesInStore)"

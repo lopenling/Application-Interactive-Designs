@@ -202,7 +202,7 @@ export const useTeamsStore = defineStore("teamsStore", {
         });
       });
     },
-    TRenameTeam({ teamId, teamName }: TRenameTeam) {
+    renameTeam({ teamId, teamName }: TRenameTeam) {
       const teamIndex = this.getTeamIndexById(teamId);
       this.$patch((state) => (state.teams[teamIndex].name = teamName));
     },

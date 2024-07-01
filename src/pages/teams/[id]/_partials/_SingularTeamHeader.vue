@@ -91,7 +91,10 @@ const singularTeam = computed(() => teamsStore.getTeamById(currentTeamId));
 const allCustomDictionaryIds = computed(() =>
   teamsStore.getAllCustomDictionaryIdsInTeam(singularTeam.value!.id),
 );
-const userInFilter = ref(teamsStore.userInFilter);
+const userInFilter = computed({
+  get: () => teamsStore.userInFilter,
+  set: (value) => teamsStore.setUserInFilter(value),
+});
 const allUserIds = computed(() => teamsStore.getAllUserIdsInTeam(singularTeam.value!.id));
 const allTeamUsers = computed(() =>
   usersStore.users

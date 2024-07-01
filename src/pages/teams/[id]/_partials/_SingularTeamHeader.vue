@@ -2,7 +2,7 @@
   <div v-if="singularTeam && role == 'admin'">
     <SettingsStats>
       <SettingsStatsDatum :icon-component="IconSingleNeutral">
-        {{ allUserIds!.length }} {{ allUserIds!.length == 1 ? "member" : "members" }}
+        {{ users!.length }} {{ users!.length == 1 ? "member" : "members" }}
       </SettingsStatsDatum>
       <SettingsStatsDatum :icon-component="IconBookEdit">
         <span v-if="state == 'empty'">0/{{ MAX_CUSTOM_DICTIONARIES }} custom</span>
@@ -34,23 +34,23 @@
 
     <div class="-mt-4 mb-12 grid auto-cols-fr grid-cols-12 gap-4">
       <div class="col-span-full md:col-span-6">
-        <BaseCombobox v-model="userInFilter" :options="allTeamUsers">
+        <BaseCombobox v-model="userInFilter" :options="sortedUsers">
           <BaseComboboxInput placeholder="Filter by user" appearance="gray" />
         </BaseCombobox>
       </div>
       <div v-if="userInFilter" class="col-span-full self-center md:col-span-6">
-        <BaseActionLink @click="userInFilter = null">clear filter</BaseActionLink>
+        <BaseActionLink @click="teamsStore.setUserInFilter(null)">clear filter</BaseActionLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { MAX_CUSTOM_DICTIONARIES } from "@scripts/data/constants";
 import eventBus from "@scripts/general/eventBus";
-import { useTeamsStore } from "@stores/teamsStore";
-import { useUsersStore } from "@stores/usersStore";
+import { useTeamsStore, type TTeam } from "@stores/teamsStore";
+import { useUsersStore, type TUser } from "@stores/usersStore";
 
 import { type AstroGlobal } from "astro";
 import getRole from "@scripts/helpers/getRole";
@@ -87,21 +87,36 @@ const state = getState(props.astro);
 
 const teamsStore = useTeamsStore();
 const usersStore = useUsersStore();
-const singularTeam = computed(() => teamsStore.getTeamById(currentTeamId));
+const singularTeam = computed(() => teamsStore.getTeamById(currentTeamId) as TTeam);
 const allCustomDictionaryIds = computed(() =>
   teamsStore.getAllCustomDictionaryIdsInTeam(singularTeam.value!.id),
 );
+
 const userInFilter = computed({
   get: () => teamsStore.userInFilter,
   set: (value) => teamsStore.setUserInFilter(value),
 });
-const allUserIds = computed(() => teamsStore.getAllUserIdsInTeam(singularTeam.value!.id));
-const allTeamUsers = computed(() =>
-  usersStore.users
-    .filter((user) => allUserIds.value?.includes(user.id))
+
+const users = computed(() => {
+  const userIds = teamsStore.getAllUserIdsInTeam(singularTeam.value.id)!;
+  return usersStore.getUsersByIds(userIds) as TUser[];
+});
+
+const sortedUsers = computed(() => {
+  return users.value
     .map((user) => ({
       id: user.id,
-      value: usersStore.getUserFullNameById(user.id),
-    })),
-);
+      value: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id)
+        ? user.email
+        : usersStore.getUserFullNameById(user.id)!,
+      isPending: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id),
+    }))
+    .sort(
+      (a: any, b: any) =>
+        // First sort by invite status (pending invites last)
+        a.isPending - b.isPending ||
+        // Then sort by first name or fallback to email (a-z)
+        a.value.localeCompare(b.value),
+    );
+});
 </script>

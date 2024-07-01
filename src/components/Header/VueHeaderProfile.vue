@@ -7,7 +7,7 @@
         <span class="absolute -inset-1.5"></span>
         <span class="sr-only">Open user menu</span>
         <BaseAvatar
-          :user="signedInUser"
+          :user-id="signedInUser.id"
           :group-hover="true"
           :hide-image="state == 'empty'"
           size-class="size-8"

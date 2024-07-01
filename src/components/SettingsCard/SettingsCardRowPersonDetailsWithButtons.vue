@@ -6,20 +6,28 @@
       class="flex min-w-0 grow flex-col items-start gap-x-4 gap-y-2 2xs:flex-row sm:items-center"
     >
       <BaseAvatar
-        :user="person"
-        :group-hover="true"
-        :hide-image="props.hideImage"
+        :user-id="props.userId"
         :subdue-image="props.subdueImage"
+        :hide-image="invitePending"
         size-class="size-9"
       />
 
       <div class="flex w-full min-w-0 grow flex-col gap-x-4 gap-y-2 sm:flex-row sm:items-center">
         <div :class="['flex min-w-0 flex-col', slots.extraData ? 'basis-1/2' : 'basis-full']">
           <div class="text-sm font-medium text-stone-700">
-            {{ getUserFullNameById(person.id) }}
+            <span v-if="!invitePending">
+              {{ usersStore.getUserFullNameById(user.id) }}
+            </span>
+            <span v-if="invitePending" :title="user.email" class="block truncate">
+              {{ usersStore.getUserById(user.id)!.email }}
+            </span>
           </div>
-          <div class="truncate text-xs leading-5 text-stone-500/85" :title="person.email">
-            {{ person.email }}
+
+          <div class="text-xs leading-5 text-stone-500/85">
+            <span v-if="!invitePending" :title="user.email" class="block truncate">
+              {{ usersStore.getUserById(user.id)!.email }}
+            </span>
+            <span v-if="invitePending">Invite pending</span>
           </div>
         </div>
 
@@ -36,16 +44,20 @@
 </template>
 
 <script setup lang="ts">
-import { type TUser } from "@scripts/data/usersData";
-import getUserFullNameById from "@scripts/helpers/getUserFullNameById";
+import { computed, useSlots } from "vue";
 import BaseAvatar from "@components/BaseAvatar/BaseAvatar.vue";
-import { useSlots } from "vue";
+import { useTeamsStore, type TTeam } from "@stores/teamsStore";
+import { useUsersStore, type TUser } from "@stores/usersStore";
 
 type TProps = {
-  person: TUser;
-  hideImage?: boolean;
+  userId: TUser["id"];
+  teamId: TTeam["id"];
   subdueImage?: boolean;
 };
 const props = defineProps<TProps>();
 const slots = useSlots();
+const teamsStore = useTeamsStore();
+const usersStore = useUsersStore();
+const user = computed(() => usersStore.getUserById(props.userId)! as TUser);
+const invitePending = teamsStore.isUserInvitePendingByUserIdInTeam(props.userId, props.teamId);
 </script>

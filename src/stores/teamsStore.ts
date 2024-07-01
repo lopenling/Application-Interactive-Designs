@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { userRoles, type TSingularUserRole, type TUserRoleKeys } from "@stores/usersStore";
+import { userRoles, type TSingularUserRole } from "@stores/usersStore";
 
 export type TTeam = {
   id: number;
@@ -22,6 +22,7 @@ export type TTeamInvitedUser = {
   role: TSingularUserRole;
   inviteAuthorId: number;
 };
+export type TUserInFilter = { id: number; value: string } | null;
 
 type TAddTeam = { teamId: number; teamName: string; userId: number };
 type TRenameTeam = { teamId: number; teamName: string };
@@ -55,7 +56,7 @@ const teams: TTeam[] = [
     id: 2,
     name: "Beta",
     adminUserIds: [2],
-    memberUserIds: [1, 3, 4, 5],
+    memberUserIds: [],
     invitedUsers: [],
     enabledCustomDictionaryIds: [2],
     disabledCustomDictionaryIds: [],
@@ -104,10 +105,12 @@ const teams: TTeam[] = [
   },
 ];
 
+const userInFilter: TUserInFilter = null;
+
 export const useTeamsStore = defineStore("teamsStore", {
   state: () => ({
     teams: teams,
-    userInFilter: null,
+    userInFilter: userInFilter,
   }),
   getters: {
     getTeamById: (state) => {
@@ -249,6 +252,9 @@ export const useTeamsStore = defineStore("teamsStore", {
 
       this.$patch((state) => (state.teams[teamIndex].invitedUsers = updatedInvitedUsers!));
       if (acceptInvite) this.addUserToTeam({ userId, teamId, role: invite.role });
+    },
+    setUserInFilter(user: any) {
+      this.userInFilter = user;
     },
   },
   persist: true,

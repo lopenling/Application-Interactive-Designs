@@ -32,14 +32,16 @@
       </template>
     </SettingsTitle>
 
-    <div class="-mt-4 mb-12 grid auto-cols-fr grid-cols-12 gap-4">
+    <div v-if="users.length > 1" class="-mt-4 mb-12 grid auto-cols-fr grid-cols-12 gap-4">
       <div class="col-span-full md:col-span-6">
         <BaseCombobox v-model="userInFilter" :options="sortedUsers">
           <BaseComboboxInput placeholder="Filter by user" appearance="gray" />
         </BaseCombobox>
       </div>
       <div v-if="userInFilter" class="col-span-full self-center md:col-span-6">
-        <BaseActionLink @click="teamsStore.setUserInFilter(null)">clear filter</BaseActionLink>
+        <BaseActionLink @click="teamsStore.setUserInFilter(null)" class="text-sm">
+          Clear filter
+        </BaseActionLink>
       </div>
     </div>
   </div>

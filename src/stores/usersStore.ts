@@ -3,9 +3,9 @@ import { defineStore } from "pinia";
 export type TUser = {
   id: number;
   email: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string | undefined;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string | undefined;
 };
 export type TUserRoles = {
   administrator: TSingularUserRole;
@@ -57,7 +57,7 @@ const users: TUser[] = [
     email: "jessica.taylor@example.com",
     firstName: "Jessica",
     lastName: "Taylor",
-    avatarUrl: "/images/avatars/jessica_taylor.jpg",
+    // avatarUrl: "/images/avatars/jessica_taylor.jpg",
   },
   {
     id: 7,
@@ -150,10 +150,29 @@ export const useUsersStore = defineStore("usersStore", {
     getUserById: (state) => {
       return (userId: number) => state.users.find((user) => user.id === userId);
     },
+    getUsersByIds: (state) => {
+      return (userIds: number[]) => state.users.filter((user) => userIds.includes(user.id));
+    },
     getUserFullNameById: (state) => {
       return (userId: number) => {
         const { firstName, lastName } = state.users.find((user) => user.id === userId) || {};
+
+        if (!firstName && !lastName) return null;
         return `${firstName ? firstName : ""} ${lastName ? lastName : ""}`;
+      };
+    },
+    getUserInitialsById: (state) => {
+      return (userId: number) => {
+        const { firstName, lastName, email } = state.users.find((user) => user.id === userId) || {};
+
+        if (!firstName && !lastName) return email![0].toUpperCase();
+        return `${firstName ? firstName[0] : ""}${lastName ? lastName[0] : ""}`;
+      };
+    },
+    getUserEmailFirstLetterById: (state) => {
+      return (userId: number) => {
+        const { email } = state.users.find((user) => user.id === userId) || {};
+        return email![0].toUpperCase();
       };
     },
   },

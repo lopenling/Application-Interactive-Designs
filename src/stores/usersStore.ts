@@ -15,7 +15,6 @@ export type TSingularUserRole = {
   value: string;
   label: string;
 };
-export type TUserRoleKeys = keyof TUserRoles;
 
 const users: TUser[] = [
   {

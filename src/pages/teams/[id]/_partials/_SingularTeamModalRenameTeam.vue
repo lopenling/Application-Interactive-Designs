@@ -21,7 +21,12 @@
 
     <template #title>Rename the team</template>
     <template #buttons>
-      <ModalDialogButton appearance="primary" :close-modal="true" type="submit" form="teamNameForm">
+      <ModalDialogButton
+        appearance="primary"
+        :close-modal="false"
+        type="submit"
+        form="teamNameForm"
+      >
         Apply new name
       </ModalDialogButton>
     </template>
@@ -50,6 +55,7 @@ const handleFormSubmit = () => {
     teamId: singularTeam.value.id,
     teamName: teamName.value,
   });
+  eventBus.emit("close-modal", { name: "singular-team-rename-team" });
 };
 
 eventBus.on("open-modal", (event: any) => {

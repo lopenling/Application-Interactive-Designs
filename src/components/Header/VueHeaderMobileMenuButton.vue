@@ -14,7 +14,7 @@
     <VueIcon v-else :data="IconDataClose" :attributes="{ class: `block h-6 w-6` }" />
     <div class="ml-4">
       <BaseAvatar
-        :user="signedInUser"
+        :user-id="signedInUser.id"
         :group-hover="true"
         :hide-image="state == 'empty'"
         size-class="size-8"

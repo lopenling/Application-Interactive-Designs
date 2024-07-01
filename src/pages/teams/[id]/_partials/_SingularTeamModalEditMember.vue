@@ -9,7 +9,7 @@
             :style="`width: ${iconButtonsOverflowWidth}px;`"
           />
           <span
-            v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)"
+            v-if="teamsStore.isUserInvitePendingByUserIdInTeam(singularUser.id, singularTeam.id)"
             class="block truncate"
           >
             {{ singularUser.email }}
@@ -19,7 +19,9 @@
           </span>
         </div>
         <div class="text-xs leading-5 text-stone-500/85">
-          <span v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)">
+          <span
+            v-if="teamsStore.isUserInvitePendingByUserIdInTeam(singularUser.id, singularTeam.id)"
+          >
             Invitation pending
           </span>
           <span v-else class="block truncate">
@@ -38,11 +40,11 @@
 
     <template #illustration>
       <ModalDialogIllustration
-        v-if="teamsStore.isUserInvitePendingByUserId(singularUser.id, singularTeam.id)"
+        v-if="teamsStore.isUserInvitePendingByUserIdInTeam(singularUser.id, singularTeam.id)"
         :icon-component="IconSingleNeutral"
         appearance="primary"
       />
-      <BaseAvatar v-else :user="singularUser" size-class="size-full" />
+      <BaseAvatar v-else :user-id="singularUser.id" size-class="size-full" />
     </template>
     <template #buttons>
       <ModalDialogButton appearance="primary" :close-modal="true">
@@ -92,7 +94,7 @@ eventBus.on("open-modal", (event: any) => {
   let userId: TSingularTeamModalEditMember["userId"] = event.data.userId;
   let teamId: TSingularTeamModalEditMember["teamId"] = event.data.teamId;
 
-  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleInTeamByUserId(userId, teamId)!;
+  selectedRoleInEditTeamMember.value = teamsStore.getUserRoleByUserIdInTeam(userId, teamId)!;
   singularTeam.value = teamsStore.getTeamById(teamId)!;
   singularUser.value = usersStore.getUserById(userId)!;
 });

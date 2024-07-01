@@ -149,7 +149,7 @@ export const useTeamsStore = defineStore("teamsStore", {
         return teams;
       };
     },
-    getUserRoleInTeamByUserId: (state) => {
+    getUserRoleByUserIdInTeam: (state) => {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
 
@@ -160,14 +160,6 @@ export const useTeamsStore = defineStore("teamsStore", {
         if (invitee && invitee.role.value === userRoles.administrator.value)
           return userRoles.administrator;
         if (invitee && invitee.role.value === userRoles.member.value) return userRoles.member;
-      };
-    },
-    getUserIdsInTeamByRoleKey: (state) => {
-      return (teamId: number, roleKey: TUserRoleKeys) => {
-        const team = state.teams.find((obj) => obj.id == teamId);
-
-        if (roleKey === userRoles.administrator.value) return team?.adminUserIds;
-        if (roleKey === userRoles.member.value) return team?.memberUserIds;
       };
     },
     getAllUserIdsInTeam: (state) => {
@@ -184,7 +176,7 @@ export const useTeamsStore = defineStore("teamsStore", {
         return team?.enabledCustomDictionaryIds.concat(team?.disabledCustomDictionaryIds);
       };
     },
-    isUserInvitePendingByUserId: (state) => {
+    isUserInvitePendingByUserIdInTeam: (state) => {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
 

@@ -1,10 +1,10 @@
 <template>
   <div :class="['flex shrink-0', props.sizeClass ? props.sizeClass : 'size-8']">
     <img
-      v-if="props.user.avatarUrl && !hideImage"
+      v-if="user.avatarUrl && !props.hideImage"
       v-bind="$attrs"
-      :src="props.user.avatarUrl"
-      :alt="getUserFullNameById(props.user.id)"
+      :src="user.avatarUrl"
+      :alt="usersStore.getUserFullNameById(user.id) || ''"
       :class="[
         'rounded-md transition',
         props.sizeClass ? props.sizeClass : 'size-8',
@@ -22,25 +22,28 @@
         props.subdueImage && 'opacity-60 grayscale',
       ]"
     >
-      <span>{{ props.user.firstName.charAt(0) + props.user.lastName.charAt(0) }}</span>
+      <span v-if="props.hideImage">{{ usersStore.getUserEmailFirstLetterById(user.id) }}</span>
+      <span v-else>{{ usersStore.getUserInitialsById(user.id) }}</span>
     </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type TUser } from "@scripts/data/usersData";
-import getUserFullNameById from "@scripts/helpers/getUserFullNameById";
+import { computed } from "vue";
+import { useUsersStore, type TUser } from "@stores/usersStore";
 
 defineOptions({
   inheritAttrs: false,
 });
 
 type TProps = {
-  user: TUser;
+  userId: TUser["id"];
   sizeClass?: string;
   groupHover?: boolean;
   hideImage?: boolean;
   subdueImage?: boolean;
 };
 const props = defineProps<TProps>();
+const usersStore = useUsersStore();
+const user = computed(() => usersStore.getUserById(props.userId) as TUser);
 </script>

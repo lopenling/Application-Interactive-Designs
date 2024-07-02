@@ -1,45 +1,32 @@
 <template>
-  <ModalDialog name="singular-team-remove-member" :max-width="prohibitRemove ? 'xl' : 'lg'">
-    <p v-if="prohibitRemove" class="text-pretty">
+  <ModalDialog name="singular-team-self-downgrade" :max-width="prohibitDowngrade ? 'xl' : 'lg'">
+    <p v-if="prohibitDowngrade" class="text-pretty">
       There must be at least one team
       <span class="lowercase">{{ userRoles.administrator.label }}</span
-      >. You can't remove the only one.
+      >. You can't step down to a <span class="lowercase">{{ userRoles.member.label }}</span> if
+      none remain.
     </p>
     <p v-else class="text-pretty">
-      <span v-if="singularUser.id === signedInUser.id">
-        You will loose access to team {{ singularTeam.name }} and all of it's materials. The other
-        <span class="lowercase">{{ userRoles.administrator.label }}(s)</span> will continue to
-        manage the team.
-      </span>
-      <span v-else>
-        {{ singularUser.firstName }} will loose access to team {{ singularTeam.name }} and all of
-        it's materials.
-      </span>
+      You will still be part of team {{ singularTeam.name }}, but will no longer be able to access
+      this page and manage the team.
     </p>
 
     <template #title>
-      <span v-if="prohibitRemove"> Unable to remove the {{ userRoles.administrator.label }} </span>
-      <span v-else>
-        Remove
-        <span v-if="singularUser.id == signedInUser.id">yourself?</span>
-        <span v-else>{{ usersStore.getUserFullNameById(singularUser.id) }}?</span>
-      </span>
+      <span v-if="prohibitDowngrade">Unable to step down to member</span>
+      <span v-else>Step down to member?</span>
     </template>
     <template #illustration>
       <ModalDialogIllustration
-        v-if="prohibitRemove && singularUser.id === signedInUser.id"
+        v-if="prohibitDowngrade"
         :icon-component="IconAlertCircle"
         appearance="danger"
       />
-      <ModalDialogIllustration
-        v-else
-        :icon-component="IconSingleNeutralActionsSubtract"
-        icon-class="scale-110 translate-x-px"
-        appearance="danger"
-      />
+      <ModalDialogIllustration v-else :icon-component="IconStairsDescend" appearance="primary" />
     </template>
-    <template #buttons v-if="!prohibitRemove">
-      <ModalDialogButton appearance="danger" @click="removeMember">Yes, remove</ModalDialogButton>
+    <template #buttons v-if="!prohibitDowngrade">
+      <ModalDialogButton appearance="primary" @click="changeRole">
+        Yes, change my role
+      </ModalDialogButton>
     </template>
   </ModalDialog>
 </template>
@@ -48,7 +35,7 @@
 import { ref, computed } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
-import { useUsersStore, userRoles, type TUser } from "@stores/usersStore";
+import { useUsersStore, userRoles, type TUser, type TSingularUserRole } from "@stores/usersStore";
 
 import { type AstroGlobal } from "astro";
 import getRole from "@scripts/helpers/getRole";
@@ -59,12 +46,13 @@ import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 
+import IconStairsDescend from "@components/icons/streamline/regular/IconStairsDescend.vue";
 import IconAlertCircle from "@components/icons/streamline/regular/IconAlertCircle.vue";
-import IconSingleNeutralActionsSubtract from "@components/icons/streamline/regular/IconSingleNeutralActionsSubtract.vue";
 
-export type TSingularTeamModalRemoveMember = {
+export type TSingularTeamModalSelfDowngrade = {
   userId: number;
   teamId: number;
+  role: TSingularUserRole;
 };
 
 type TProps = { astro: AstroGlobal };
@@ -77,7 +65,9 @@ const singularTeam = ref({} as TTeam);
 const usersStore = useUsersStore();
 const singularUser = ref({} as TUser);
 const administratorIds = ref([] as number[]);
-const prohibitRemove = computed(() => {
+const newRole = ref({} as TSingularUserRole);
+
+const prohibitDowngrade = computed(() => {
   if (
     administratorIds.value.length === 1 &&
     administratorIds.value.includes(singularUser.value.id)
@@ -87,24 +77,27 @@ const prohibitRemove = computed(() => {
   return false;
 });
 
-const removeMember = () => {
-  teamsStore.removeUserFromTeam({
+const changeRole = () => {
+  teamsStore.editUserRoleInTeam({
     userId: singularUser.value.id,
     teamId: singularTeam.value.id,
+    role: newRole.value,
   });
   if (singularUser.value.id === signedInUser.id) {
     window.location.href = `/teams/?` + getUrlParams(props.astro);
   }
-  eventBus.emit("close-modal", { name: "singular-team-remove-member" });
+  eventBus.emit("close-modal", { name: "singular-team-self-downgrade" });
 };
 
 eventBus.on("open-modal", (event: any) => {
-  if (event.name !== "singular-team-remove-member") return;
-  let userId: TSingularTeamModalRemoveMember["userId"] = event.data.userId;
-  let teamId: TSingularTeamModalRemoveMember["teamId"] = event.data.teamId;
+  if (event.name !== "singular-team-self-downgrade") return;
+  let userId: TSingularTeamModalSelfDowngrade["userId"] = event.data.userId;
+  let teamId: TSingularTeamModalSelfDowngrade["teamId"] = event.data.teamId;
+  let role: TSingularTeamModalSelfDowngrade["role"] = event.data.role;
 
   singularUser.value = usersStore.getUserById(userId)!;
   singularTeam.value = teamsStore.getTeamById(teamId)!;
+  newRole.value = role;
   administratorIds.value = teamsStore.getAdministratorIdsInTeam(teamId)!;
 });
 </script>

@@ -1,10 +1,5 @@
 <template>
-  <ModalDialog
-    name="teams-new-team"
-    max-width="lg"
-    enable-initial-focus="smAndUp"
-    :separate-buttons="false"
-  >
+  <ModalDialog name="teams-new-team" max-width="md" enable-initial-focus="smAndUp">
     <form
       id="newTeamForm"
       @submit.prevent="handleFormSubmit"
@@ -27,7 +22,7 @@
     <template #title>Give the team a name</template>
     <template #buttons>
       <ModalDialogButton appearance="primary" :close-modal="false" type="submit" form="newTeamForm">
-        Continue
+        Create team
       </ModalDialogButton>
     </template>
   </ModalDialog>

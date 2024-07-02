@@ -177,6 +177,12 @@ export const useTeamsStore = defineStore("teamsStore", {
           .concat(team?.invitedUsers.map((user) => user.id));
       };
     },
+    getAdministratorIdsInTeam: (state) => {
+      return (teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.administratorUserIds;
+      };
+    },
     getAllCustomDictionaryIdsInTeam: (state) => {
       return (teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
@@ -248,6 +254,10 @@ export const useTeamsStore = defineStore("teamsStore", {
       });
       this.$patch((state) => (state.teams[teamIndex].invitedUsers = updatedInvitedUsers!));
     },
+    editUserRoleInTeam({ userId, teamId, role }: TEditUserRoleInTeam) {
+      this.removeUserFromTeam({ userId, teamId });
+      this.addUserToTeam({ userId, teamId, role: role });
+    },
     removeUserFromTeam({ userId, teamId }: TRemoveUserFromTeam) {
       const team = this.getTeamById(teamId);
       const teamIndex = this.getTeamIndexById(teamId);
@@ -261,10 +271,9 @@ export const useTeamsStore = defineStore("teamsStore", {
         const updatedUserIds = team?.memberUserIds.filter((id) => id !== userId);
         this.$patch((state) => (state.teams[teamIndex].memberUserIds = updatedUserIds!));
       }
-    },
-    editUserRoleTeam({ userId, teamId, role }: TEditUserRoleInTeam) {
-      this.removeUserFromTeam({ userId, teamId });
-      this.addUserToTeam({ userId, teamId, role: role });
+      if (this.isUserInvitePendingByUserIdInTeam(userId, teamId)) {
+        this.resolveUserInvite({ userId, teamId, acceptInvite: false });
+      }
     },
     resolveUserInvite({ userId, teamId, acceptInvite }: TResolveUserInvite) {
       const team = this.getTeamById(teamId);

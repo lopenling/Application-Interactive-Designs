@@ -1,39 +1,20 @@
 <template>
-  <ModalDialog name="teams-leave-team" max-width="xl" :separate-buttons="true">
-    <p>
-      You will loose access to team {{ singularTeam.name }} and all of it's materials. Write the
-      team name below to confirm.
+  <ModalDialog name="teams-leave-team" max-width="lg">
+    <p class="text-pretty">
+      You will loose access to team {{ singularTeam.name }} and all of it's materials.
     </p>
-    <form
-      id="leaveTeamForm"
-      @submit.prevent="handleFormSubmit"
-      class="mt-4 flex flex-col text-left"
-    >
-      <BaseLabel for="leaveTeamName">Team name</BaseLabel>
-      <BaseInputText
-        v-model="leaveTeamName"
-        appearance="white"
-        type="text"
-        name="leaveTeamName"
-        id="leaveTeamName"
-        inputmode="text"
-        autocomplete="off"
-        required
-      />
-    </form>
 
-    <template #title>Do you really want to leave?</template>
+    <template #title>Do you really want to leave the team?</template>
     <template #illustration>
-      <ModalDialogIllustration :icon-component="IconAlertCircle" appearance="danger" />
+      <ModalDialogIllustration
+        :icon-component="IconLogout1"
+        icon-class="translate-x-0.5"
+        appearance="danger"
+      />
     </template>
     <template #buttons>
-      <ModalDialogButton
-        appearance="danger"
-        :close-modal="false"
-        type="submit"
-        form="leaveTeamForm"
-      >
-        Yes, leave team
+      <ModalDialogButton @click="leaveTeam" appearance="danger" :close-modal="false">
+        Yes, leave the team
       </ModalDialogButton>
     </template>
   </ModalDialog>
@@ -51,7 +32,7 @@ import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
 import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 
-import IconAlertCircle from "@components/icons/streamline/regular/IconAlertCircle.vue";
+import IconLogout1 from "@components/icons/streamline/regular/IconLogout1.vue";
 
 export type TTeamsModalLeaveTeam = {
   userId: number;
@@ -62,16 +43,13 @@ const teamsStore = useTeamsStore();
 const singularTeam = ref({} as TTeam);
 const usersStore = useUsersStore();
 const singularUser = ref({} as TUser);
-const leaveTeamName = ref("");
 
-const handleFormSubmit = () => {
-  // TODO: Actually check if the entered team name matches the team name
+const leaveTeam = () => {
   teamsStore.removeUserFromTeam({
     userId: singularUser.value.id,
     teamId: singularTeam.value.id,
   });
   eventBus.emit("close-modal", { name: "teams-leave-team" });
-  leaveTeamName.value = "";
 };
 
 eventBus.on("open-modal", (event: any) => {

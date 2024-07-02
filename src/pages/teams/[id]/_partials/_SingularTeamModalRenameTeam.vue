@@ -1,5 +1,5 @@
 <template>
-  <ModalDialog name="singular-team-rename-team" max-width="lg" enable-initial-focus="smAndUp">
+  <ModalDialog name="singular-team-rename-team" max-width="md" enable-initial-focus="smAndUp">
     <form
       id="teamNameForm"
       @submit.prevent="handleFormSubmit"

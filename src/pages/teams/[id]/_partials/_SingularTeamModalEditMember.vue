@@ -30,12 +30,14 @@
         </div>
       </div>
 
-      <div class="mb-0 w-full text-left sm:w-1/2">
-        <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
-          <BaseListboxLabel>Role</BaseListboxLabel>
-          <BaseListboxInput appearance="white" />
-        </BaseListbox>
-      </div>
+      <form id="editTeamMemberForm" @submit.prevent="handleFormSubmit">
+        <div class="mb-0 w-full text-left sm:w-1/2">
+          <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
+            <BaseListboxLabel>Role</BaseListboxLabel>
+            <BaseListboxInput appearance="white" />
+          </BaseListbox>
+        </div>
+      </form>
     </template>
 
     <template #illustration>
@@ -47,7 +49,12 @@
       <BaseAvatar v-else :user-id="singularUser.id" size-class="size-full" />
     </template>
     <template #buttons>
-      <ModalDialogButton appearance="primary" :close-modal="true">
+      <ModalDialogButton
+        appearance="primary"
+        :close-modal="false"
+        type="submit"
+        form="editTeamMemberForm"
+      >
         Apply changes
       </ModalDialogButton>
     </template>
@@ -88,6 +95,15 @@ const usersStore = useUsersStore();
 const singularUser = ref({} as TUser);
 const selectedRoleInEditTeamMember = ref({} as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
+
+const handleFormSubmit = () => {
+  teamsStore.editUserRoleTeam({
+    userId: singularUser.value.id,
+    teamId: singularTeam.value.id,
+    role: selectedRoleInEditTeamMember.value,
+  });
+  eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+};
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-edit-member") return;

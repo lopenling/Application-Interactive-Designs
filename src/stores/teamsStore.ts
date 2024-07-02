@@ -4,7 +4,7 @@ import { userRoles, type TSingularUserRole } from "@stores/usersStore";
 export type TTeam = {
   id: number;
   name: string;
-  adminUserIds: number[];
+  administratorUserIds: number[];
   memberUserIds: number[];
   enabledCustomDictionaryIds: number[];
   disabledCustomDictionaryIds: number[];
@@ -30,12 +30,13 @@ type TDeleteTeam = { teamId: number };
 type TAddUserToTeam = { userId: number; teamId: number; role: TSingularUserRole };
 type TRemoveUserFromTeam = { userId: number; teamId: number };
 type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
+type TEditUserRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
 
 const teams: TTeam[] = [
   {
     id: 1,
     name: "Alpha",
-    adminUserIds: [2, 16],
+    administratorUserIds: [2, 16],
     memberUserIds: [4, 6, 12, 14],
     invitedUsers: [
       { id: 10, role: userRoles.administrator, inviteAuthorId: 2 },
@@ -55,7 +56,7 @@ const teams: TTeam[] = [
   {
     id: 2,
     name: "Beta",
-    adminUserIds: [2],
+    administratorUserIds: [2],
     memberUserIds: [],
     invitedUsers: [],
     enabledCustomDictionaryIds: [2],
@@ -68,7 +69,7 @@ const teams: TTeam[] = [
   {
     id: 3,
     name: "Gamma",
-    adminUserIds: [1],
+    administratorUserIds: [1],
     memberUserIds: [2, 3],
     invitedUsers: [],
     enabledCustomDictionaryIds: [3],
@@ -82,7 +83,7 @@ const teams: TTeam[] = [
   {
     id: 4,
     name: "Delta",
-    adminUserIds: [1],
+    administratorUserIds: [1],
     memberUserIds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     invitedUsers: [],
     enabledCustomDictionaryIds: [],
@@ -93,7 +94,7 @@ const teams: TTeam[] = [
   {
     id: 5,
     name: "Omega",
-    adminUserIds: [8],
+    administratorUserIds: [8],
     memberUserIds: [],
     invitedUsers: [{ id: 2, role: userRoles.administrator, inviteAuthorId: 8 }],
     enabledCustomDictionaryIds: [],
@@ -128,7 +129,7 @@ export const useTeamsStore = defineStore("teamsStore", {
     getTeamsWhereUserIsAdminByUserId: (state) => {
       return (userId: number) => {
         const teams = state.teams
-          .filter((team) => team.adminUserIds.some((id) => id === userId))
+          .filter((team) => team.administratorUserIds.some((id) => id === userId))
           .sort((a, b) => a.name.localeCompare(b.name));
         return teams;
       };
@@ -153,7 +154,7 @@ export const useTeamsStore = defineStore("teamsStore", {
       return (userId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
 
-        if (team?.adminUserIds.includes(userId)) return userRoles.administrator;
+        if (team?.administratorUserIds.includes(userId)) return userRoles.administrator;
         if (team?.memberUserIds.includes(userId)) return userRoles.member;
 
         const invitee = team?.invitedUsers.find((user) => user.id === userId);
@@ -165,7 +166,7 @@ export const useTeamsStore = defineStore("teamsStore", {
     getAllUserIdsInTeam: (state) => {
       return (teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
-        return team?.adminUserIds
+        return team?.administratorUserIds
           .concat(team?.memberUserIds)
           .concat(team?.invitedUsers.map((user) => user.id));
       };
@@ -192,7 +193,7 @@ export const useTeamsStore = defineStore("teamsStore", {
         state.teams.push({
           id: teamId,
           name: teamName,
-          adminUserIds: [userId],
+          administratorUserIds: [userId],
           memberUserIds: [],
           invitedUsers: [],
           enabledCustomDictionaryIds: [],
@@ -218,21 +219,32 @@ export const useTeamsStore = defineStore("teamsStore", {
 
       this.$patch((state) => {
         if (role.value === userRoles.administrator.value) {
-          const updatedAdminUserIds = team?.adminUserIds.concat(userId);
-          state.teams[teamIndex].adminUserIds = updatedAdminUserIds!;
+          const updatedUserIds = team?.administratorUserIds.concat(userId);
+          state.teams[teamIndex].administratorUserIds = updatedUserIds!;
         }
         if (role.value === userRoles.member.value) {
-          const updatedMemberUserIds = team?.memberUserIds.concat(userId);
-          state.teams[teamIndex].memberUserIds = updatedMemberUserIds!;
+          const updatedUserIds = team?.memberUserIds.concat(userId);
+          state.teams[teamIndex].memberUserIds = updatedUserIds!;
         }
       });
     },
     removeUserFromTeam({ userId, teamId }: TRemoveUserFromTeam) {
       const team = this.getTeamById(teamId);
-      const updatedMemberUserIds = team?.memberUserIds.filter((id) => id !== userId);
       const teamIndex = this.getTeamIndexById(teamId);
+      const role = this.getUserRoleByUserIdInTeam(userId, teamId);
 
-      this.$patch((state) => (state.teams[teamIndex].memberUserIds = updatedMemberUserIds!));
+      if (role!.value === userRoles.administrator.value) {
+        const updatedUserIds = team?.administratorUserIds.filter((id) => id !== userId);
+        this.$patch((state) => (state.teams[teamIndex].administratorUserIds = updatedUserIds!));
+      }
+      if (role!.value === userRoles.member.value) {
+        const updatedUserIds = team?.memberUserIds.filter((id) => id !== userId);
+        this.$patch((state) => (state.teams[teamIndex].memberUserIds = updatedUserIds!));
+      }
+    },
+    editUserRoleTeam({ userId, teamId, role }: TEditUserRoleInTeam) {
+      this.removeUserFromTeam({ userId, teamId });
+      this.addUserToTeam({ userId, teamId, role: role });
     },
     resolveUserInvite({ userId, teamId, acceptInvite }: TResolveUserInvite) {
       const team = this.getTeamById(teamId);

@@ -16,6 +16,8 @@ export type TSingularUserRole = {
   label: string;
 };
 
+type TAddUser = { userEmail: string; userId?: number };
+
 const users: TUser[] = [
   {
     id: 1,
@@ -153,6 +155,12 @@ export const useUsersStore = defineStore("usersStore", {
     getUsersByIds: (state) => {
       return (userIds: number[]) => state.users.filter((user) => userIds.includes(user.id));
     },
+    getNewUserId: (state) => {
+      return () => {
+        const highestId = Math.max(...state.users.map((user) => user.id));
+        return highestId + 1;
+      };
+    },
     getUserFullNameById: (state) => {
       return (userId: number) => {
         const { firstName, lastName } = state.users.find((user) => user.id === userId) || {};
@@ -176,4 +184,13 @@ export const useUsersStore = defineStore("usersStore", {
       };
     },
   },
+  actions: {
+    addUser({ userEmail, userId }: TAddUser) {
+      const newUserId = this.getNewUserId();
+      this.$patch((state) => {
+        state.users.push({ id: userId || newUserId, email: userEmail });
+      });
+    },
+  },
+  persist: true,
 });

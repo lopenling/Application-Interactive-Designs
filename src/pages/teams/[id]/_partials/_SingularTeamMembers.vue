@@ -5,7 +5,12 @@
 
       <template #button>
         <CardHeaderButton
-          @click="openModalSingularTeamNewMember({ teamId: singularTeam.id })"
+          @click="
+            openModalSingularTeamNewMember({
+              teamId: singularTeam.id,
+              currentUserId: signedInUser.id,
+            })
+          "
           :iconComponent="IconAdd"
         >
           New member
@@ -50,6 +55,7 @@ import { useUsersStore, userRoles, type TUser } from "@stores/usersStore";
 import { type AstroGlobal } from "astro";
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
+import signedInUserData from "@scripts/data/signedInUserData";
 
 import { type TSingularTeamModalNewMember } from "./_SingularTeamModalNewMember.vue";
 import { type TSingularTeamModalEditMember } from "./_SingularTeamModalEditMember.vue";
@@ -69,6 +75,7 @@ const params = props.astro.params;
 const currentTeamId = Number(params.id);
 const role = getRole(props.astro);
 const state = getState(props.astro);
+const signedInUser = signedInUserData(role);
 
 const teamsStore = useTeamsStore();
 const usersStore = useUsersStore();

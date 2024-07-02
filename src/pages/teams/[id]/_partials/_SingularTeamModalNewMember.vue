@@ -5,10 +5,15 @@
     :separate-buttons="true"
     enable-initial-focus="smAndUp"
   >
-    <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row">
+    <form
+      id="newTeamMemberForm"
+      @submit.prevent="handleFormSubmit"
+      class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4 sm:flex-row"
+    >
       <div class="sm:basis-3/5">
         <BaseLabel for="email">Email address</BaseLabel>
         <BaseInputText
+          v-model="newMemberEmail"
           appearance="white"
           type="email"
           name="email"
@@ -18,12 +23,12 @@
         />
       </div>
       <div class="sm:basis-2/5">
-        <BaseListbox v-model="selectedRoleInEditTeamMember" :options="sortedUserRolesArray">
+        <BaseListbox v-model="newMemberRole" :options="sortedUserRolesArray">
           <BaseListboxLabel>Role</BaseListboxLabel>
           <BaseListboxInput appearance="white" />
         </BaseListbox>
       </div>
-    </div>
+    </form>
 
     <p class="max-w-prose text-left text-stone-500">
       An invite link to join team {{ teamsStore.getTeamById(singularTeam.id)?.name }} will be
@@ -39,7 +44,14 @@
       />
     </template>
     <template #buttons>
-      <ModalDialogButton appearance="primary" :close-modal="true">Send invite</ModalDialogButton>
+      <ModalDialogButton
+        appearance="primary"
+        :close-modal="false"
+        type="submit"
+        form="newTeamMemberForm"
+      >
+        Send invite
+      </ModalDialogButton>
     </template>
   </ModalDialog>
 </template>
@@ -64,17 +76,34 @@ import IconSingleNeutral from "@components/icons/streamline/regular/IconSingleNe
 
 export type TSingularTeamModalNewMember = {
   teamId: number;
+  currentUserId: number;
 };
 
 const teamsStore = useTeamsStore();
 const singularTeam = ref({} as TTeam);
-const selectedRoleInEditTeamMember = ref(userRoles.member as TSingularUserRole);
+const inviteAuthorId = ref(-1);
+const newMemberEmail = ref("");
+const newMemberRole = ref(userRoles.member as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
+
+const handleFormSubmit = () => {
+  // TODO: Check if user is already invited or a member
+  teamsStore.addNewInviteToTeam({
+    userEmail: newMemberEmail.value,
+    teamId: singularTeam.value.id,
+    role: newMemberRole.value,
+    inviteAuthorId: 2,
+  });
+  newMemberEmail.value = "";
+  eventBus.emit("close-modal", { name: "singular-team-new-member" });
+};
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-new-member") return;
   let teamId: TSingularTeamModalNewMember["teamId"] = event.data.teamId;
+  let currentUserId: TSingularTeamModalNewMember["currentUserId"] = event.data.currentUserId;
 
   singularTeam.value = teamsStore.getTeamById(teamId)!;
+  inviteAuthorId.value = currentUserId;
 });
 </script>

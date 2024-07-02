@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { userRoles, type TSingularUserRole } from "@stores/usersStore";
+import { useUsersStore, userRoles, type TSingularUserRole } from "@stores/usersStore";
 
 export type TTeam = {
   id: number;
@@ -28,6 +28,12 @@ type TAddTeam = { teamId: number; teamName: string; userId: number };
 type TRenameTeam = { teamId: number; teamName: string };
 type TDeleteTeam = { teamId: number };
 type TAddUserToTeam = { userId: number; teamId: number; role: TSingularUserRole };
+type TAddNewInviteToTeam = {
+  userEmail: string;
+  teamId: number;
+  role: TSingularUserRole;
+  inviteAuthorId: number;
+};
 type TRemoveUserFromTeam = { userId: number; teamId: number };
 type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
 type TEditUserRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
@@ -227,6 +233,20 @@ export const useTeamsStore = defineStore("teamsStore", {
           state.teams[teamIndex].memberUserIds = updatedUserIds!;
         }
       });
+    },
+    addNewInviteToTeam({ userEmail, teamId, role, inviteAuthorId }: TAddNewInviteToTeam) {
+      const user = useUsersStore();
+      const newUserId = user.getNewUserId();
+      user.addUser({ userEmail: userEmail, userId: newUserId });
+
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+      const updatedInvitedUsers = team?.invitedUsers.concat({
+        id: newUserId,
+        role: role,
+        inviteAuthorId: inviteAuthorId,
+      });
+      this.$patch((state) => (state.teams[teamIndex].invitedUsers = updatedInvitedUsers!));
     },
     removeUserFromTeam({ userId, teamId }: TRemoveUserFromTeam) {
       const team = this.getTeamById(teamId);

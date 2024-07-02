@@ -10,17 +10,19 @@
         @submit.prevent="handleFormSubmit"
         class="mt-4 flex flex-col text-left"
       >
-        <BaseLabel for="deleteTeamName">Team name</BaseLabel>
-        <BaseInputText
-          v-model="deleteTeamName"
-          appearance="white"
-          type="text"
-          name="deleteTeamName"
-          id="deleteTeamName"
-          inputmode="text"
-          autocomplete="off"
-          required
-        />
+        <div class="sm:w-1/2">
+          <BaseLabel for="deleteTeamName">Team name</BaseLabel>
+          <BaseInputText
+            v-model="deleteTeamName"
+            appearance="white"
+            type="text"
+            name="deleteTeamName"
+            id="deleteTeamName"
+            inputmode="text"
+            autocomplete="off"
+            required
+          />
+        </div>
       </form>
     </div>
     <div v-else>

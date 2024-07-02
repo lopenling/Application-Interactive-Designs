@@ -73,6 +73,10 @@ import sortArrayByKey from "@scripts/helpers/sortArrayByKey";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { useUsersStore, userRoles, type TUser, type TSingularUserRole } from "@stores/usersStore";
 
+import { type AstroGlobal } from "astro";
+import getRole from "@scripts/helpers/getRole";
+import signedInUserData from "@scripts/data/signedInUserData";
+
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
 import ModalDialogOption from "@components/ModalDialog/ModalDialogOption.vue";
@@ -88,6 +92,10 @@ export type TSingularTeamModalEditMember = {
   userId: number;
   teamId: number;
 };
+type TProps = { astro: AstroGlobal };
+const props = defineProps<TProps>();
+const role = getRole(props.astro);
+const signedInUser = signedInUserData(role);
 
 const teamsStore = useTeamsStore();
 const singularTeam = ref({} as TTeam);
@@ -97,12 +105,24 @@ const selectedRoleInEditTeamMember = ref({} as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
 
 const handleFormSubmit = () => {
-  teamsStore.editUserRoleInTeam({
-    userId: singularUser.value.id,
-    teamId: singularTeam.value.id,
-    role: selectedRoleInEditTeamMember.value,
-  });
-  eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+  if (singularUser.value.id === signedInUser.id) {
+    eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+    eventBus.emit("open-modal", {
+      name: "singular-team-self-downgrade",
+      data: {
+        teamId: singularTeam.value.id,
+        userId: singularUser.value.id,
+        role: selectedRoleInEditTeamMember.value,
+      },
+    });
+  } else {
+    teamsStore.editUserRoleInTeam({
+      userId: singularUser.value.id,
+      teamId: singularTeam.value.id,
+      role: selectedRoleInEditTeamMember.value,
+    });
+    eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+  }
 };
 
 const removeUserFromTeam = () => {

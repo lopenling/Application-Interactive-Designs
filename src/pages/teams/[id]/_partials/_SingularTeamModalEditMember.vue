@@ -60,7 +60,7 @@
     </template>
     <template #options>
       <div class="py-1">
-        <ModalDialogOption>Remove from team</ModalDialogOption>
+        <ModalDialogOption @click="removeUserFromTeam">Remove from team</ModalDialogOption>
       </div>
     </template>
   </ModalDialog>
@@ -97,12 +97,20 @@ const selectedRoleInEditTeamMember = ref({} as TSingularUserRole);
 const sortedUserRolesArray = sortArrayByKey(Object.values(userRoles), "label");
 
 const handleFormSubmit = () => {
-  teamsStore.editUserRoleTeam({
+  teamsStore.editUserRoleInTeam({
     userId: singularUser.value.id,
     teamId: singularTeam.value.id,
     role: selectedRoleInEditTeamMember.value,
   });
   eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+};
+
+const removeUserFromTeam = () => {
+  eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+  eventBus.emit("open-modal", {
+    name: "singular-team-remove-member",
+    data: { teamId: singularTeam.value.id, userId: singularUser.value.id },
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

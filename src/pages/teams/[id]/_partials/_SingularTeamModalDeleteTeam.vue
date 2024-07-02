@@ -1,7 +1,7 @@
 <template>
   <ModalDialog name="singular-team-delete-team" max-width="xl" :separate-buttons="true">
     <div v-if="numberOfUsersInTeam == 1">
-      <p>
+      <p class="text-pretty">
         You will loose access to team {{ singularTeam.name }} and all of it's materials. Write the
         team name below to confirm.
       </p>
@@ -24,22 +24,24 @@
       </form>
     </div>
     <div v-else>
-      <p>
-        <span v-if="numberOfUsersInTeam == 2">There is still 1 other member</span>
+      <p class="text-pretty">
+        <span v-if="numberOfUsersInTeam == 2">There is still <strong>1 other member</strong></span>
         <span v-else>
           There are still <strong>{{ numberOfUsersInTeam - 1 }} other members</strong>
         </span>
-        in team {{ singularTeam.name }} besides you. A team can only be deleted if there are no
-        other members.
+        in the team besides you. A team can only be deleted if there are no other members.
       </p>
     </div>
 
     <template #title>
-      <span v-if="numberOfUsersInTeam == 1">Do you really want to delete?</span>
-      <span v-else>Unable to delete</span>
+      <span v-if="numberOfUsersInTeam == 1">Do you really want to delete the team?</span>
+      <span v-else>Unable to delete the team</span>
     </template>
     <template #illustration>
-      <ModalDialogIllustration :icon-component="IconAlertCircle" appearance="danger" />
+      <ModalDialogIllustration
+        :icon-component="numberOfUsersInTeam == 1 ? IconBin1 : IconAlertCircle"
+        appearance="danger"
+      />
     </template>
     <template #buttons v-if="numberOfUsersInTeam == 1">
       <ModalDialogButton
@@ -48,7 +50,7 @@
         type="submit"
         form="deleteTeamForm"
       >
-        Yes, delete team
+        Yes, delete the team
       </ModalDialogButton>
     </template>
   </ModalDialog>
@@ -69,6 +71,7 @@ import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
 import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 
 import IconAlertCircle from "@components/icons/streamline/regular/IconAlertCircle.vue";
+import IconBin1 from "@components/icons/streamline/regular/IconBin1.vue";
 
 export type TSingularTeamModalDeleteTeam = {
   teamId: number;

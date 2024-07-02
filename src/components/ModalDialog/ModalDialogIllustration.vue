@@ -14,8 +14,9 @@
         props.appearance == 'primary' && 'text-primary-500',
         props.appearance == 'danger' && 'text-red-500',
         props.appearance == 'default' || !props.appearance ? 'text-stone-500' : '',
+        props.iconClass || '',
       ]"
-      :data-expand-by="iconExpandBy || 0"
+      :data-expand-by="props.iconExpandBy || 0"
     />
   </div>
 </template>
@@ -24,6 +25,7 @@
 type TProps = {
   iconComponent: object;
   iconExpandBy?: number;
+  iconClass?: string;
   appearance?: "primary" | "danger" | "default";
 };
 const props = defineProps<TProps>();

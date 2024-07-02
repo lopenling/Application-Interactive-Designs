@@ -59,5 +59,7 @@ const slots = useSlots();
 const teamsStore = useTeamsStore();
 const usersStore = useUsersStore();
 const user = computed(() => usersStore.getUserById(props.userId)! as TUser);
-const invitePending = teamsStore.isUserInvitePendingByUserIdInTeam(props.userId, props.teamId);
+const invitePending = computed(() =>
+  teamsStore.isUserInvitePendingByUserIdInTeam(props.userId, props.teamId),
+);
 </script>

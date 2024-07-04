@@ -2,11 +2,13 @@
   <div v-if="singularTeam && role == 'admin'">
     <CardHeader>
       <CardHeaderHeading>
+        {{
+          userInFilter &&
+          !teamsStore.isUserInvitePendingByUserIdInTeam(userInFilter.id, singularTeam.id)
+            ? usersStore.getPossessiveFirstNameById(userInFilter.id)
+            : "Invitee's"
+        }}
         Custom dictionaries
-
-        <template #extraHeading v-if="enabledCustomDictionaries && userInFilter">
-          &ndash; {{ usersStore.getUserFullNameById(userInFilter.id) }}
-        </template>
       </CardHeaderHeading>
 
       <template #button>
@@ -135,7 +137,7 @@
           userInFilter &&
           !showDisabledDictionaries &&
           enabledCustomDictionaries.length === 0 &&
-          allCustomDictionaries
+          allCustomDictionaries.length > 0
         "
       >
         No custom dictionaries enabled
@@ -199,8 +201,10 @@ const sortedUsers = computed(() => {
       (a: any, b: any) =>
         // First sort by invite status (pending invites last)
         a.invitePending - b.invitePending ||
-        // Then sort by first name (a-z)
-        a.firstName.localeCompare(b.firstName),
+        // Then sort by first name if it exists, otherwise by email
+        (a.firstName || a.email)
+          .toLowerCase()
+          .localeCompare((b.firstName || b.email).toLowerCase()),
     );
 });
 

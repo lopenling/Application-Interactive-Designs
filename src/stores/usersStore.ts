@@ -183,6 +183,18 @@ export const useUsersStore = defineStore("usersStore", {
         return email![0].toUpperCase();
       };
     },
+    getPossessiveFirstNameById: (state) => {
+      return (userId: number) => {
+        const { firstName } = state.users.find((user) => user.id === userId) || {};
+        if (!firstName) return null;
+
+        if (firstName.endsWith("s") || firstName.endsWith("S")) {
+          return `${firstName}'`;
+        } else {
+          return `${firstName}'s`;
+        }
+      };
+    },
   },
   actions: {
     addUser({ userEmail, userId }: TAddUser) {

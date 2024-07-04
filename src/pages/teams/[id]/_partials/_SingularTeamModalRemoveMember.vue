@@ -104,6 +104,7 @@ const prohibitRemove = computed(() => {
 });
 
 const removeMember = () => {
+  teamsStore.userInFilter = null;
   teamsStore.removeUserFromTeam({
     userId: singularUser.value.id,
     teamId: singularTeam.value.id,

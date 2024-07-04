@@ -6,24 +6,21 @@ export type TTeam = {
   name: string;
   administratorUserIds: number[];
   memberUserIds: number[];
+  invitedUsers: TTeamInvitedUser[];
   enabledCustomDictionaryIds: number[];
   disabledCustomDictionaryIds: number[];
   enabledNativeDictionaryIds: number[];
-  excludedUsers: TTeamExcludedUser[];
-  invitedUsers: TTeamInvitedUser[];
   customDictionaryExlcudedUsers: TTeamExcludedUser[];
-};
-export type TTeamExcludedUser = {
-  userId?: number;
-  id?: number;
-  dictionaryIds?: number[];
-  customDictionaryIds?: number[];
-  nativeDictionaryIds?: number[];
+  nativeDictionaryExlcudedUsers: TTeamExcludedUser[];
 };
 export type TTeamInvitedUser = {
   id: number;
   role: TSingularUserRole;
   inviteAuthorId: number;
+};
+export type TTeamExcludedUser = {
+  userId?: number;
+  dictionaryIds: number[];
 };
 export type TUserInFilter = { id: number; value: string } | null;
 export type TShowDisabledDictionaries = boolean;
@@ -42,7 +39,14 @@ type TRemoveUserFromTeam = { userId: number; teamId: number };
 type TEditUserRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
 type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
 type TToggleCustomDictionaryInTeam = { dictionaryId: number; teamId: number };
+type TToggleNativeDictionaryInTeam = { dictionaryId: number; teamId: number };
 type TUpdateUserExcludedFromCustomDictionary = {
+  userId: number;
+  dictionaryId: number;
+  value: boolean;
+  teamId: number;
+};
+type TUpdateUserExcludedFromNativeDictionary = {
   userId: number;
   dictionaryId: number;
   value: boolean;
@@ -62,17 +66,11 @@ const teams: TTeam[] = [
     enabledCustomDictionaryIds: [1],
     disabledCustomDictionaryIds: [10],
     enabledNativeDictionaryIds: [1, 2, 3, 5, 6, 7, 8, 17],
-    excludedUsers: [
-      { id: 2, customDictionaryIds: [1], nativeDictionaryIds: [3] },
-      { id: 4, customDictionaryIds: [], nativeDictionaryIds: [3] },
-      { id: 6, customDictionaryIds: [1], nativeDictionaryIds: [] },
-      { id: 14, customDictionaryIds: [1], nativeDictionaryIds: [3] },
-      { id: 16, customDictionaryIds: [1], nativeDictionaryIds: [3] },
-    ],
     customDictionaryExlcudedUsers: [
       { userId: 6, dictionaryIds: [1] },
       { userId: 14, dictionaryIds: [1] },
     ],
+    nativeDictionaryExlcudedUsers: [],
   },
   {
     id: 2,
@@ -80,13 +78,13 @@ const teams: TTeam[] = [
     administratorUserIds: [2],
     memberUserIds: [],
     invitedUsers: [],
-    enabledCustomDictionaryIds: [2],
+    enabledCustomDictionaryIds: [],
     disabledCustomDictionaryIds: [],
     enabledNativeDictionaryIds: [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     ],
-    excludedUsers: [],
     customDictionaryExlcudedUsers: [],
+    nativeDictionaryExlcudedUsers: [],
   },
   {
     id: 3,
@@ -97,11 +95,8 @@ const teams: TTeam[] = [
     enabledCustomDictionaryIds: [3],
     disabledCustomDictionaryIds: [30],
     enabledNativeDictionaryIds: [1, 2, 3],
-    excludedUsers: [
-      { id: 1, customDictionaryIds: [3], nativeDictionaryIds: [1] },
-      { id: 3, customDictionaryIds: [3], nativeDictionaryIds: [1] },
-    ],
     customDictionaryExlcudedUsers: [],
+    nativeDictionaryExlcudedUsers: [],
   },
   {
     id: 4,
@@ -112,8 +107,8 @@ const teams: TTeam[] = [
     enabledCustomDictionaryIds: [],
     disabledCustomDictionaryIds: [4],
     enabledNativeDictionaryIds: [],
-    excludedUsers: [],
     customDictionaryExlcudedUsers: [],
+    nativeDictionaryExlcudedUsers: [],
   },
   {
     id: 5,
@@ -126,8 +121,8 @@ const teams: TTeam[] = [
     enabledNativeDictionaryIds: [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     ],
-    excludedUsers: [],
     customDictionaryExlcudedUsers: [],
+    nativeDictionaryExlcudedUsers: [],
   },
 ];
 
@@ -231,6 +226,12 @@ export const useTeamsStore = defineStore("teamsStore", {
         return team?.enabledCustomDictionaryIds.includes(dictionaryId);
       };
     },
+    isNativeDictionaryEnabledByDictionaryIdInTeam: (state) => {
+      return (dictionaryId: number, teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.enabledNativeDictionaryIds.includes(dictionaryId);
+      };
+    },
     isUserExcludedFromCustomDictionary: (state) => {
       return (userId: number, dictionaryId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
@@ -239,10 +240,26 @@ export const useTeamsStore = defineStore("teamsStore", {
         );
       };
     },
+    isUserExcludedFromNativeDictionary: (state) => {
+      return (userId: number, dictionaryId: number, teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.nativeDictionaryExlcudedUsers.some(
+          (item) => item.userId === userId && item.dictionaryIds?.includes(dictionaryId),
+        );
+      };
+    },
     isDictionaryIdInCustomDictionaryExlcudedUsers: (state) => {
       return (dictionaryId: number, teamId: number) => {
         const team = state.teams.find((obj) => obj.id == teamId);
         return team?.customDictionaryExlcudedUsers.some((item) =>
+          item.dictionaryIds?.includes(dictionaryId),
+        );
+      };
+    },
+    isDictionaryIdInNativeDictionaryExlcudedUsers: (state) => {
+      return (dictionaryId: number, teamId: number) => {
+        const team = state.teams.find((obj) => obj.id == teamId);
+        return team?.nativeDictionaryExlcudedUsers.some((item) =>
           item.dictionaryIds?.includes(dictionaryId),
         );
       };
@@ -262,8 +279,8 @@ export const useTeamsStore = defineStore("teamsStore", {
           enabledNativeDictionaryIds: [
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
           ],
-          excludedUsers: [],
           customDictionaryExlcudedUsers: [],
+          nativeDictionaryExlcudedUsers: [],
         });
       });
     },
@@ -354,6 +371,21 @@ export const useTeamsStore = defineStore("teamsStore", {
         state.teams[teamIndex].disabledCustomDictionaryIds = updatedDisabledIds!;
       });
     },
+    toggleNativeDictionaryInTeam({ dictionaryId, teamId }: TToggleNativeDictionaryInTeam) {
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+      let updatedEnabledIds;
+
+      if (this.isNativeDictionaryEnabledByDictionaryIdInTeam(dictionaryId, teamId)) {
+        updatedEnabledIds = team?.enabledNativeDictionaryIds.filter((id) => id !== dictionaryId);
+      } else {
+        updatedEnabledIds = team?.enabledNativeDictionaryIds.concat(dictionaryId);
+      }
+
+      this.$patch((state) => {
+        state.teams[teamIndex].enabledNativeDictionaryIds = updatedEnabledIds!;
+      });
+    },
     updateUserExcludedFromCustomDictionary({
       userId,
       dictionaryId,
@@ -385,6 +417,43 @@ export const useTeamsStore = defineStore("teamsStore", {
         } else if (!value) {
           // Add new user with the dictionaryId
           state.teams[teamIndex].customDictionaryExlcudedUsers.push({
+            userId,
+            dictionaryIds: [dictionaryId],
+          });
+        }
+      });
+    },
+    updateUserExcludedFromNativeDictionary({
+      userId,
+      dictionaryId,
+      value,
+      teamId,
+    }: TUpdateUserExcludedFromNativeDictionary) {
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+      const user = team?.nativeDictionaryExlcudedUsers.find((u) => u.userId === userId);
+      const userIndex = team?.nativeDictionaryExlcudedUsers.findIndex(
+        (item) => item["userId"] === userId,
+      )!;
+
+      this.$patch((state) => {
+        if (user) {
+          if (!value) {
+            // Add dictionaryId to the user's dictionaryIds if it doesn't exist
+            if (!user.dictionaryIds?.includes(dictionaryId)) {
+              state.teams[teamIndex].nativeDictionaryExlcudedUsers[userIndex].dictionaryIds!.push(
+                dictionaryId,
+              );
+            }
+          } else {
+            // Remove dictionaryId from the user's dictionaryIds if it exists
+            let updatedDictionaryIds = user.dictionaryIds!.filter((id) => id !== dictionaryId);
+            state.teams[teamIndex].nativeDictionaryExlcudedUsers[userIndex].dictionaryIds =
+              updatedDictionaryIds;
+          }
+        } else if (!value) {
+          // Add new user with the dictionaryId
+          state.teams[teamIndex].nativeDictionaryExlcudedUsers.push({
             userId,
             dictionaryIds: [dictionaryId],
           });

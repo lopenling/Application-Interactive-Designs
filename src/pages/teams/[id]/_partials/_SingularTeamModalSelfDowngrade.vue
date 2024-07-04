@@ -12,8 +12,8 @@
     </p>
 
     <template #title>
-      <span v-if="prohibitDowngrade">Unable to step down to member</span>
-      <span v-else>Step down to member?</span>
+      <span v-if="prohibitDowngrade">Unable to Step Down to Member</span>
+      <span v-else>Step Down to Member?</span>
     </template>
     <template #illustration>
       <ModalDialogIllustration

@@ -19,7 +19,7 @@
       />
     </form>
 
-    <template #title>Give the team a name</template>
+    <template #title>Give the Team a Name</template>
     <template #buttons>
       <ModalDialogButton appearance="primary" :close-modal="false" type="submit" form="newTeamForm">
         Create team

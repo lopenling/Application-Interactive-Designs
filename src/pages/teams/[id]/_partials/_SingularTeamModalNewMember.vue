@@ -35,7 +35,7 @@
       emailed to this person. If they don't have an account, they'll be prompted to create one.
     </p>
 
-    <template #title>Add a new member</template>
+    <template #title>Add a New Member</template>
     <template #illustration>
       <ModalDialogIllustration
         :icon-component="IconSingleNeutral"

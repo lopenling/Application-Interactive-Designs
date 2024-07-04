@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <template #title>Edit custom dictionary</template>
+    <template #title>Edit Custom Dictionary</template>
     <template #illustration>
       <ModalDialogIllustration :icon-component="IconBookEdit" appearance="primary" />
     </template>

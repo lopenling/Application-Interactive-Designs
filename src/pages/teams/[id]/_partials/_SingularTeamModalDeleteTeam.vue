@@ -36,8 +36,8 @@
     </div>
 
     <template #title>
-      <span v-if="numberOfUsersInTeam == 1">Do you really want to delete the team?</span>
-      <span v-else>Unable to delete the team</span>
+      <span v-if="numberOfUsersInTeam == 1">Do You Really Want to Delete the Team?</span>
+      <span v-else>Unable to Delete the Team</span>
     </template>
     <template #illustration>
       <ModalDialogIllustration

@@ -24,10 +24,10 @@
     </p>
 
     <template #title>
-      <span v-if="prohibitRemove">Unable to remove the {{ userRoles.administrator.label }}</span>
+      <span v-if="prohibitRemove">Unable to Remove the {{ userRoles.administrator.label }}</span>
       <span v-else class="break-words">
         Remove
-        <span v-if="isUserSelf">yourself?</span>
+        <span v-if="isUserSelf">Yourself?</span>
         <span v-else>
           {{
             isInvitePending ? singularUser.email : usersStore.getUserFullNameById(singularUser.id)

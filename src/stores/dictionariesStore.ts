@@ -152,9 +152,16 @@ export const useDictionariesStore = defineStore("dictionariesStore", {
       return (dictionaryId: number) =>
         state.customDictionaries.find((dictionary) => dictionary.id === dictionaryId);
     },
+    getNativeDictionariesByIds: (state) => {
+      return (dictionaryIds: number[]) =>
+        state.nativeDictionaries.filter((dictionary) => dictionaryIds.includes(dictionary.id));
+    },
     getCustomDictionariesByIds: (state) => {
       return (dictionaryIds: number[]) =>
         state.customDictionaries.filter((dictionary) => dictionaryIds.includes(dictionary.id));
+    },
+    getAllNativeDictionaryIds: (state) => {
+      return () => state.nativeDictionaries.map((dictionary) => dictionary.id);
     },
   },
   persist: true,

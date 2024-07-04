@@ -2,70 +2,74 @@
   <div v-if="singularTeam && role == 'admin'">
     <CardHeader>
       <CardHeaderHeading>
+        {{
+          userInFilter &&
+          !teamsStore.isUserInvitePendingByUserIdInTeam(userInFilter.id, singularTeam.id)
+            ? usersStore.getPossessiveFirstNameById(userInFilter.id)
+            : "Invitee's"
+        }}
         Native dictionaries
-
-        <template
-          #extraHeading
-          v-if="singularTeam.enabledNativeDictionaryIds.length > 0 && selectedUserInFilterInStore"
-        >
-          &ndash; {{ getUserFullNameById(selectedUserInFilterInStore!.id) }}
-        </template>
       </CardHeaderHeading>
     </CardHeader>
 
     <SettingsCard class="divide-y">
       <SettingsCardRowExpandableToggle
-        v-if="!selectedUserInFilterInStore"
-        v-for="dictionary in nativeDictionariesInStore"
+        v-if="allNativeDictionaries && !userInFilter && state == 'filled'"
+        v-for="dictionary in allNativeDictionaries"
+        :key="`native-${componentKey}-${dictionary.id}`"
+        :modelValue="
+          teamsStore.isNativeDictionaryEnabledByDictionaryIdInTeam(dictionary.id, singularTeam.id)!
+        "
         @update:modelValue="
-          updateTeamsNativeDictionariesData({
+          teamsStore.toggleNativeDictionaryInTeam({
             dictionaryId: dictionary.id,
-            payload: $event,
-            teamId: singularTeamId,
+            teamId: singularTeam.id,
           })
         "
-        :is-toggled="singularTeam.enabledNativeDictionaryIds.includes(dictionary.id)"
       >
         {{ dictionary.name }}
         <span
           v-if="
-            isDictionaryInExcludedUsers({
-              dictionaryId: dictionary.id,
-              teamId: singularTeamId,
-              dictionaryType: 'native',
-            })
+            teamsStore.isDictionaryIdInNativeDictionaryExlcudedUsers(dictionary.id, singularTeam.id)
           "
           class="font-normal text-stone-400/80"
           title="Some users are excluded"
-        >
-          *
-        </span>
+          v-text="'*'"
+        />
 
         <template #expandableArea>
           <SettingsCardSubRowToggle
-            v-for="user in usersInStore.filter((user) => combinedUserIds.includes(user.id))"
+            v-for="user in sortedUsers"
+            :modelValue="
+              !teamsStore.isUserExcludedFromNativeDictionary(
+                user.id,
+                dictionary.id,
+                singularTeam.id,
+              )!
+            "
             @update:modelValue="
-              updateTeamsExcludedUsersData({
-                userId: user.id,
-                dictionaryId: dictionary.id,
-                payload: $event,
-                teamId: singularTeamId,
-                dictionaryType: 'native',
-              })
+              ($event) => {
+                teamsStore.updateUserExcludedFromNativeDictionary({
+                  userId: user.id,
+                  dictionaryId: dictionary.id,
+                  value: $event,
+                  teamId: singularTeam.id,
+                });
+              }
             "
-            :is-toggled="
-              !isUserExcludedFromDictionary({
-                userId: user.id,
-                dictionaryId: dictionary.id,
-                teamId: singularTeamId,
-                dictionaryType: 'native',
-              })
+            :is-grayscale="
+              !teamsStore.isNativeDictionaryEnabledByDictionaryIdInTeam(
+                dictionary.id,
+                singularTeam.id,
+              )
             "
-            :is-grayscale="!singularTeam.enabledNativeDictionaryIds.includes(dictionary.id)"
           >
-            {{ getUserFullNameById(user.id) }}
+            <span v-if="user.invitePending" class="block truncate">{{ user.email }}</span>
+            <span v-else>{{ usersStore.getUserFullNameById(user.id) || user.email }}</span>
 
-            <template #extraData>{{ user.email }}</template>
+            <template #extraData v-if="!user.invitePending">
+              {{ user.email }}
+            </template>
           </SettingsCardSubRowToggle>
         </template>
       </SettingsCardRowExpandableToggle>
@@ -73,34 +77,35 @@
       <!-- Filter applied -->
 
       <SettingsCardRowToggle
-        v-if="selectedUserInFilterInStore"
-        v-for="dictionary in nativeDictionariesInStore.filter((dictionary) =>
-          showDisabledDictionariesInStore
-            ? true
-            : singularTeam.enabledNativeDictionaryIds.includes(dictionary.id),
-        )"
-        @update:modelValue="
-          updateTeamsExcludedUsersData({
-            userId: selectedUserInFilterInStore.id,
-            dictionaryId: dictionary.id,
-            payload: $event,
-            teamId: singularTeamId,
-            dictionaryType: 'native',
-          })
+        v-if="userInFilter"
+        v-for="dictionary in showDisabledDictionaries
+          ? allNativeDictionaries
+          : enabledNativeDictionaries"
+        :modelValue="
+          !teamsStore.isUserExcludedFromNativeDictionary(
+            userInFilter!.id,
+            dictionary.id,
+            singularTeam.id,
+          )!
         "
-        :is-toggled="
-          !isUserExcludedFromDictionary({
-            userId: selectedUserInFilterInStore.id,
+        @update:modelValue="
+          teamsStore.updateUserExcludedFromNativeDictionary({
+            userId: userInFilter.id,
             dictionaryId: dictionary.id,
-            teamId: singularTeamId,
-            dictionaryType: 'native',
+            value: $event,
+            teamId: singularTeam.id,
           })
         "
         appearance="secondary"
       >
         {{ dictionary.name }}
         <span
-          v-if="!singularTeam.enabledNativeDictionaryIds.includes(dictionary.id)"
+          v-if="
+            !teamsStore.isNativeDictionaryEnabledByDictionaryIdInTeam(
+              dictionary.id,
+              singularTeam.id,
+            )
+          "
           class="font-normal text-stone-400/80"
         >
           &ndash; Disabled
@@ -111,9 +116,10 @@
 
       <SettingsCardRowMessage
         v-if="
-          selectedUserInFilterInStore &&
-          !showDisabledDictionariesInStore &&
-          singularTeam.enabledNativeDictionaryIds.length === 0
+          userInFilter &&
+          !showDisabledDictionaries &&
+          enabledNativeDictionaries.length === 0 &&
+          allNativeDictionaries.length > 0
         "
       >
         No native dictionaries enabled
@@ -123,26 +129,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useStore } from "@nanostores/vue";
-import { $multiStore, updateStore } from "@stores/componentStates.mjs";
+import { ref, computed, onMounted } from "vue";
+import { useTeamsStore, type TTeam, type TUserInFilter } from "@stores/teamsStore";
+import { useUsersStore, type TUser } from "@stores/usersStore";
+import { useDictionariesStore } from "@stores/dictionariesStore";
 
 import { type AstroGlobal } from "astro";
-import { type TUser } from "@scripts/data/usersData";
-import { type TTeam } from "@scripts/data/teamsData";
-import { type TNativeDictionary } from "@scripts/data/nativeDictionariesData";
-import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
-
 import getRole from "@scripts/helpers/getRole";
-import isUserExcludedFromDictionary from "@scripts/helpers/isUserExcludedFromDictionary";
-import isDictionaryInExcludedUsers from "@scripts/helpers/isDictionaryInExcludedUsers";
-import getUserFullNameById from "@scripts/helpers/getUserFullNameById";
-import updateTeamsNativeDictionariesData from "@scripts/helpers/updateTeamsNativeDictionariesData";
-import updateTeamsExcludedUsersData from "@scripts/helpers/updateTeamsExcludedUsersData";
-
-import usersData from "@scripts/data/usersData";
-import teamsData from "@scripts/data/teamsData";
-import nativeDictionariesData from "@scripts/data/nativeDictionariesData";
+import getState from "@scripts/helpers/getState";
 
 import CardHeader from "@components/CardHeader/CardHeader.vue";
 import CardHeaderHeading from "@components/CardHeader/CardHeaderHeading.vue";
@@ -155,44 +149,52 @@ import SettingsCardRowMessage from "@components/SettingsCard/SettingsCardRowMess
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();
 const params = props.astro.params;
-const singularTeamId = Number(params.id);
-
+const currentTeamId = Number(params.id);
 const role = getRole(props.astro);
-const users = usersData();
-const teams = teamsData();
-const nativeDictionaries = nativeDictionariesData();
+const state = getState(props.astro);
 
-/**
- * Store
- *
- * Setup the multi-store.
- * Setup the sub-store inside multi-store by assigning a `storeKey` and initial value.
- * Reactively get data from stores
- */
+const teamsStore = useTeamsStore();
+const usersStore = useUsersStore();
+const dictionariesStore = useDictionariesStore();
+const singularTeam = computed(() => teamsStore.getTeamById(currentTeamId) as TTeam);
+const userInFilter = computed(() => teamsStore.userInFilter as TUserInFilter);
+const showDisabledDictionaries = computed(() => teamsStore.showDisabledDictionaries);
 
-const multiStore = useStore($multiStore);
-if (!multiStore.value["users"]) updateStore("users", users);
-if (!multiStore.value["teams"]) updateStore("teams", teams);
-if (!multiStore.value["nativeDictionaries"]) updateStore("nativeDictionaries", nativeDictionaries);
-if (!multiStore.value["selectedUserInFilter"]) updateStore("selectedUserInFilter", null);
-if (!multiStore.value["showDisabledDictionaries"]) updateStore("showDisabledDictionaries", false);
+const users = computed(() => {
+  const userIds = teamsStore.getAllUserIdsInTeam(singularTeam.value.id)!;
+  return usersStore.getUsersByIds(userIds) as TUser[];
+});
 
-const usersInStore = computed(() => multiStore.value["users"] as TUser[]);
-const teamsInStore = computed(() => multiStore.value["teams"] as TTeam[]);
-const singularTeam = computed(
-  () => teamsInStore.value.find((team) => team.id === singularTeamId) as TTeam,
-);
-const nativeDictionariesInStore = computed(
-  () => multiStore.value["nativeDictionaries"] as TNativeDictionary[],
-);
-const combinedUserIds = computed(() => [
-  ...singularTeam.value.adminUserIds,
-  ...singularTeam.value.memberUserIds,
-]);
-const selectedUserInFilterInStore = computed(
-  () => multiStore.value["selectedUserInFilter"] as TOption,
-);
-const showDisabledDictionariesInStore = computed(
-  () => multiStore.value["showDisabledDictionaries"] as boolean,
-);
+const sortedUsers = computed(() => {
+  return users.value
+    .map((user) => ({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      invitePending: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id),
+    }))
+    .sort(
+      (a: any, b: any) =>
+        // First sort by invite status (pending invites last)
+        a.invitePending - b.invitePending ||
+        // Then sort by first name if it exists, otherwise by email
+        (a.firstName || a.email)
+          .toLowerCase()
+          .localeCompare((b.firstName || b.email).toLowerCase()),
+    );
+});
+
+const allNativeDictionaries = computed(() => dictionariesStore.nativeDictionaries);
+
+const enabledNativeDictionaries = computed(() => {
+  const enabledNativeDictionaryIds = singularTeam.value.enabledNativeDictionaryIds;
+  return dictionariesStore.getNativeDictionariesByIds(enabledNativeDictionaryIds);
+});
+
+// Force components to re-render onmount to fix rendering bug. Hopefully not
+// needed in prodction and is only Astro + Vue combo problem?
+const componentKey = ref(0);
+onMounted(() => {
+  componentKey.value++;
+});
 </script>

@@ -4,10 +4,17 @@ export type TNativeDictionary = {
   id: number;
   name: string;
 };
-
 export type TCustomDictionary = {
   id: number;
   name: string;
+};
+export type TDictionaryTypes = {
+  native: TSingularDictionaryType;
+  custom: TSingularDictionaryType;
+};
+export type TSingularDictionaryType = {
+  value: string;
+  label: string;
 };
 
 const nativeDictionaries: TNativeDictionary[] = [
@@ -99,6 +106,10 @@ const customDictionaries: TCustomDictionary[] = [
     name: "Alpha lexicon",
   },
   {
+    id: 10,
+    name: "Old Alpha lexicon",
+  },
+  {
     id: 2,
     name: "Beta lexicon",
   },
@@ -116,6 +127,17 @@ const customDictionaries: TCustomDictionary[] = [
   },
 ];
 
+export const dictionaryTypes: TDictionaryTypes = {
+  native: {
+    value: "native",
+    label: "Native",
+  },
+  custom: {
+    value: "custom",
+    label: "Custom",
+  },
+};
+
 export const useDictionariesStore = defineStore("dictionariesStore", {
   state: () => ({
     nativeDictionaries: nativeDictionaries,
@@ -130,5 +152,10 @@ export const useDictionariesStore = defineStore("dictionariesStore", {
       return (dictionaryId: number) =>
         state.customDictionaries.find((dictionary) => dictionary.id === dictionaryId);
     },
+    getCustomDictionariesByIds: (state) => {
+      return (dictionaryIds: number[]) =>
+        state.customDictionaries.filter((dictionary) => dictionaryIds.includes(dictionary.id));
+    },
   },
+  persist: true,
 });

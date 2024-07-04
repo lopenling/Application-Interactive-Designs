@@ -2,8 +2,8 @@
   <Disclosure as="div" v-slot="{ open }">
     <div class="flex items-center justify-between gap-2 px-4">
       <BaseToggle
+        :modelValue="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
-        :is-toggled="props.isToggled"
         :is-grayscale="props.isGrayscale"
         :appearance="props.appearance"
         class="py-4"
@@ -58,7 +58,7 @@ import IconArrowDown1 from "@components/icons/streamline/regular/IconArrowDown1.
 import IconArrowUp1 from "@components/icons/streamline/regular/IconArrowUp1.vue";
 
 type TProps = {
-  isToggled: boolean;
+  modelValue: boolean;
   isGrayscale?: boolean;
   appearance?: TBaseToggleProps["appearance"];
   expandIconComponent?: object;

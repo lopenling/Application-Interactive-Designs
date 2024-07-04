@@ -1,5 +1,5 @@
 export type TProps = {
-  isToggled: boolean;
+  modelValue: boolean;
   size?: "large" | "medium" | "small";
   appearance?: "primary" | "secondary";
   isGrayscale?: boolean;

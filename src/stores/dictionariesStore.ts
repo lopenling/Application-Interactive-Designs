@@ -17,6 +17,8 @@ export type TSingularDictionaryType = {
   label: string;
 };
 
+type TRenameCustomDictionary = { dictionaryId: number; dictionaryName: string };
+
 const nativeDictionaries: TNativeDictionary[] = [
   {
     id: 1,
@@ -166,6 +168,16 @@ export const useDictionariesStore = defineStore("dictionariesStore", {
     },
     getAllNativeDictionaryIds: (state) => {
       return () => state.nativeDictionaries.map((dictionary) => dictionary.id);
+    },
+    getCustomDictionaryIndexById: (state) => {
+      return (dictionaryId: number) =>
+        state.customDictionaries.findIndex((dictionary) => dictionary["id"] === dictionaryId);
+    },
+  },
+  actions: {
+    renameCustomDictionary({ dictionaryId, dictionaryName }: TRenameCustomDictionary) {
+      const dictionaryIndex = this.getCustomDictionaryIndexById(dictionaryId);
+      this.$patch((state) => (state.customDictionaries[dictionaryIndex].name = dictionaryName));
     },
   },
   persist: true,

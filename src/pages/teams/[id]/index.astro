@@ -15,6 +15,7 @@ import SingularTeamModalRemoveMember from "./_partials/_SingularTeamModalRemoveM
 import SingularTeamModalEditMember from "./_partials/_SingularTeamModalEditMember.vue";
 import SingularTeamModalNewCustomDictionary from "./_partials/_SingularTeamModalNewCustomDictionary.vue";
 import SingularTeamModalEditCustomDictionary from "./_partials/_SingularTeamModalEditCustomDictionary.vue";
+import SingularTeamModalRemoveCustomDictionary from "./_partials/_SingularTeamModalRemoveCustomDictionary.vue";
 import SingularTeamModalSelfDowngrade from "./_partials/_SingularTeamModalSelfDowngrade.vue";
 
 import { createPinia } from "pinia";
@@ -46,6 +47,7 @@ const meta: TMetaInformation = {
   <SingularTeamModalRemoveMember astro={Astro} client:load />
   <SingularTeamModalNewCustomDictionary client:load />
   <SingularTeamModalEditCustomDictionary client:load />
+  <SingularTeamModalRemoveCustomDictionary client:load />
   <SingularTeamModalSelfDowngrade astro={Astro} client:load />
 
   {

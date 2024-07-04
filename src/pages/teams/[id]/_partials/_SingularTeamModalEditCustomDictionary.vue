@@ -38,7 +38,7 @@
     </template>
     <template #options>
       <div class="py-1">
-        <ModalDialogOption>Delete dictionary</ModalDialogOption>
+        <ModalDialogOption @click="removeCustomDictionary">Delete dictionary</ModalDialogOption>
       </div>
     </template>
   </ModalDialog>
@@ -60,10 +60,12 @@ import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue"
 
 export type TSingularTeamModalEditCustomDictionary = {
   dictionaryId: number;
+  teamId: number;
 };
 
 const dictionariesStore = useDictionariesStore();
 const singularCustomDictionary = ref({} as TCustomDictionary);
+const passthroughTeamId = ref(-1);
 const dictionaryName = ref("");
 
 const handleFormSubmit = () => {
@@ -74,12 +76,22 @@ const handleFormSubmit = () => {
   eventBus.emit("close-modal", { name: "singular-team-edit-custom-dictionary" });
 };
 
+const removeCustomDictionary = () => {
+  eventBus.emit("close-modal", { name: "singular-team-edit-custom-dictionary" });
+  eventBus.emit("open-modal", {
+    name: "singular-team-remove-custom-dictionary",
+    data: { dictionaryId: singularCustomDictionary.value.id, teamId: passthroughTeamId.value },
+  });
+};
+
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-edit-custom-dictionary") return;
   let dictionaryId: TSingularTeamModalEditCustomDictionary["dictionaryId"] =
     event.data.dictionaryId;
+  let teamId: TSingularTeamModalEditCustomDictionary["dictionaryId"] = event.data.teamId;
 
   singularCustomDictionary.value = dictionariesStore.getCustomDictionaryById(dictionaryId)!;
   dictionaryName.value = singularCustomDictionary.value.name;
+  passthroughTeamId.value = teamId;
 });
 </script>

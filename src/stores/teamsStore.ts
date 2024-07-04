@@ -41,6 +41,7 @@ type TEditInviteRoleInTeam = { userId: number; teamId: number; role: TSingularUs
 type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
 type TToggleCustomDictionaryInTeam = { dictionaryId: number; teamId: number };
 type TToggleNativeDictionaryInTeam = { dictionaryId: number; teamId: number };
+type TRemoveCustomDictionaryFromTeam = { dictionaryId: number; teamId: number };
 type TUpdateUserExcludedFromCustomDictionary = {
   userId: number;
   dictionaryId: number;
@@ -399,6 +400,21 @@ export const useTeamsStore = defineStore("teamsStore", {
 
       this.$patch((state) => {
         state.teams[teamIndex].enabledNativeDictionaryIds = updatedEnabledIds!;
+      });
+    },
+    removeCustomDictionaryFromTeam({ dictionaryId, teamId }: TRemoveCustomDictionaryFromTeam) {
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+      const updatedEnabledIds = team?.enabledCustomDictionaryIds.filter(
+        (id) => id !== dictionaryId,
+      );
+      const updatedDisabledIds = team?.disabledCustomDictionaryIds.filter(
+        (id) => id !== dictionaryId,
+      );
+
+      this.$patch((state) => {
+        state.teams[teamIndex].enabledCustomDictionaryIds = updatedEnabledIds!;
+        state.teams[teamIndex].disabledCustomDictionaryIds = updatedDisabledIds!;
       });
     },
     updateUserExcludedFromCustomDictionary({

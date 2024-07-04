@@ -1,6 +1,6 @@
 <template>
   <CardHeader>
-    <CardHeaderHeading>Member role</CardHeaderHeading>
+    <CardHeaderHeading>Member Role</CardHeaderHeading>
   </CardHeader>
 
   <SettingsCard class="divide-y">

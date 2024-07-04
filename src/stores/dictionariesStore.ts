@@ -106,10 +106,6 @@ const customDictionaries: TCustomDictionary[] = [
     name: "Alpha lexicon",
   },
   {
-    id: 10,
-    name: "Old Alpha lexicon",
-  },
-  {
     id: 2,
     name: "Beta lexicon",
   },
@@ -118,12 +114,20 @@ const customDictionaries: TCustomDictionary[] = [
     name: "Gamma lexicon",
   },
   {
-    id: 30,
-    name: "Old gamma lexicon",
-  },
-  {
     id: 4,
     name: "Delta lexicon",
+  },
+  {
+    id: 5,
+    name: "Epsilon lexicon",
+  },
+  {
+    id: 51,
+    name: "Zeta lexicon",
+  },
+  {
+    id: 52,
+    name: "Old Zeta lexicon",
   },
 ];
 

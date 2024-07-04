@@ -13,7 +13,7 @@
     </SettingsStats>
 
     <SettingsTitle>
-      <SettingsTitleText>Team {{ singularTeam.name }}</SettingsTitleText>
+      <SettingsTitleText>{{ singularTeam.name }}</SettingsTitleText>
       <template #options>
         <div class="py-1">
           <SettingsTitleOption
@@ -110,7 +110,7 @@ const sortedUsers = computed(() => {
       id: user.id,
       value: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id)
         ? user.email
-        : usersStore.getUserFullNameById(user.id)!,
+        : usersStore.getUserFullNameById(user.id)! || user.email,
       isPending: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id),
     }))
     .sort(

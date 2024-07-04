@@ -4,7 +4,7 @@
       You will loose access to team {{ singularTeam.name }} and all of it's materials.
     </p>
 
-    <template #title>Do you really want to leave the team?</template>
+    <template #title>Do You Really Want to Leave the Team?</template>
     <template #illustration>
       <ModalDialogIllustration
         :icon-component="IconLogout1"

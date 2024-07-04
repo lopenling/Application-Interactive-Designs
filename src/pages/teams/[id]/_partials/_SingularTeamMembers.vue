@@ -11,7 +11,10 @@
               currentUserId: signedInUser.id,
             })
           "
-          :iconComponent="IconAdd"
+          :icon-component="IconAdd"
+          :icon-stroke-width="2.5"
+          :icon-expand-by="2.5"
+          icon-class="-mx-px"
         >
           New member
         </CardHeaderButton>

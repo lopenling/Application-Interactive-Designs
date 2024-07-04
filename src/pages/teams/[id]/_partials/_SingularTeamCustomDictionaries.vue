@@ -9,11 +9,14 @@
               : "Invitee's"
           }}
         </span>
-        Custom dictionaries
+        Custom Dictionaries
       </CardHeaderHeading>
 
       <template #button>
-        <CardHeaderButton @click="openModalSingularTeamNewCustomDictionary()">
+        <CardHeaderButton
+          @click="openModalSingularTeamNewCustomDictionary()"
+          :iconComponent="IconDownloadBottom"
+        >
           Import
         </CardHeaderButton>
       </template>
@@ -47,7 +50,6 @@
         <template #extraButtons>
           <SettingsCardSubtleButton
             @click="openModalSingularTeamEditCustomDictionary({ dictionaryId: dictionary.id })"
-            :iconComponent="IconAdd"
           >
             Edit
           </SettingsCardSubtleButton>
@@ -169,7 +171,7 @@ import SettingsCardSubRowToggle from "@components/SettingsCard/SettingsCardSubRo
 import SettingsCardRowMessage from "@components/SettingsCard/SettingsCardRowMessage.vue";
 import SettingsCardSubtleButton from "@components/SettingsCard/SettingsCardSubtleButton.vue";
 
-import IconAdd from "@components/icons/streamline/regular/IconAdd.vue";
+import IconDownloadBottom from "@components/icons/streamline/regular/IconDownloadBottom.vue";
 
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();

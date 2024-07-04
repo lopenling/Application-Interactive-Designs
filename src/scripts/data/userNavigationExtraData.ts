@@ -47,5 +47,10 @@ export default function userNavigationExtraData(astro: AstroGlobal) {
     });
   }
 
+  data.push({
+    name: "Reset demo",
+    href: "javascript:(function() { localStorage.removeItem('teamsStore'); localStorage.removeItem('usersStore'); localStorage.removeItem('dictionaryStore'); location.reload(); })()",
+  });
+
   return data;
 }

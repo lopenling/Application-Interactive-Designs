@@ -1,6 +1,10 @@
 <template>
   <ModalDialog name="singular-team-edit-custom-dictionary" max-width="xl" :separate-buttons="true">
-    <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4">
+    <form
+      id="editCustomDictionaryForm"
+      @submit.prevent="handleFormSubmit"
+      class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4"
+    >
       <div class="sm:w-1/2">
         <BaseLabel for="dictionary-name">Name</BaseLabel>
         <BaseInputText
@@ -10,17 +14,25 @@
           name="dictionary-name"
           id="dictionary-name"
           inputmode="text"
+          pattern="[a-zA-Z0-9_\-\(\)][a-zA-Z0-9_\-\(\) ]{1,49}"
+          autocomplete="off"
+          title="2-50 letters, no special characters except _ - ( )"
           required
         />
       </div>
-    </div>
+    </form>
 
     <template #title>Edit Custom Dictionary</template>
     <template #illustration>
       <ModalDialogIllustration :icon-component="IconBookEdit" appearance="primary" />
     </template>
     <template #buttons>
-      <ModalDialogButton appearance="primary" :close-modal="true">
+      <ModalDialogButton
+        appearance="primary"
+        :close-modal="false"
+        type="submit"
+        form="editCustomDictionaryForm"
+      >
         Apply changes
       </ModalDialogButton>
     </template>
@@ -53,6 +65,14 @@ export type TSingularTeamModalEditCustomDictionary = {
 const dictionariesStore = useDictionariesStore();
 const singularCustomDictionary = ref({} as TCustomDictionary);
 const dictionaryName = ref("");
+
+const handleFormSubmit = () => {
+  dictionariesStore.renameCustomDictionary({
+    dictionaryId: singularCustomDictionary.value.id,
+    dictionaryName: dictionaryName.value,
+  });
+  eventBus.emit("close-modal", { name: "singular-team-edit-custom-dictionary" });
+};
 
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-edit-custom-dictionary") return;

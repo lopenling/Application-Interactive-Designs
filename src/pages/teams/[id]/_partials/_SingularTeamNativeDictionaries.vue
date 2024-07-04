@@ -9,7 +9,7 @@
               : "Invitee's"
           }}
         </span>
-        Native dictionaries
+        Native Dictionaries
       </CardHeaderHeading>
     </CardHeader>
 

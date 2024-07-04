@@ -1,7 +1,7 @@
 <template>
   <a
     :href="props.url"
-    class="group flex items-center justify-between gap-2 px-4 text-stone-700 transition hover:bg-stone-50"
+    class="group flex items-center justify-between gap-2 px-4 text-stone-700 outline-none transition hover:bg-stone-50"
   >
     <div class="py-4 text-sm">
       <span
@@ -12,7 +12,7 @@
     </div>
 
     <span
-      class="rounded-md px-2.5 text-primary-500/70 transition group-hover:translate-x-1 group-hover:text-primary-600/70"
+      class="rounded-md px-2.5 py-1.5 text-primary-500/70 transition group-hover:translate-x-1 group-hover:text-primary-600/70 group-focus-visible:outline-none group-focus-visible:ring-2 group-focus-visible:ring-primary-600 group-focus-visible:ring-offset-0"
     >
       <component :is="IconArrowRight" class="h-4 w-4" />
     </span>

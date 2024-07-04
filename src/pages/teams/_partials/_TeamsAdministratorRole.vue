@@ -1,6 +1,6 @@
 <template>
   <CardHeader>
-    <CardHeaderHeading>Administrator role</CardHeaderHeading>
+    <CardHeaderHeading>Administrator Role</CardHeaderHeading>
 
     <template #button>
       <CardHeaderButton @click="openModalTeamsNewTeam()" :iconComponent="IconAdd">

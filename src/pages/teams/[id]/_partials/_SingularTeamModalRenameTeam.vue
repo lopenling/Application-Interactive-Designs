@@ -19,7 +19,7 @@
       />
     </form>
 
-    <template #title>Rename the team</template>
+    <template #title>Rename the Team</template>
     <template #buttons>
       <ModalDialogButton
         appearance="primary"

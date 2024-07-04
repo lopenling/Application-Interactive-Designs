@@ -57,7 +57,7 @@ type TUpdateUserExcludedFromNativeDictionary = {
 const teams: TTeam[] = [
   {
     id: 1,
-    name: "Alpha",
+    name: "Arctic Alligators",
     administratorUserIds: [2],
     memberUserIds: [4, 6, 12, 14],
     invitedUsers: [
@@ -65,17 +65,20 @@ const teams: TTeam[] = [
       { id: 10, role: userRoles.administrator, inviteAuthorId: 2 },
     ],
     enabledCustomDictionaryIds: [1],
-    disabledCustomDictionaryIds: [10],
+    disabledCustomDictionaryIds: [],
     enabledNativeDictionaryIds: [1, 2, 3, 5, 6, 7, 8, 17],
     customDictionaryExlcudedUsers: [
       { userId: 6, dictionaryIds: [1] },
       { userId: 14, dictionaryIds: [1] },
     ],
-    nativeDictionaryExlcudedUsers: [],
+    nativeDictionaryExlcudedUsers: [
+      { userId: 6, dictionaryIds: [3] },
+      { userId: 14, dictionaryIds: [3] },
+    ],
   },
   {
     id: 2,
-    name: "Beta",
+    name: "Buff Brownies",
     administratorUserIds: [2],
     memberUserIds: [],
     invitedUsers: [],
@@ -89,7 +92,7 @@ const teams: TTeam[] = [
   },
   {
     id: 3,
-    name: "Gamma",
+    name: "Clever Cats",
     administratorUserIds: [1],
     memberUserIds: [2, 3],
     invitedUsers: [],
@@ -101,7 +104,7 @@ const teams: TTeam[] = [
   },
   {
     id: 4,
-    name: "Delta",
+    name: "Dapper Ducks",
     administratorUserIds: [1],
     memberUserIds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     invitedUsers: [],
@@ -113,12 +116,12 @@ const teams: TTeam[] = [
   },
   {
     id: 5,
-    name: "Omega",
+    name: "Olympic Owls",
     administratorUserIds: [8],
     memberUserIds: [],
     invitedUsers: [{ id: 2, role: userRoles.administrator, inviteAuthorId: 8 }],
-    enabledCustomDictionaryIds: [],
-    disabledCustomDictionaryIds: [],
+    enabledCustomDictionaryIds: [5, 51],
+    disabledCustomDictionaryIds: [52],
     enabledNativeDictionaryIds: [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     ],

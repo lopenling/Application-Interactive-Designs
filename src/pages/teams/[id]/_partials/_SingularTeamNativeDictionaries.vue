@@ -2,12 +2,13 @@
   <div v-if="singularTeam && role == 'admin'">
     <CardHeader>
       <CardHeaderHeading>
-        {{
-          userInFilter &&
-          !teamsStore.isUserInvitePendingByUserIdInTeam(userInFilter.id, singularTeam.id)
-            ? usersStore.getPossessiveFirstNameById(userInFilter.id)
-            : "Invitee's"
-        }}
+        <span v-if="userInFilter">
+          {{
+            !teamsStore.isUserInvitePendingByUserIdInTeam(userInFilter.id, singularTeam.id)
+              ? usersStore.getPossessiveFirstNameById(userInFilter.id)
+              : "Invitee's"
+          }}
+        </span>
         Native dictionaries
       </CardHeaderHeading>
     </CardHeader>

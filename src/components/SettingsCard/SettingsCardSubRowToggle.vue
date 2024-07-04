@@ -6,8 +6,8 @@
   >
     <div :class="['-ml-[44px] w-full sm:ml-0', slots.extraData && 'sm:w-1/2']">
       <BaseToggle
+        :modelValue="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
-        :is-toggled="props.isToggled"
         :is-grayscale="props.isGrayscale"
         size="small"
         appearance="secondary"
@@ -32,7 +32,7 @@ import BaseToggle from "@components/BaseToggle/BaseToggle.vue";
 import BaseToggleLabel from "@components/BaseToggle/BaseToggleLabel.vue";
 
 type TProps = {
-  isToggled: boolean;
+  modelValue: boolean;
   isGrayscale?: boolean;
 };
 const props = defineProps<TProps>();

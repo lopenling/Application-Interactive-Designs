@@ -4,57 +4,42 @@
       <CardHeaderHeading>
         Custom dictionaries
 
-        <template
-          #extraHeading
-          v-if="singularTeam.enabledCustomDictionaryIds.length > 0 && selectedUserInFilterInStore"
-        >
-          &ndash; {{ getUserFullNameById(selectedUserInFilterInStore.id) }}
+        <template #extraHeading v-if="enabledCustomDictionaries && userInFilter">
+          &ndash; {{ usersStore.getUserFullNameById(userInFilter.id) }}
         </template>
       </CardHeaderHeading>
 
       <template #button>
-        <CardHeaderButton
-          @click="openModalSingularTeamNewCustomDictionary()"
-          :iconComponent="IconAdd"
-        >
-          New dictionary
+        <CardHeaderButton @click="openModalSingularTeamNewCustomDictionary()">
+          Import
         </CardHeaderButton>
       </template>
     </CardHeader>
 
     <SettingsCard class="divide-y">
       <SettingsCardRowExpandableToggle
-        v-if="
-          combinedCustomDictionaryIds.length > 0 &&
-          !selectedUserInFilterInStore &&
-          state == 'filled'
+        v-if="allCustomDictionaries && !userInFilter && state == 'filled'"
+        v-for="dictionary in allCustomDictionaries"
+        :key="`custom-${componentKey}-${dictionary.id}`"
+        :modelValue="
+          teamsStore.isCustomDictionaryEnabledByDictionaryIdInTeam(dictionary.id, singularTeam.id)!
         "
-        v-for="dictionary in customDictionariesInStore.filter((dictionary) =>
-          combinedCustomDictionaryIds.includes(dictionary.id),
-        )"
         @update:modelValue="
-          updateTeamsCustomDictionariesData({
+          teamsStore.toggleCustomDictionaryInTeam({
             dictionaryId: dictionary.id,
-            payload: $event,
-            teamId: singularTeamId,
+            teamId: singularTeam.id,
           })
         "
-        :is-toggled="singularTeam.enabledCustomDictionaryIds.includes(dictionary.id)"
       >
         {{ dictionary.name }}
         <span
           v-if="
-            isDictionaryInExcludedUsers({
-              dictionaryId: dictionary.id,
-              teamId: singularTeamId,
-              dictionaryType: 'custom',
-            })
+            teamsStore.isDictionaryIdInCustomDictionaryExlcudedUsers(dictionary.id, singularTeam.id)
           "
           class="font-normal text-stone-400/80"
           title="Some users are excluded"
-        >
-          *
-        </span>
+          v-text="'*'"
+        />
 
         <template #extraButtons>
           <SettingsCardSubtleButton
@@ -66,29 +51,37 @@
         </template>
         <template #expandableArea>
           <SettingsCardSubRowToggle
-            v-for="user in usersInStore.filter((user) => combinedUserIds.includes(user.id))"
+            v-for="user in sortedUsers"
+            :modelValue="
+              !teamsStore.isUserExcludedFromCustomDictionary(
+                user.id,
+                dictionary.id,
+                singularTeam.id,
+              )!
+            "
             @update:modelValue="
-              updateTeamsExcludedUsersData({
-                userId: user.id,
-                dictionaryId: dictionary.id,
-                payload: $event,
-                teamId: singularTeamId,
-                dictionaryType: 'custom',
-              })
+              ($event) => {
+                teamsStore.updateUserExcludedFromCustomDictionary({
+                  userId: user.id,
+                  dictionaryId: dictionary.id,
+                  value: $event,
+                  teamId: singularTeam.id,
+                });
+              }
             "
-            :is-toggled="
-              !isUserExcludedFromDictionary({
-                userId: user.id,
-                dictionaryId: dictionary.id,
-                teamId: singularTeamId,
-                dictionaryType: 'custom',
-              })
+            :is-grayscale="
+              !teamsStore.isCustomDictionaryEnabledByDictionaryIdInTeam(
+                dictionary.id,
+                singularTeam.id,
+              )
             "
-            :is-grayscale="!singularTeam.enabledCustomDictionaryIds.includes(dictionary.id)"
           >
-            {{ getUserFullNameById(user.id) }}
+            <span v-if="user.invitePending" class="block truncate">{{ user.email }}</span>
+            <span v-else>{{ usersStore.getUserFullNameById(user.id) || user.email }}</span>
 
-            <template #extraData>{{ user.email }}</template>
+            <template #extraData v-if="!user.invitePending">
+              {{ user.email }}
+            </template>
           </SettingsCardSubRowToggle>
         </template>
       </SettingsCardRowExpandableToggle>
@@ -96,35 +89,35 @@
       <!-- Filter applied -->
 
       <SettingsCardRowToggle
-        v-if="selectedUserInFilterInStore"
-        v-for="dictionary in customDictionariesInStore.filter((dictionary) =>
-          showDisabledDictionariesInStore
-            ? singularTeam.enabledCustomDictionaryIds.includes(dictionary.id) ||
-              singularTeam.disabledCustomDictionaryIds.includes(dictionary.id)
-            : singularTeam.enabledCustomDictionaryIds.includes(dictionary.id),
-        )"
-        @update:modelValue="
-          updateTeamsExcludedUsersData({
-            userId: selectedUserInFilterInStore.id,
-            dictionaryId: dictionary.id,
-            payload: $event,
-            teamId: singularTeamId,
-            dictionaryType: 'custom',
-          })
+        v-if="userInFilter"
+        v-for="dictionary in showDisabledDictionaries
+          ? allCustomDictionaries
+          : enabledCustomDictionaries"
+        :modelValue="
+          !teamsStore.isUserExcludedFromCustomDictionary(
+            userInFilter!.id,
+            dictionary.id,
+            singularTeam.id,
+          )!
         "
-        :is-toggled="
-          !isUserExcludedFromDictionary({
-            userId: selectedUserInFilterInStore.id,
+        @update:modelValue="
+          teamsStore.updateUserExcludedFromCustomDictionary({
+            userId: userInFilter.id,
             dictionaryId: dictionary.id,
-            teamId: singularTeamId,
-            dictionaryType: 'custom',
+            value: $event,
+            teamId: singularTeam.id,
           })
         "
         appearance="secondary"
       >
         {{ dictionary.name }}
         <span
-          v-if="!singularTeam.enabledCustomDictionaryIds.includes(dictionary.id)"
+          v-if="
+            !teamsStore.isCustomDictionaryEnabledByDictionaryIdInTeam(
+              dictionary.id,
+              singularTeam.id,
+            )
+          "
           class="font-normal text-stone-400/80"
         >
           &ndash; Disabled
@@ -133,16 +126,16 @@
 
       <!-- No rows -->
 
-      <SettingsCardRowMessage v-if="combinedCustomDictionaryIds.length === 0 || state == 'empty'">
-        No dictionaries created yet
+      <SettingsCardRowMessage v-if="allCustomDictionaries.length === 0 || state == 'empty'">
+        No dictionaries imported yet
       </SettingsCardRowMessage>
 
       <SettingsCardRowMessage
         v-if="
-          selectedUserInFilterInStore &&
-          !showDisabledDictionariesInStore &&
-          singularTeam.enabledCustomDictionaryIds.length === 0 &&
-          combinedCustomDictionaryIds.length !== 0
+          userInFilter &&
+          !showDisabledDictionaries &&
+          enabledCustomDictionaries.length === 0 &&
+          allCustomDictionaries
         "
       >
         No custom dictionaries enabled
@@ -152,29 +145,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useStore } from "@nanostores/vue";
-import { $multiStore, updateStore } from "@stores/componentStates.mjs";
+import { ref, computed, onMounted } from "vue";
 import eventBus from "@scripts/general/eventBus";
+import { useTeamsStore, type TTeam, type TUserInFilter } from "@stores/teamsStore";
+import { useUsersStore, type TUser } from "@stores/usersStore";
+import { useDictionariesStore } from "@stores/dictionariesStore";
 
 import { type AstroGlobal } from "astro";
-import { type TTeam } from "@scripts/data/teamsData";
-import { type TUser } from "@scripts/data/usersData";
-import { type TCustomDictionary } from "@scripts/data/customDictionariesData";
-import { type TOption } from "@components/BaseCombobox/BaseCombobox.types";
 import { type TSingularTeamModalEditCustomDictionary } from "./_SingularTeamModalEditCustomDictionary.vue";
-
-import usersData from "@scripts/data/usersData";
-import teamsData from "@scripts/data/teamsData";
-import customDictionariesData from "@scripts/data/customDictionariesData";
-
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
-import isUserExcludedFromDictionary from "@scripts/helpers/isUserExcludedFromDictionary";
-import isDictionaryInExcludedUsers from "@scripts/helpers/isDictionaryInExcludedUsers";
-import getUserFullNameById from "@scripts/helpers/getUserFullNameById";
-import updateTeamsCustomDictionariesData from "@scripts/helpers/updateTeamsCustomDictionariesData";
-import updateTeamsExcludedUsersData from "@scripts/helpers/updateTeamsExcludedUsersData";
 
 import CardHeader from "@components/CardHeader/CardHeader.vue";
 import CardHeaderHeading from "@components/CardHeader/CardHeaderHeading.vue";
@@ -191,13 +171,48 @@ import IconAdd from "@components/icons/streamline/regular/IconAdd.vue";
 type TProps = { astro: AstroGlobal };
 const props = defineProps<TProps>();
 const params = props.astro.params;
-const singularTeamId = Number(params.id);
-
+const currentTeamId = Number(params.id);
 const role = getRole(props.astro);
 const state = getState(props.astro);
-const users = usersData();
-const teams = teamsData();
-const customDictionaries = customDictionariesData();
+
+const teamsStore = useTeamsStore();
+const usersStore = useUsersStore();
+const dictionariesStore = useDictionariesStore();
+const singularTeam = computed(() => teamsStore.getTeamById(currentTeamId) as TTeam);
+const userInFilter = computed(() => teamsStore.userInFilter as TUserInFilter);
+const showDisabledDictionaries = computed(() => teamsStore.showDisabledDictionaries);
+
+const users = computed(() => {
+  const userIds = teamsStore.getAllUserIdsInTeam(singularTeam.value.id)!;
+  return usersStore.getUsersByIds(userIds) as TUser[];
+});
+
+const sortedUsers = computed(() => {
+  return users.value
+    .map((user) => ({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      invitePending: teamsStore.isUserInvitePendingByUserIdInTeam(user.id, singularTeam.value!.id),
+    }))
+    .sort(
+      (a: any, b: any) =>
+        // First sort by invite status (pending invites last)
+        a.invitePending - b.invitePending ||
+        // Then sort by first name (a-z)
+        a.firstName.localeCompare(b.firstName),
+    );
+});
+
+const allCustomDictionaries = computed(() => {
+  const allCustomDictionaryIds = teamsStore.getAllCustomDictionaryIdsInTeam(singularTeam.value.id);
+  return dictionariesStore.getCustomDictionariesByIds(allCustomDictionaryIds!);
+});
+
+const enabledCustomDictionaries = computed(() => {
+  const enabledCustomDictionaryIds = singularTeam.value.enabledCustomDictionaryIds;
+  return dictionariesStore.getCustomDictionariesByIds(enabledCustomDictionaryIds);
+});
 
 const openModalSingularTeamNewCustomDictionary = () => {
   eventBus.emit("open-modal", { name: "singular-team-new-custom-dictionary" });
@@ -208,41 +223,10 @@ const openModalSingularTeamEditCustomDictionary = (
   eventBus.emit("open-modal", { name: "singular-team-edit-custom-dictionary", data: data });
 };
 
-/**
- * Store
- *
- * Setup the multi-store.
- * Setup the sub-store inside multi-store by assigning a `storeKey` and initial value.
- * Reactively get data from stores
- */
-
-const multiStore = useStore($multiStore);
-if (!multiStore.value["users"]) updateStore("users", users);
-if (!multiStore.value["teams"]) updateStore("teams", teams);
-if (!multiStore.value["customDictionaries"]) updateStore("customDictionaries", customDictionaries);
-if (!multiStore.value["selectedUserInFilter"]) updateStore("selectedUserInFilter", null);
-if (!multiStore.value["showDisabledDictionaries"]) updateStore("showDisabledDictionaries", false);
-
-const usersInStore = computed(() => multiStore.value["users"] as TUser[]);
-const teamsInStore = computed(() => multiStore.value["teams"] as TTeam[]);
-const singularTeam = computed(
-  () => teamsInStore.value.find((team) => team.id === singularTeamId) as TTeam,
-);
-const customDictionariesInStore = computed(
-  () => multiStore.value["customDictionaries"] as TCustomDictionary[],
-);
-const combinedCustomDictionaryIds = computed(() => [
-  ...singularTeam.value.enabledCustomDictionaryIds,
-  ...singularTeam.value.disabledCustomDictionaryIds,
-]);
-const combinedUserIds = computed(() => [
-  ...singularTeam.value.adminUserIds,
-  ...singularTeam.value.memberUserIds,
-]);
-const selectedUserInFilterInStore = computed(
-  () => multiStore.value["selectedUserInFilter"] as TOption,
-);
-const showDisabledDictionariesInStore = computed(
-  () => multiStore.value["showDisabledDictionaries"] as boolean,
-);
+// Force components to re-render onmount to fix rendering bug. Hopefully not
+// needed in prodction and is only Astro + Vue combo problem?
+const componentKey = ref(0);
+onMounted(() => {
+  componentKey.value++;
+});
 </script>

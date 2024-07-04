@@ -37,7 +37,7 @@
       {{ MAX_CUSTOM_DICTIONARIES }} custom dictionaries.
     </p>
 
-    <template #title>Add a new custom dictionary</template>
+    <template #title>Import a custom dictionary</template>
     <template #illustration>
       <ModalDialogIllustration :icon-component="IconBookEdit" appearance="primary" />
     </template>

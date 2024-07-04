@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center justify-between gap-2 px-4">
     <BaseToggle
+      :modelValue="modelValue"
       @update:modelValue="$emit('update:modelValue', $event)"
-      :is-toggled="props.isToggled"
       :is-grayscale="props.isGrayscale"
       :appearance="props.appearance"
       class="py-4"
@@ -18,7 +18,7 @@ import BaseToggle from "@components/BaseToggle/BaseToggle.vue";
 import BaseToggleLabel from "@components/BaseToggle/BaseToggleLabel.vue";
 
 type TProps = {
-  isToggled: boolean;
+  modelValue: boolean;
   isGrayscale?: boolean;
   appearance?: TBaseToggleProps["appearance"];
 };

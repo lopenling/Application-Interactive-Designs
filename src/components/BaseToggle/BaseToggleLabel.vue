@@ -3,7 +3,7 @@
     as="span"
     :passive="props.passive"
     :class="[
-      'ml-4 text-sm font-medium text-stone-700',
+      'ml-4 min-w-0 text-sm font-medium text-stone-700',
       props.changeOpacity && 'opacity-60 peer-aria-checked:opacity-100',
       props.passive ? 'cursor-default' : 'cursor-pointer',
     ]"

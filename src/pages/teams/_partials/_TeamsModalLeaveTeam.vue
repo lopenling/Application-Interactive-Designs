@@ -29,8 +29,6 @@ import { useUsersStore, type TUser } from "@stores/usersStore";
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
-import BaseLabel from "@components/BaseLabel/BaseLabel.vue";
-import BaseInputText from "@components/BaseInputText/BaseInputText.vue";
 
 import IconLogout1 from "@components/icons/streamline/regular/IconLogout1.vue";
 

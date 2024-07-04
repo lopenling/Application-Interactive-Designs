@@ -2,7 +2,7 @@
   <button
     v-bind="$attrs"
     type="button"
-    class="basis-full py-1.5 font-medium text-secondary-700 transition hover:bg-secondary-500/[12.5%] hover:text-secondary-900 sm:rounded-md sm:px-2.5"
+    class="basis-full py-1.5 font-medium text-secondary-700 transition hover:bg-secondary-500/[12.5%] hover:text-secondary-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-0 sm:rounded-md sm:px-2.5"
   >
     <slot />
   </button>

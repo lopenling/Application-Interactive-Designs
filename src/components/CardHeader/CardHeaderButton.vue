@@ -7,9 +7,10 @@
     <component
       v-if="props.iconComponent"
       :is="props.iconComponent"
-      class="h-3 w-3 flex-shrink-0 text-secondary-300/70"
-      data-stroke-width="2.5"
-      data-expand-by="1"
+      class="flex-shrink-0 text-secondary-300/70"
+      :class="[props.iconSizeClass ? props.iconSizeClass : 'size-4', props.iconClass]"
+      :data-stroke-width="iconStrokeWidth || 2"
+      :data-expand-by="iconExpandBy"
     />
     <slot></slot>
   </button>
@@ -18,6 +19,10 @@
 <script setup lang="ts">
 type TProps = {
   iconComponent?: object;
+  iconSizeClass?: string;
+  iconClass?: string;
+  iconStrokeWidth?: number;
+  iconExpandBy?: number;
 };
 const props = defineProps<TProps>();
 </script>

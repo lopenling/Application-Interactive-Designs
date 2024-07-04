@@ -15,7 +15,7 @@
         <slot name="extraButtons" />
         <DisclosureButton
           as="button"
-          class="rounded-md px-2.5 py-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-500"
+          class="rounded-md px-2.5 py-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-0"
         >
           <span v-if="props.expandIconComponent" class="flex shrink-0 items-center gap-1.5">
             <component :is="props.expandIconComponent" class="h-4 w-4" />

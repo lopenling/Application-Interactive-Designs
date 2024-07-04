@@ -37,6 +37,7 @@ type TAddNewInviteToTeam = {
 };
 type TRemoveUserFromTeam = { userId: number; teamId: number };
 type TEditUserRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
+type TEditInviteRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
 type TResolveUserInvite = { userId: number; teamId: number; acceptInvite: boolean };
 type TToggleCustomDictionaryInTeam = { dictionaryId: number; teamId: number };
 type TToggleNativeDictionaryInTeam = { dictionaryId: number; teamId: number };
@@ -324,6 +325,17 @@ export const useTeamsStore = defineStore("teamsStore", {
     editUserRoleInTeam({ userId, teamId, role }: TEditUserRoleInTeam) {
       this.removeUserFromTeam({ userId, teamId });
       this.addUserToTeam({ userId, teamId, role: role });
+    },
+    editInviteRoleInTeam({ userId, teamId, role }: TEditInviteRoleInTeam) {
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+      let user = team?.invitedUsers.find((user) => user.id === userId);
+      const userIndex = team?.invitedUsers.findIndex((user) => user.id === userId)!;
+
+      if (user) {
+        user.role = role;
+        this.$patch((state) => (state.teams[teamIndex].invitedUsers[userIndex] = user));
+      }
     },
     removeUserFromTeam({ userId, teamId }: TRemoveUserFromTeam) {
       const team = this.getTeamById(teamId);

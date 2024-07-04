@@ -19,13 +19,13 @@
               {{ usersStore.getUserFullNameById(user.id) }}
             </span>
             <span v-if="invitePending" :title="user.email" class="block truncate">
-              {{ usersStore.getUserById(user.id)!.email }}
+              {{ user.email }}
             </span>
           </div>
 
           <div class="text-xs leading-5 text-stone-500/85">
             <span v-if="!invitePending" :title="user.email" class="block truncate">
-              {{ usersStore.getUserById(user.id)!.email }}
+              {{ user.email }}
             </span>
             <span v-if="invitePending">Invite pending</span>
           </div>

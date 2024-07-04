@@ -22,7 +22,6 @@
       <SettingsCardRowPersonDetailsWithButtons
         v-if="state == 'filled'"
         v-for="singularUser in sortedUsers"
-        :user="singularUser"
         :user-id="singularUser.id"
         :team-id="singularTeam.id"
         :subdue-image="

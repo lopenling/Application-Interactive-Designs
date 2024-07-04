@@ -49,7 +49,12 @@
 
         <template #extraButtons>
           <SettingsCardSubtleButton
-            @click="openModalSingularTeamEditCustomDictionary({ dictionaryId: dictionary.id })"
+            @click="
+              openModalSingularTeamEditCustomDictionary({
+                dictionaryId: dictionary.id,
+                teamId: singularTeam.id,
+              })
+            "
           >
             Edit
           </SettingsCardSubtleButton>

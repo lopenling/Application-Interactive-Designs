@@ -116,11 +116,21 @@ const handleFormSubmit = () => {
       },
     });
   } else {
-    teamsStore.editUserRoleInTeam({
-      userId: singularUser.value.id,
-      teamId: singularTeam.value.id,
-      role: selectedRoleInEditTeamMember.value,
-    });
+    if (
+      teamsStore.isUserInvitePendingByUserIdInTeam(singularUser.value.id, singularTeam.value.id)
+    ) {
+      teamsStore.editInviteRoleInTeam({
+        userId: singularUser.value.id,
+        teamId: singularTeam.value.id,
+        role: selectedRoleInEditTeamMember.value,
+      });
+    } else {
+      teamsStore.editUserRoleInTeam({
+        userId: singularUser.value.id,
+        teamId: singularTeam.value.id,
+        role: selectedRoleInEditTeamMember.value,
+      });
+    }
     eventBus.emit("close-modal", { name: "singular-team-edit-member" });
   }
 };

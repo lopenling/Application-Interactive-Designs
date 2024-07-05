@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useTeamsStore } from "@stores/teamsStore";
 
 export type TNativeDictionary = {
   id: number;
@@ -17,6 +18,7 @@ export type TSingularDictionaryType = {
   label: string;
 };
 
+type TAddDictionary = { dictionaryName: string; dictionaryId?: number; teamId: number };
 type TRenameCustomDictionary = { dictionaryId: number; dictionaryName: string };
 
 const nativeDictionaries: TNativeDictionary[] = [
@@ -169,12 +171,30 @@ export const useDictionariesStore = defineStore("dictionariesStore", {
     getAllNativeDictionaryIds: (state) => {
       return () => state.nativeDictionaries.map((dictionary) => dictionary.id);
     },
+    getNewCustomDictionaryId: (state) => {
+      return () => {
+        const highestId = Math.max(...state.customDictionaries.map((dictionary) => dictionary.id));
+        return highestId + 1;
+      };
+    },
     getCustomDictionaryIndexById: (state) => {
       return (dictionaryId: number) =>
         state.customDictionaries.findIndex((dictionary) => dictionary["id"] === dictionaryId);
     },
   },
   actions: {
+    addNewCustomDictionary({ dictionaryName, dictionaryId, teamId }: TAddDictionary) {
+      const teamsStore = useTeamsStore();
+      const newDictionaryId = this.getNewCustomDictionaryId();
+      teamsStore.addCustomDictionaryToTeam({ dictionaryId: newDictionaryId, teamId: teamId });
+
+      this.$patch((state) => {
+        state.customDictionaries.push({
+          id: dictionaryId || newDictionaryId,
+          name: dictionaryName,
+        });
+      });
+    },
     renameCustomDictionary({ dictionaryId, dictionaryName }: TRenameCustomDictionary) {
       const dictionaryIndex = this.getCustomDictionaryIndexById(dictionaryId);
       this.$patch((state) => (state.customDictionaries[dictionaryIndex].name = dictionaryName));

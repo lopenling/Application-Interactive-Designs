@@ -15,15 +15,21 @@
         download here</button
       >.
     </p>
-    <div class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4">
+    <form
+      id="newCustomDictionaryForm"
+      @submit.prevent="handleFormSubmit"
+      class="mb-6 mt-6 flex flex-col gap-x-4 gap-y-2.5 text-left sm:mb-4"
+    >
       <div class="sm:w-1/2">
         <BaseLabel for="dictionary-name">Name</BaseLabel>
         <BaseInputText
+          v-model="newCustomDictionaryName"
           appearance="white"
           type="text"
           name="dictionary-name"
           id="dictionary-name"
           inputmode="text"
+          autocomplete="off"
           required
         />
       </div>
@@ -31,7 +37,7 @@
         <BaseLabel for="dictionary-file">CSV file</BaseLabel>
         <BaseInputFile id="dictionary-file" tabindex="-1" appearance="transparent" />
       </div>
-    </div>
+    </form>
     <p class="max-w-prose text-left text-stone-500">
       The uploaded CSV file size must be less than 100MB. A team can have up to
       {{ MAX_CUSTOM_DICTIONARIES }} custom dictionaries.
@@ -44,8 +50,10 @@
     <template #buttons>
       <ModalDialogButton
         appearance="primary"
-        :close-modal="true"
+        :close-modal="false"
         @focus="downloadButtonTabIndex = 0"
+        type="submit"
+        form="newCustomDictionaryForm"
       >
         Upload dictionary
       </ModalDialogButton>
@@ -56,6 +64,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
+import { useTeamsStore, type TTeam } from "@stores/teamsStore";
+import { useDictionariesStore } from "@stores/dictionariesStore";
 import { MAX_CUSTOM_DICTIONARIES } from "@scripts/data/constants";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
@@ -67,8 +77,29 @@ import BaseInputFile from "@components/BaseInputFile/BaseInputFile.vue";
 
 import IconBookEdit from "@components/icons/streamline/regular/IconBookEdit.vue";
 
+export type TSingularTeamModalNewCustomDictionary = {
+  teamId: number;
+};
+
+const teamsStore = useTeamsStore();
+const singularTeam = ref({} as TTeam);
+const dictionariesStore = useDictionariesStore();
+const newCustomDictionaryName = ref("");
+
+const handleFormSubmit = () => {
+  dictionariesStore.addNewCustomDictionary({
+    dictionaryName: newCustomDictionaryName.value,
+    teamId: singularTeam.value.id,
+  });
+  newCustomDictionaryName.value = "";
+  eventBus.emit("close-modal", { name: "singular-team-new-custom-dictionary" });
+};
+
 eventBus.on("open-modal", (event: any) => {
   if (event.name !== "singular-team-new-custom-dictionary") return;
+  let teamId: TSingularTeamModalNewCustomDictionary["teamId"] = event.data.teamId;
+
+  singularTeam.value = teamsStore.getTeamById(teamId)!;
 });
 
 const downloadButtonTabIndex = ref(-1);

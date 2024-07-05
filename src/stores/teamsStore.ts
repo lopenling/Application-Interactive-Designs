@@ -35,6 +35,7 @@ type TAddNewInviteToTeam = {
   role: TSingularUserRole;
   inviteAuthorId: number;
 };
+type TAddCustomDictionaryToTeam = { dictionaryId: number; teamId: number };
 type TRemoveUserFromTeam = { userId: number; teamId: number };
 type TEditUserRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
 type TEditInviteRoleInTeam = { userId: number; teamId: number; role: TSingularUserRole };
@@ -325,6 +326,15 @@ export const useTeamsStore = defineStore("teamsStore", {
         inviteAuthorId: inviteAuthorId,
       });
       this.$patch((state) => (state.teams[teamIndex].invitedUsers = updatedInvitedUsers!));
+    },
+    addCustomDictionaryToTeam({ dictionaryId, teamId }: TAddCustomDictionaryToTeam) {
+      const team = this.getTeamById(teamId);
+      const teamIndex = this.getTeamIndexById(teamId);
+
+      this.$patch((state) => {
+        const updatedIds = team?.enabledCustomDictionaryIds.concat(dictionaryId);
+        state.teams[teamIndex].enabledCustomDictionaryIds = updatedIds!;
+      });
     },
     editUserRoleInTeam({ userId, teamId, role }: TEditUserRoleInTeam) {
       this.removeUserFromTeam({ userId, teamId });

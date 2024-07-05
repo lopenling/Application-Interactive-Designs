@@ -14,7 +14,7 @@
 
       <template #button>
         <CardHeaderButton
-          @click="openModalSingularTeamNewCustomDictionary()"
+          @click="openModalSingularTeamNewCustomDictionary({ teamId: singularTeam.id })"
           :iconComponent="IconDownloadBottom"
         >
           Import
@@ -163,6 +163,7 @@ import { useDictionariesStore } from "@stores/dictionariesStore";
 
 import { type AstroGlobal } from "astro";
 import { type TSingularTeamModalEditCustomDictionary } from "./_SingularTeamModalEditCustomDictionary.vue";
+import { type TSingularTeamModalNewCustomDictionary } from "./_SingularTeamModalNewCustomDictionary.vue";
 import getRole from "@scripts/helpers/getRole";
 import getState from "@scripts/helpers/getState";
 
@@ -226,8 +227,8 @@ const enabledCustomDictionaries = computed(() => {
   return dictionariesStore.getCustomDictionariesByIds(enabledCustomDictionaryIds);
 });
 
-const openModalSingularTeamNewCustomDictionary = () => {
-  eventBus.emit("open-modal", { name: "singular-team-new-custom-dictionary" });
+const openModalSingularTeamNewCustomDictionary = (data: TSingularTeamModalNewCustomDictionary) => {
+  eventBus.emit("open-modal", { name: "singular-team-new-custom-dictionary", data: data });
 };
 const openModalSingularTeamEditCustomDictionary = (
   data: TSingularTeamModalEditCustomDictionary,

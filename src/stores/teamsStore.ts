@@ -74,8 +74,8 @@ const teams: TTeam[] = [
       { userId: 14, dictionaryIds: [1] },
     ],
     nativeDictionaryExlcudedUsers: [
-      { userId: 6, dictionaryIds: [3] },
-      { userId: 14, dictionaryIds: [3] },
+      { userId: 6, dictionaryIds: [1, 3, 4] },
+      { userId: 14, dictionaryIds: [1, 3, 4] },
     ],
   },
   {

@@ -48,6 +48,7 @@
 import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useDictionariesStore, type TCustomDictionary } from "@stores/dictionariesStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
@@ -74,6 +75,13 @@ const handleFormSubmit = () => {
     dictionaryName: dictionaryName.value,
   });
   eventBus.emit("close-modal", { name: "singular-team-edit-custom-dictionary" });
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Custom dictionary updated successfully.",
+    } as TAlert,
+  });
 };
 
 const removeCustomDictionary = () => {

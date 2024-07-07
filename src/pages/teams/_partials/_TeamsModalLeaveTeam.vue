@@ -25,6 +25,7 @@ import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { useUsersStore, type TUser } from "@stores/usersStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
@@ -48,6 +49,14 @@ const leaveTeam = () => {
     teamId: singularTeam.value.id,
   });
   eventBus.emit("close-modal", { name: "teams-leave-team" });
+
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Team left successfully.",
+    } as TAlert,
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

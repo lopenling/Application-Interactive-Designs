@@ -62,6 +62,7 @@ import eventBus from "@scripts/general/eventBus";
 import sortArrayByKey from "@scripts/helpers/sortArrayByKey";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { userRoles, type TSingularUserRole } from "@stores/usersStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
@@ -96,6 +97,14 @@ const handleFormSubmit = () => {
   });
   newMemberEmail.value = "";
   eventBus.emit("close-modal", { name: "singular-team-new-member" });
+
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Invite sent successfully.",
+    } as TAlert,
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

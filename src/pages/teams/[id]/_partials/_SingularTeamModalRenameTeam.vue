@@ -37,6 +37,7 @@
 import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogButton from "@components/ModalDialog/ModalDialogButton.vue";
@@ -56,6 +57,14 @@ const handleFormSubmit = () => {
     teamName: teamName.value,
   });
   eventBus.emit("close-modal", { name: "singular-team-rename-team" });
+
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Team name changed successfully.",
+    } as TAlert,
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

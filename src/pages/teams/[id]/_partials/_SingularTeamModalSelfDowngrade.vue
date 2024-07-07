@@ -84,7 +84,7 @@ const changeRole = () => {
     role: newRole.value,
   });
   if (singularUser.value.id === signedInUser.id) {
-    window.location.href = `/teams/?` + getUrlParams(props.astro);
+    window.location.href = `/teams/?` + getUrlParams(props.astro) + "&alert=role-changed";
   }
   eventBus.emit("close-modal", { name: "singular-team-self-downgrade" });
 };

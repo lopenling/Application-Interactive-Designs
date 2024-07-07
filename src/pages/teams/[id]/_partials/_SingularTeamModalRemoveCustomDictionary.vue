@@ -24,6 +24,7 @@ import { ref } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { useDictionariesStore, type TCustomDictionary } from "@stores/dictionariesStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog.vue";
 import ModalDialogIllustration from "@components/ModalDialog/ModalDialogIllustration.vue";
@@ -47,6 +48,14 @@ const removeCustomDictionary = () => {
     teamId: singularTeam.value.id,
   });
   eventBus.emit("close-modal", { name: "singular-team-remove-custom-dictionary" });
+
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Custom dictionary deleted successfully.",
+    } as TAlert,
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

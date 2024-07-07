@@ -7,11 +7,13 @@ import TeamsAdministratorRole from "./_partials/_TeamsAdministratorRole.vue";
 import TeamsMemberRole from "./_partials/_TeamsMemberRole.vue";
 import TeamsModalNewTeam from "./_partials/_TeamsModalNewTeam.vue";
 import TeamsModalLeaveTeam from "./_partials/_TeamsModalLeaveTeam.vue";
+import Alert from "@components/Alert/Alert.vue";
 
 const meta: TMetaInformation = {
   lang: "en",
   title: `Teams`,
 };
+const alert = Astro.url.searchParams.get("alert");
 ---
 
 <LayoutSettings meta={meta}>
@@ -21,4 +23,20 @@ const meta: TMetaInformation = {
 
   <TeamsModalNewTeam astro={Astro} client:load />
   <TeamsModalLeaveTeam astro={Astro} client:load />
+  <Alert client:load />
+  {
+    alert === "team-deleted" && (
+      <Alert message="Team deleted successfully." appearance="success" client:load />
+    )
+  }
+  {
+    alert === "team-left" && (
+      <Alert message="Team left successfully." appearance="success" client:load />
+    )
+  }
+  {
+    alert === "role-changed" && (
+      <Alert message="Role changed successfully." appearance="success" client:load />
+    )
+  }
 </LayoutSettings>

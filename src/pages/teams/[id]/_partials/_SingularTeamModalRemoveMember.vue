@@ -59,6 +59,7 @@ import { ref, computed } from "vue";
 import eventBus from "@scripts/general/eventBus";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { useUsersStore, userRoles, type TUser } from "@stores/usersStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import { type AstroGlobal } from "astro";
 import getRole from "@scripts/helpers/getRole";
@@ -110,9 +111,17 @@ const removeMember = () => {
     teamId: singularTeam.value.id,
   });
   if (singularUser.value.id === signedInUser.id) {
-    window.location.href = `/teams/?` + getUrlParams(props.astro);
+    window.location.href = `/teams/?` + getUrlParams(props.astro) + "&alert=team-left";
   }
   eventBus.emit("close-modal", { name: "singular-team-remove-member" });
+
+  // TODO: Actually check the response and show appropriate alert
+  eventBus.emit("open-alert", {
+    data: {
+      appearance: "success",
+      message: "Member removed successfully.",
+    } as TAlert,
+  });
 };
 
 eventBus.on("open-modal", (event: any) => {

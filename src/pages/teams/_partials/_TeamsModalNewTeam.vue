@@ -57,7 +57,8 @@ const handleFormSubmit = () => {
     teamName: newTeamName.value,
     userId: signedInUser.id,
   });
-  window.location.href = `/teams/${newTeamId.value}?` + getUrlParams(props.astro);
+  window.location.href =
+    `/teams/${newTeamId.value}?` + getUrlParams(props.astro) + "&alert=team-created";
 };
 
 eventBus.on("open-modal", (event: any) => {

@@ -17,6 +17,7 @@ import SingularTeamModalNewCustomDictionary from "./_partials/_SingularTeamModal
 import SingularTeamModalEditCustomDictionary from "./_partials/_SingularTeamModalEditCustomDictionary.vue";
 import SingularTeamModalRemoveCustomDictionary from "./_partials/_SingularTeamModalRemoveCustomDictionary.vue";
 import SingularTeamModalSelfDowngrade from "./_partials/_SingularTeamModalSelfDowngrade.vue";
+import Alert from "@components/Alert/Alert.vue";
 
 import { createPinia } from "pinia";
 import { useTeamsStore } from "@stores/teamsStore.ts";
@@ -31,6 +32,7 @@ const meta: TMetaInformation = {
   lang: "en",
   title: `${singularTeam?.name || ""}`,
 };
+const alert = Astro.url.searchParams.get("alert");
 ---
 
 <LayoutSettings meta={meta}>
@@ -50,6 +52,12 @@ const meta: TMetaInformation = {
   <SingularTeamModalRemoveCustomDictionary client:load />
   <SingularTeamModalSelfDowngrade astro={Astro} client:load />
 
+  <Alert client:load />
+  {
+    alert === "team-created" && (
+      <Alert message="New team created successfully." appearance="success" client:load />
+    )
+  }
   {
     role !== "admin" && (
       <div class="pointer-events-none fixed inset-0 flex items-center justify-center">

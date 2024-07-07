@@ -90,7 +90,7 @@ const handleFormSubmit = () => {
   // TODO: Actually check if the entered team name matches the team name
   teamsStore.deleteTeam({ teamId: singularTeam.value.id });
   deleteTeamName.value = "";
-  window.location.href = `/teams/?` + getUrlParams(props.astro);
+  window.location.href = "/teams/?" + getUrlParams(props.astro) + "&alert=team-deleted";
 };
 
 eventBus.on("open-modal", (event: any) => {

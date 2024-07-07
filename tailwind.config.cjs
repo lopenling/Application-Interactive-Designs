@@ -83,11 +83,11 @@ module.exports = {
       // borderWidth: {
       // },
       boxShadow: {
+        "lg+":
+          "0 6px 6px -8px rgb(0 0 0 / 0.15), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
         xl: "0 25px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
       },
       colors: customColors,
-      // dropShadow: {
-      // },
       fontFamily: {
         sans: ["Noto Sans", ...defaultTheme.fontFamily.sans],
       },

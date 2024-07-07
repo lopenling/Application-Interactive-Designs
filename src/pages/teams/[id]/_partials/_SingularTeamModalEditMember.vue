@@ -72,6 +72,7 @@ import eventBus from "@scripts/general/eventBus";
 import sortArrayByKey from "@scripts/helpers/sortArrayByKey";
 import { useTeamsStore, type TTeam } from "@stores/teamsStore";
 import { useUsersStore, userRoles, type TUser, type TSingularUserRole } from "@stores/usersStore";
+import { type TAlert } from "@components/Alert/Alert.vue";
 
 import { type AstroGlobal } from "astro";
 import getRole from "@scripts/helpers/getRole";
@@ -132,6 +133,14 @@ const handleFormSubmit = () => {
       });
     }
     eventBus.emit("close-modal", { name: "singular-team-edit-member" });
+
+    // TODO: Actually check the response and show appropriate alert
+    eventBus.emit("open-alert", {
+      data: {
+        appearance: "success",
+        message: "Member updated successfully.",
+      } as TAlert,
+    });
   }
 };
 

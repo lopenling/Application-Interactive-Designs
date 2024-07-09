@@ -6,6 +6,15 @@ const { default: toColorValue } = require("tailwindcss/lib/util/toColorValue");
 const { default: flattenColorPalette } = require("tailwindcss/lib/util/flattenColorPalette");
 const { default: withAlphaVariable } = require("tailwindcss/lib/util/withAlphaVariable");
 
+// Replicate helpers from @tailwindcss/typography
+const round = (num) =>
+  num
+    .toFixed(7)
+    .replace(/(\.[0-9]+?)0+$/, "$1")
+    .replace(/\.0$/, "");
+const rem = (px) => `${round(px / 16)}rem`;
+const em = (px, base) => `${round(px / base)}em`;
+
 const customColors = {
   primary: {
     50: "#F5FAF5",
@@ -34,6 +43,77 @@ const customColors = {
     950: "#070a02",
   },
 };
+
+// Overwrite @tailwindcss/typography base values
+const customTypography = (theme) => ({
+  DEFAULT: {
+    css: {
+      a: {
+        display: "inline",
+        margin: "0 -1px",
+        padding: "0 1px",
+        "text-decoration-thickness": "1px",
+        "text-underline-offset": "3px",
+        "text-decoration-color": theme("colors.secondary.400"),
+        "transition-property": "text-decoration-color, color, background-color",
+        "transition-duration": "150ms",
+        "&:hover": {
+          color: theme("colors.primary.800"),
+          background: theme("colors.primary.100"),
+        },
+        "&:focus-visible": {
+          "text-decoration": "none",
+          "border-radius": "2px",
+          color: theme("colors.primary.800"),
+          background: theme("colors.primary.100"),
+          "outline-width": "2px",
+          "outline-color": theme("colors.primary.600"),
+        },
+      },
+    },
+  },
+
+  sm: {
+    css: {
+      h1: {
+        fontSize: em(28, 14),
+        marginTop: "0",
+        marginBottom: em(16, 28),
+        lineHeight: round(34 / 28),
+      },
+      h3: {
+        fontSize: em(16, 14),
+        marginTop: em(24.8, 16),
+        marginBottom: em(8, 16),
+        lineHeight: round(24.8 / 16),
+      },
+    },
+  },
+  base: {
+    css: {
+      h1: {
+        fontSize: em(34, 16),
+        marginTop: "0",
+        marginBottom: em(32, 34),
+        lineHeight: round(40 / 34),
+      },
+      h3: {
+        fontSize: em(18, 16),
+        marginTop: em(28.8, 18),
+        marginBottom: em(10.8, 18),
+        lineHeight: round(28.8 / 18),
+      },
+    },
+  },
+  stone: {
+    css: {
+      "--tw-prose-body": theme("colors.stone.700"),
+      "--tw-prose-bold": theme("colors.stone.800"),
+      "--tw-prose-headings": theme("colors.stone.800"),
+      "--tw-prose-links": theme("colors.stone.700"),
+    },
+  },
+});
 
 module.exports = {
   content: ["./src/**/*.{astro,vue,html,js,mjs,cjs,ts,jsx,md,mdx}"],
@@ -90,6 +170,7 @@ module.exports = {
       colors: customColors,
       fontFamily: {
         sans: ["Noto Sans", ...defaultTheme.fontFamily.sans],
+        serif: ["Noto Serif", ...defaultTheme.fontFamily.serif],
       },
       // fontSize: {
       // },
@@ -134,6 +215,7 @@ module.exports = {
       transitionDuration: {
         DEFAULT: "125ms",
       },
+      typography: customTypography,
     },
   },
   plugins: [

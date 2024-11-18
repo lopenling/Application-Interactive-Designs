@@ -1,1 +1,0 @@
-export { IconWandMagicSparkles, IconDataWandMagicSparkles } from "./solid/IconWandMagicSparkles.mjs";

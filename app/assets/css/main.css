@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --container-padding-x: theme(padding.4);
+}
+
+@media screen(sm) {
+  :root {
+    --container-padding-x: theme(padding.6);
+  }
+}
+
+@media screen(lg) {
+  :root {
+    --container-padding-x: theme(padding.8);
+  }
+}
+
+@layer base {
+  html {
+    color: theme("colors.common.700");
+    background-color: theme("colors.common.50");
+  }
+
+  body,
+  #app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  @supports (min-height: 100dvh) {
+    body,
+    #app {
+      min-height: 100dvh;
+    }
+  }
+
+  ::selection {
+    color: theme("colors.primary.850");
+    background-color: theme("colors.primary.300 / 40%");
+  }
+
+  :focus-visible {
+    outline: theme("colors.primary.650", "currentColor") solid 2px;
+    outline-offset: 1px;
+  }
+}

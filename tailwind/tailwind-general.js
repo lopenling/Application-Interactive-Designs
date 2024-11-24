@@ -46,9 +46,6 @@ export default {
         serif: ["Noto Serif", "serif"],
         tibetan: ["Noto Serif Tibetan", "serif"],
       },
-      maxWidth: {
-        test: "768px",
-      },
       outlineColor: ({ theme }) => ({
         DEFAULT: theme("colors.primary.650", "currentColor"),
       }),

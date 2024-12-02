@@ -90,11 +90,6 @@ Search and replace all instances of the following classes in this exact order:
 
 **NB!** Notice the space after `50 ` and `25 `.
 
----
-
-Strikethrough values represent the values that stay the same.
-Values marked with `*` are most likely not (yet) used in this project.
-
 # Shadows
 
 Search and replace all instances of the following classes in this exact order:
@@ -104,3 +99,22 @@ Search and replace all instances of the following classes in this exact order:
 3. `shadow-lg+` -> `shadow-lg` (disable regex)
 
 Regex explanation: "shadow" which is not preceded by a `.` and not followed by `-`, `?`, `=` or `:`.
+
+# Border radius
+
+Search and replace all instances of the following classes in this exact order:
+
+1. `rounded-sm` -> `rounded-px`
+2. `(?<!\.)rounded(?![-?=:])` -> `rounded-xs` (enable regex)
+3. `rounded-md` -> `rounded-sm`
+4. `rounded-lg` -> `rounded-md`
+5. `rounded-xl` -> `rounded-lg`
+6. `rounded-2xl` -> `rounded-xl`
+7. `rounded-3xl` -> `rounded-2xl` \*
+
+Regex explanation: "rounded" which is not preceded by a `.` and not followed by `-`, `?`, `=` or `:`.
+
+---
+
+Strikethrough values represent the values that stay the same.
+Values marked with `*` are most likely not (yet) used in this project.

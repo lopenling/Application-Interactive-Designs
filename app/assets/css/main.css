@@ -4,6 +4,7 @@
 
 :root {
   --container-padding-x: theme(padding.4);
+  --header-height: 3.75rem;
 }
 
 @media screen(sm) {

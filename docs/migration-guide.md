@@ -94,3 +94,13 @@ Search and replace all instances of the following classes in this exact order:
 
 Strikethrough values represent the values that stay the same.
 Values marked with `*` are most likely not (yet) used in this project.
+
+# Shadows
+
+Search and replace all instances of the following classes in this exact order:
+
+1. `shadow-sm` -> `shadow-xs`
+2. `(?<!\.)shadow(?![-?=:])` -> `shadow-sm` (enable regex)
+3. `shadow-lg+` -> `shadow-lg` (disable regex)
+
+Regex explanation: "shadow" which is not preceded by a `.` and not followed by `-`, `?`, `=` or `:`.

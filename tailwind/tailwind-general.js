@@ -56,6 +56,20 @@ export default {
       outlineWidth: {
         DEFAULT: "2px",
       },
+      padding: {
+        // shadow-*-x padding values represent the horizontal space needed to fully render the
+        // corresponding boxShadow. These are calculated as ("largest blur radius" + "spread") * 1.333.
+        // For example calculating shadow-md-x based on boxShadow.md: (6px + -1px) * 1.333 ≈ 7px.
+        // Note: The blur radius value is not linearly proportional to the space required to render
+        // the shadow, which is why the 1.333 multiplier is applied (it is not perfectly exact but
+        // it is good enough and accommodates all the blur sizes).
+        "shadow-xs-x": "3px",
+        "shadow-sm-x": "4px",
+        "shadow-md-x": "7px",
+        "shadow-lg-x": "16px",
+        "shadow-xl-x": "27px",
+        "shadow-2xl-x": "51px",
+      },
       ringColor: ({ theme }) => ({
         DEFAULT: theme("colors.primary.650", "currentColor"),
       }),

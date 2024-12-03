@@ -49,3 +49,18 @@
     outline-offset: 1px;
   }
 }
+
+@layer components {
+  .dummy-scrollbar-gutter {
+    --tw-content: "\00a0";
+    line-height: 99999px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: -999px;
+    clip-path: border-box inset(999px 0 0 0);
+    overflow-y: scroll;
+    pointer-events: none;
+  }
+}
